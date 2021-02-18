@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "xxx",
+    "xyx",
+    "xxx"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "minecraft:sand"
+    },
+    "y":
+    {
+      "item": "minecraft:clay"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:moulding_sand",
+    "count": 8
+  }
+}

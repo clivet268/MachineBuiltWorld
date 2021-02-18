@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "machinebuiltworld:block/magnets" },
+    "facing=south": { "model": "machinebuiltworld:block/magnets", "y":  180},
+    "facing=west": { "model": "machinebuiltworld:block/magnets", "y":  270},
+    "facing=east": { "model": "machinebuiltworld:block/magnets", "y":  90}
+  }
+}

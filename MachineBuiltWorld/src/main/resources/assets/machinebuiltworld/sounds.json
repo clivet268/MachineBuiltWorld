@@ -1,0 +1,22 @@
+{
+  "entity.bullet_hit": {
+  "category": "entity",
+    "subtitle": "entity.bullet_hit.sub",
+    "sounds": [
+      {
+        "name": "machinebuiltworld:entity/bullet_hit",
+        "stream": true
+      }
+    ]
+  },
+  "item.pistol_shoot": {
+    "category": "item",
+    "subtitle": "item.pistol_shoot.sub",
+    "sounds": [
+      {
+        "name": "machinebuiltworld:item/pistol_shoot",
+        "stream": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " x ",
+    "x x",
+    " x "
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "machinebuiltworld:wire"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:crude_electromagnet",
+    "count": 1
+  }
+}

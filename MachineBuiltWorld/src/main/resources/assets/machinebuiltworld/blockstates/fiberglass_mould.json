@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "filled=0": { "model": "machinebuiltworld:block/fiberglass_mould_0" },
+    "filled=1": { "model": "machinebuiltworld:block/fiberglass_mould_1" },
+    "filled=2": { "model": "machinebuiltworld:block/fiberglass_mould_2" },
+    "filled=3": { "model": "machinebuiltworld:block/fiberglass_mould_3" }
+  }
+}

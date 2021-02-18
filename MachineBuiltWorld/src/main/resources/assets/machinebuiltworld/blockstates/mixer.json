@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "mixeroas=0": { "model": "machinebuiltworld:block/mixer1" },
+    "mixeroas=1": { "model": "machinebuiltworld:block/mixer2" }
+  }
+}

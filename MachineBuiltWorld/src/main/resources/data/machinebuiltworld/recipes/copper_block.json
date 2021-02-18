@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "machinebuiltworld:copper_ingot"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:copper_block",
+    "count": 1
+  }
+}

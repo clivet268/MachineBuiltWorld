@@ -1,0 +1,36 @@
+{
+  "credit": "Made with Blockbench",
+  "texture_size": [32, 32],
+  "textures": {
+    "0": "machinebuiltworld:blocks/tttbattery",
+    "particle": "machinebuiltworld:blocks/tttbattery"
+  },
+  "elements": [
+    {
+      "from": [4, 0, 4],
+      "to": [12, 14, 12],
+      "rotation": {"angle": 0, "axis": "y", "origin": [12, 8, 12]},
+      "faces": {
+        "north": {"uv": [0, 0, 4, 7], "texture": "#0"},
+        "east": {"uv": [4, 4, 8, 11], "texture": "#0"},
+        "south": {"uv": [0, 7, 4, 14], "texture": "#0"},
+        "west": {"uv": [8, 8, 12, 15], "texture": "#0"},
+        "up": {"uv": [8, 4, 4, 0], "texture": "#0"},
+        "down": {"uv": [12, 0, 8, 4], "texture": "#0"}
+      }
+    },
+    {
+      "from": [6, 14, 6],
+      "to": [10, 17, 10],
+      "rotation": {"angle": 0, "axis": "y", "origin": [14, 22, 14]},
+      "faces": {
+        "north": {"uv": [10, 4, 12, 5.5], "texture": "#0"},
+        "east": {"uv": [10, 5.5, 12, 7], "texture": "#0"},
+        "south": {"uv": [4, 11, 6, 12.5], "texture": "#0"},
+        "west": {"uv": [6, 11, 8, 12.5], "texture": "#0"},
+        "up": {"uv": [10, 6, 8, 4], "texture": "#0"},
+        "down": {"uv": [10, 6, 8, 8], "texture": "#0"}
+      }
+    }
+  ]
+}

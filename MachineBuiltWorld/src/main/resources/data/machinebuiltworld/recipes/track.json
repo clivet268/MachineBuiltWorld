@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "xxx",
+    "yzy",
+    "xxx"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "machinebuiltworld:track_gear"
+    },
+    "y":
+    {
+      "item": "minecraft:leather"
+    },
+    "z":
+    {
+      "item": "machinebuiltworld:iron_axle"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:moulding_sand",
+    "count": 8
+  }
+}

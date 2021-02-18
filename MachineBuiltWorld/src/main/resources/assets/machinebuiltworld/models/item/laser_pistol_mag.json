@@ -1,0 +1,56 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "machinebuiltworld:items/laser_pistol_mag_e"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "machinebuiltworld:ammo": 0.1
+      },
+      "model": "machinebuiltworld:item/laser_pistol_mag_1"
+    },
+    {
+      "predicate": {
+        "machinebuiltworld:ammo": 0.2
+      },
+      "model": "machinebuiltworld:item/laser_pistol_mag_2"
+    },
+    {
+      "predicate": {
+        "machinebuiltworld:ammo": 0.3
+      },
+      "model": "machinebuiltworld:item/laser_pistol_mag_3"
+    },
+    {
+      "predicate": {
+        "machinebuiltworld:ammo": 0.4
+      },
+      "model": "machinebuiltworld:item/laser_pistol_mag_4"
+    },
+    {
+      "predicate": {
+        "machinebuiltworld:ammo": 0.5
+      },
+      "model": "machinebuiltworld:item/laser_pistol_mag_5"
+    },
+    {
+      "predicate": {
+        "machinebuiltworld:ammo": 0.6
+      },
+      "model": "machinebuiltworld:item/laser_pistol_mag_6"
+    },
+    {
+      "predicate": {
+        "machinebuiltworld:ammo": 0.7
+      },
+      "model": "machinebuiltworld:item/laser_pistol_mag_7"
+    },
+    {
+      "predicate": {
+        "machinebuiltworld:ammo": 0.8
+      },
+      "model": "machinebuiltworld:item/laser_pistol_mag_8"
+    }
+  ]
+}

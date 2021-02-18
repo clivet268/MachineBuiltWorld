@@ -1,0 +1,67 @@
+Machine Built World
+
+11/05/2020
+Machine Built World V1.0.0 Alpha
+
+Blocks Added:
+Atomizer(WIP), BatteryPot(WIP), TTTBattery(WIP), TTBattery(WIP), TBattery(WIP), Boronated Glass(WIP), Boron Ore(WIP),
+Copper Block, Copper Ore(WIP), Crude ElectromagnetA (WIP), Magnets(WIP), Melting Pot(WIP), Moulding Sand(WIP),
+Track(WIP), Wire(WIP), Heavy Duty Pot(WIP),
+
+Fluids Added:
+Battery Acid(WIP)
+
+Items Added:
+gear(WIP), copper ingot, silver ingot(WIP), crude electromagnet, wire(WIP), magnet, graphene(WIP), iron rod(WIP),
+iron axle(WIP), boron dust(WIP), boron chunk(WIP), dirty boron dust(WIP), circut board(WIP),silicon(WIP)
+
+Tools Added:
+wire cutters(WIP), pliers(WIP), copper sword, copper helmet, copper chestplate, copper leggings,
+copper boots, power punchers(WIP), multimeter(WIP)
+
+Other:
++ Config(WIP)
+TTTBattery: + GUI(WIP) + Tile Entity + Config(WIP)
+TTBattery: + GUI(WIP) + Tile Entity + Config(WIP)
+TBattery: + GUI(WIP) + Tile Entity + Config(WIP)
+Battery Pot: + GUI(WIP) + Tile Entity + Config(WIP)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+11/28/2020
+Machine Built World V1.0.1 Alpha
+
+Blocks Added:
+Mill(WIP), Mixer(WIP), Smoke Detector(WIP), Fiberglass Mould
+
+Items Added:
+wood gear(WIP), high performance circut board(WIP), super performance circut board(WIP),  epoxy(WIP), high performance
+epoxy(WIP), super high performance epoxy(WIP), fiber glass(WIP), resin bucket(WIP)
+
+Fluids Added:
+Resin(WIP)
+
+Other:
+Mixer: + GUI(WIP) + Config(WIP)
+Atomizer: + GUI(WIP)
+Fiberglass Mould: + Tile Entity + Fiberglass Production
+Vital texture broken link corrected
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+1/1/2021
+Machine Built World V1.0.2 Alpha
+
+Blocks Added: Crusher(WIP), Oxygen Furnace(WIP), Coke Oven(WIP)
+
+Items Added: glass shards(WIP), bullet(WIP), incendiary bullet(WIP), ion canister(WIP), laser bullet(WIP),
+micro resonator(WIP), resonator(WIP), large resonator(WIP), steel ingot(WIP), pig iron ingot(WIP), coke(WIP)
+
+Tools Added: laser pistol(WIP), laser pistol mag(WIP)
+
+Entities Added: Bullet(WIP)
+
+Other:
+Updated lang
+Coke Oven: + GUI(WIP) + Tile Entity(WIP) + Cokeing(WIP)
+Bullet: + impact sound(WIP)
+laser pistol: + shoot sound(WIP)
+Vital texture broken link for blocks corrected (again)

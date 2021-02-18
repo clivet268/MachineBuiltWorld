@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "machinebuiltworld:wire_cutters"
+    },
+    {
+      "item": "machinebuiltworld:copper_ingot"
+    }
+  ],
+  "result":
+  {
+    "item": "machinebuiltworld:wire",
+    "count": 3
+  },
+  "outShape":
+  {
+    "item": "machinebuiltworld:wire_cutters",
+    "count": 1
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "machinebuiltworld:blocks/boronated_glass"
+  }
+}

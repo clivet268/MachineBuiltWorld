@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "   ",
+    "yxy",
+    " y "
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "machinebuiltworld:fiber_glass"
+    },
+    "y":
+    {
+      "item": "machinebuiltworld:epoxy"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:circut_board",
+    "count": 1
+  }
+}

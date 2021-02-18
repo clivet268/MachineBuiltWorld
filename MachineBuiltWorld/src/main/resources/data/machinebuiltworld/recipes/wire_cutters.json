@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "xy ",
+    "yzy",
+    "  y"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "y":
+    {
+      "item": "minecraft:stick"
+    },
+    "z":
+    {
+      "item": "minecraft:red_dye"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:wire_cutters",
+    "count": 1
+  }
+}

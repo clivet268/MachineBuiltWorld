@@ -1,0 +1,9 @@
+{
+  "type": "machinebuiltworld:cokeing",
+  "ingredient": {
+    "item": "minecraft:coal"
+  },
+  "result": "machinebuiltworld:coke",
+  "experience": 0.65,
+  "cookingtime": 600
+}

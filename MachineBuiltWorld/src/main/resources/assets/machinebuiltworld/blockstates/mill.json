@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "milloas=0": { "model": "machinebuiltworld:block/mill1_milloas0" },
+    "milloas=1": { "model": "machinebuiltworld:block/mill1_milloas1" },
+    "milloas=2": { "model": "machinebuiltworld:block/mill1_milloas0" }
+  }
+}
