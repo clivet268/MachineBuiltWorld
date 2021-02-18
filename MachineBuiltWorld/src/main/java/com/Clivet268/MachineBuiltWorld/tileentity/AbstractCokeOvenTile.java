@@ -337,9 +337,7 @@ public abstract class AbstractCokeOvenTile extends TileEntity implements ISidedI
     public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
         if (direction == Direction.DOWN && index == 1) {
             Item item = stack.getItem();
-            if (item != Items.WATER_BUCKET && item != Items.BUCKET) {
-                return false;
-            }
+            return item == Items.WATER_BUCKET || item == Items.BUCKET;
         }
 
         return true;
@@ -427,7 +425,7 @@ public abstract class AbstractCokeOvenTile extends TileEntity implements ISidedI
      * guis use Slot.isItemValid
      */
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        if (index == 2) {
+        if (index == 3) {
             return false;
         } else if (index != 1) {
             return true;
@@ -469,7 +467,7 @@ public abstract class AbstractCokeOvenTile extends TileEntity implements ISidedI
         }
 
         player.unlockRecipes(list);
-        this.cokeOvenSlotThings.clear();
+        //this.cokeOvenSlotThings.clear();
     }
 
     private static void spawnExpOrbs(PlayerEntity player, int p_214003_1_, float experience) {
