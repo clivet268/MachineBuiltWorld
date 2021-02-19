@@ -124,7 +124,7 @@ public class CokeOven extends Block{
 
                     @Override
                     public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-                        return new CokeOvenContainer(i, playerInventory);
+                        return new CokeOvenContainer(i, playerInventory, pos);
                     }
                 };
                 NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, tileEntity.getPos());

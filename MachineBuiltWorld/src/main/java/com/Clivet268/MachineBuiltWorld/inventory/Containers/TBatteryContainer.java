@@ -32,6 +32,7 @@ public class TBatteryContainer extends Container {
         this.playerEntity = player;
         this.playerInventory = new InvWrapper(playerInventory);
 
+        System.out.println("this should only be written once");
         if (tileEntity != null) {
             tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> addSlot(new SlotItemHandler(h, 0, 64, 24)));
         }

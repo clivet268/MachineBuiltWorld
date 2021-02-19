@@ -21,20 +21,32 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractCokeOvenTile extends TileEntity implements ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
+public abstract class AbstractCokeOvenTile extends LockableTileEntity implements ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
+    private ItemStackHandler itemHandler = createHandler();
+    // Never create lazy optionals in getCapability. Always place them as fields in the tile entity:
+    private LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
     private static final int[] SLOTS_UP = new int[]{0};
     private static final int[] SLOTS_DOWN = new int[]{2, 1};
     private static final int[] SLOTS_HORIZONTAL = new int[]{1};
-    protected NonNullList<ItemStack> items = NonNullList.withSize(5, ItemStack.EMPTY);
+    protected NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
     private int burnTime;
     private int recipesUsed;
     private int cookTime;
@@ -77,6 +89,43 @@ public abstract class AbstractCokeOvenTile extends TileEntity implements ISidedI
             return 4;
         }
     };
+
+
+
+
+
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return handler.cast();
+        }
+        return super.getCapability(cap, side);
+    }
+
+    private ItemStackHandler createHandler() {
+        return new ItemStackHandler(4) {
+
+            @Override
+            protected void onContentsChanged(int slot) {
+                // To make sure the TE persists when the chunk is saved later we need to
+                // mark it dirty every time the item handler changes
+                markDirty();
+            }
+
+            @Override
+            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+                return stack.getItem() == Items.COAL;
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+                return stack;
+            }
+        };
+    }
     private final Map<ResourceLocation, Integer> cokeOvenSlotThings = Maps.newHashMap();
     protected final IRecipeType<? extends AbstractCokeingRecipe> recipeType;
 
@@ -85,9 +134,8 @@ public abstract class AbstractCokeOvenTile extends TileEntity implements ISidedI
         this.recipeType = recipeTypeIn;
     }
 
-    private net.minecraftforge.common.util.LazyOptional<?> itemHandler = net.minecraftforge.common.util.LazyOptional.of(() -> createUnSidedHandler());
     protected net.minecraftforge.items.IItemHandler createUnSidedHandler() {
-        return new net.minecraftforge.items.wrapper.InvWrapper(this);
+        return new InvWrapper(this);
     }
 
     @Deprecated //Forge - get burn times by calling ForgeHooks#getBurnTime(ItemStack)
@@ -489,7 +537,7 @@ public abstract class AbstractCokeOvenTile extends TileEntity implements ISidedI
         }
 
     }
-
+    @Override
     public void fillStackedContents(RecipeItemHelper helper) {
         for(ItemStack itemstack : this.items) {
             helper.accountStack(itemstack);
@@ -497,12 +545,12 @@ public abstract class AbstractCokeOvenTile extends TileEntity implements ISidedI
 
     }
 
-    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
-            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
+    LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
+            SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
 
-    @Override
-    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-        if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+    /*@Override
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        if (!this.removed && facing != null && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (facing == Direction.UP)
                 return handlers[0].cast();
             else if (facing == Direction.DOWN)
@@ -512,6 +560,8 @@ public abstract class AbstractCokeOvenTile extends TileEntity implements ISidedI
         }
         return super.getCapability(capability, facing);
     }
+
+     */
 
     /**
      * invalidates a tile entity
