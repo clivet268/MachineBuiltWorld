@@ -38,6 +38,7 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
     private PlayerEntity playerEntity;
 
     private final IRecipeType<? extends AbstractCokeingRecipe> recipeType;
+
     public CokeOvenContainerBase(ContainerType<?> containerTypeIn, IRecipeType<? extends AbstractCokeingRecipe> recipeTypeIn, int id, PlayerInventory playerInventoryIn, BlockPos pos) {
         this(containerTypeIn, recipeTypeIn, id, playerInventoryIn, new Inventory(4), new IntArray(5),pos);
     }
@@ -56,10 +57,10 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
         this.furnaceData = furnaceDataIn;
 
         if (tileEntity != null) {
-            tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(a1 -> addSlot(new SlotItemHandler(a1, 0, 56, 17)));
-            tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(a2 -> addSlot(new CokeOvenFuelSlot(this, a2, 1, 38, 53)));
-            tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(a2 -> addSlot(new CokeOvenFuelSlot(this, a2, 2, 74, 53)));
-            tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(a3 -> addSlot(new CokeOvenResultSlot(playerInventoryIn.player, a3, 3, 116, 35)));
+            addSlot(new Slot(furnaceInventory, 0, 56, 17));
+            addSlot(new CokeOvenFuelSlot(this, furnaceInventoryIn, 1, 38, 53));
+            addSlot(new CokeOvenFuelSlot(this, furnaceInventoryIn, 2, 74, 53));
+            addSlot(new CokeOvenResultSlot(playerInventoryIn.player, furnaceInventoryIn, 3, 116, 35));
 
         }
         //this.addSlot(new Slot(furnaceInventoryIn, 0, 56, 17));
@@ -69,12 +70,17 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
 
         for(int i = 0; i < 3; ++i) {
             for(int j = 0; j < 9; ++j) {
+
                 this.addSlot(new Slot(playerInventoryIn, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+
+                //@OnlyIn(Dist.CLIENT)
+                System.out.println(j + i * 9 + 9);
             }
         }
 
         for(int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInventoryIn, k, 8 + k * 18, 142));
+            System.out.println(k);
         }
 
         this.trackIntArray(furnaceDataIn);
@@ -144,13 +150,19 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
                     if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (this.isFuel(itemstack1)) {
-                    if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
+                } else if (isFuel(itemstack1)) {
+                    if (this.mergeItemStack(itemstack1, 1, 2, false)) {
+                        return itemstack1;
+                    }
+                    else{
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (this.isFuel(itemstack1)) {
-                    if (!this.mergeItemStack(itemstack1, 2, 3, false)) {
+                else if (isFuel(itemstack1)) {
+                    if (this.mergeItemStack(itemstack1, 2, 3, false)) {
+                        return itemstack1;
+                    }
+                    else{
                         return ItemStack.EMPTY;
                     }
                 } else if (index >= 4 && index < 31) {
@@ -184,7 +196,7 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
         return this.world.getRecipeManager().getRecipe((IRecipeType<CokeingRecipe>)this.recipeType, new Inventory(stack), this.world).isPresent();
     }
 
-    public boolean isFuel(ItemStack stack) {
+    public static boolean isFuel(ItemStack stack) {
         return AbstractCokeOvenTile.isFuel(stack);
     }
 
