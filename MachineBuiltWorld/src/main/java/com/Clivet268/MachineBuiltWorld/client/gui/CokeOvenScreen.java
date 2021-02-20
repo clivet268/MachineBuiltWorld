@@ -1,10 +1,8 @@
 package com.Clivet268.MachineBuiltWorld.client.gui;
 
 
-import com.Clivet268.MachineBuiltWorld.MachineBuiltWorld;
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.CokeOvenContainer;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.recipebook.FurnaceRecipeGui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -12,33 +10,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class CokeOvenScreen extends ContainerScreen<CokeOvenContainer> {
+public class CokeOvenScreen extends AbstractCokeScreen<CokeOvenContainer> {
+    private static final ResourceLocation Coke_OVEN_GUI_TEXTURES = new ResourceLocation("textures/gui/container/furnace.png");
 
-        private ResourceLocation GUI = new ResourceLocation(MachineBuiltWorld.MOD_ID, "textures/gui/coke_oven_screen.png");
-
-        public CokeOvenScreen(CokeOvenContainer container, PlayerInventory inv, ITextComponent name) {
-            super(container, inv, name);
-        }
-
-
-        @Override
-        public void render(int mouseX, int mouseY, float partialTicks) {
-            this.renderBackground();
-            super.render(mouseX, mouseY, partialTicks);
-            this.renderHoveredToolTip(mouseX, mouseY);
-        }
-
-        @Override
-        protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-            //drawString(Minecraft.getInstance().fontRenderer, "Energy: " + container.getEnergy(), 10, 10, 0xffffff);
-        }
-
-        @Override
-        protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.minecraft.getTextureManager().bindTexture(GUI);
-            int relX = (this.width - this.xSize) / 2;
-            int relY = (this.height - this.ySize) / 2;
-            this.blit(relX, relY, 0, 0, this.xSize, this.ySize);
-        }
+    public CokeOvenScreen(CokeOvenContainer p_i51089_1_, PlayerInventory p_i51089_2_, ITextComponent p_i51089_3_) {
+        super(p_i51089_1_, new FurnaceRecipeGui(), p_i51089_2_, p_i51089_3_, Coke_OVEN_GUI_TEXTURES);
+    }
 }

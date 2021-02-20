@@ -1,10 +1,9 @@
 package com.Clivet268.MachineBuiltWorld.inventory.Containers;
 
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeOvenFuelSlot;
-import com.Clivet268.MachineBuiltWorld.inventory.crafting.AbstractCokeingRecipe;
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeOvenResultSlot;
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeingRecipe;
-import com.Clivet268.MachineBuiltWorld.tileentity.AbstractCokeOvenTile;
+import com.Clivet268.MachineBuiltWorld.tileentity.CokeOvenTile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -37,13 +36,13 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
     private TileEntity tileEntity;
     private PlayerEntity playerEntity;
 
-    private final IRecipeType<? extends AbstractCokeingRecipe> recipeType;
+    private final IRecipeType<? extends AbstractCookingRecipe> recipeType;
 
-    public CokeOvenContainerBase(ContainerType<?> containerTypeIn, IRecipeType<? extends AbstractCokeingRecipe> recipeTypeIn, int id, PlayerInventory playerInventoryIn, BlockPos pos) {
+    public CokeOvenContainerBase(ContainerType<?> containerTypeIn, IRecipeType<? extends AbstractCookingRecipe> recipeTypeIn, int id, PlayerInventory playerInventoryIn, BlockPos pos) {
         this(containerTypeIn, recipeTypeIn, id, playerInventoryIn, new Inventory(4), new IntArray(5),pos);
     }
 
-    protected CokeOvenContainerBase(ContainerType<?> containerTypeIn, IRecipeType<? extends AbstractCokeingRecipe> recipeTypeIn, int id, PlayerInventory playerInventoryIn, IInventory furnaceInventoryIn, IIntArray furnaceDataIn, BlockPos pos) {
+    protected CokeOvenContainerBase(ContainerType<?> containerTypeIn, IRecipeType<? extends AbstractCookingRecipe> recipeTypeIn, int id, PlayerInventory playerInventoryIn, IInventory furnaceInventoryIn, IIntArray furnaceDataIn, BlockPos pos) {
         super(containerTypeIn, id);
         this.world = playerInventoryIn.player.world.getWorld();
         tileEntity = world.getTileEntity(pos);
@@ -197,7 +196,7 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
     }
 
     public static boolean isFuel(ItemStack stack) {
-        return AbstractCokeOvenTile.isFuel(stack);
+        return CokeOvenTile.isFuel(stack);
     }
 
     @OnlyIn(Dist.CLIENT)

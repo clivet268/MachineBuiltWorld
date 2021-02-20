@@ -1,6 +1,7 @@
 package com.Clivet268.MachineBuiltWorld.tileentity;
 
-import com.Clivet268.MachineBuiltWorld.inventory.crafting.AbstractCokeingRecipe;
+import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeingRecipe;
+import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeingRecipe;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.block.AbstractFurnaceBlock;
@@ -26,6 +27,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -40,9 +42,13 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractCokeOvenTile extends LockableTileEntity implements ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
+
+    /*
     private ItemStackHandler itemHandler = createHandler();
     // Never create lazy optionals in getCapability. Always place them as fields in the tile entity:
     private LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
+
+     */
     private static final int[] SLOTS_UP = new int[]{0};
     private static final int[] SLOTS_DOWN = new int[]{2, 1};
     private static final int[] SLOTS_HORIZONTAL = new int[]{1};
@@ -94,7 +100,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
 
 
 
-
+/*
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
@@ -104,6 +110,8 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         return super.getCapability(cap, side);
     }
 
+ */
+/*
     private ItemStackHandler createHandler() {
         return new ItemStackHandler(4) {
 
@@ -116,7 +124,13 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
 
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                return stack.getItem() == Items.COAL;
+                if(slot==0)
+                {return stack.getItem() == Items.COAL;}
+                else if (true)
+                {
+                    return true;
+                }
+                return true;
             }
 
             @Nonnull
@@ -126,10 +140,12 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
             }
         };
     }
-    private final Map<ResourceLocation, Integer> cokeOvenSlotThings = Maps.newHashMap();
-    protected final IRecipeType<? extends AbstractCokeingRecipe> recipeType;
 
-    protected AbstractCokeOvenTile(TileEntityType<?> tileTypeIn, IRecipeType<? extends AbstractCokeingRecipe> recipeTypeIn) {
+ */
+    private final Map<ResourceLocation, Integer> cokeOvenSlotThings = Maps.newHashMap();
+    protected final IRecipeType<CokeingRecipe> recipeType;
+
+    protected AbstractCokeOvenTile(TileEntityType<?> tileTypeIn, IRecipeType<CokeingRecipe> recipeTypeIn) {
         super(tileTypeIn);
         this.recipeType = recipeTypeIn;
     }
@@ -139,13 +155,13 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
     }
 
     @Deprecated //Forge - get burn times by calling ForgeHooks#getBurnTime(ItemStack)
-    public static Map<Item, Integer> getBurnTimes() {
+    public static Map<Item, Integer> getCokeBurnTimes() {
         Map<Item, Integer> map = Maps.newLinkedHashMap();
-        addItemBurnTime(map, Items.LAVA_BUCKET, 20000);
-        addItemBurnTime(map, Blocks.COAL_BLOCK, 16000);
-        addItemBurnTime(map, Items.BLAZE_ROD, 2400);
-        addItemBurnTime(map, Items.COAL, 1600);
-        addItemBurnTime(map, Items.CHARCOAL, 1600);
+        addItemBurnTime(map, Items.LAVA_BUCKET, 18000);
+        addItemBurnTime(map, Blocks.COAL_BLOCK, 12000);
+        addItemBurnTime(map, Items.BLAZE_ROD, 1800);
+        addItemBurnTime(map, Items.COAL, 1200);
+        addItemBurnTime(map, Items.CHARCOAL, 1200);
         addItemTagBurnTime(map, ItemTags.LOGS, 300);
         addItemTagBurnTime(map, ItemTags.PLANKS, 300);
         addItemTagBurnTime(map, ItemTags.WOODEN_STAIRS, 300);
@@ -162,35 +178,35 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         addItemBurnTime(map, Blocks.TRAPPED_CHEST, 300);
         addItemBurnTime(map, Blocks.CRAFTING_TABLE, 300);
         addItemBurnTime(map, Blocks.DAYLIGHT_DETECTOR, 300);
-        addItemTagBurnTime(map, ItemTags.BANNERS, 300);
-        addItemBurnTime(map, Items.BOW, 300);
-        addItemBurnTime(map, Items.FISHING_ROD, 300);
-        addItemBurnTime(map, Blocks.LADDER, 300);
-        addItemTagBurnTime(map, ItemTags.SIGNS, 200);
-        addItemBurnTime(map, Items.WOODEN_SHOVEL, 200);
-        addItemBurnTime(map, Items.WOODEN_SWORD, 200);
-        addItemBurnTime(map, Items.WOODEN_HOE, 200);
-        addItemBurnTime(map, Items.WOODEN_AXE, 200);
-        addItemBurnTime(map, Items.WOODEN_PICKAXE, 200);
-        addItemTagBurnTime(map, ItemTags.WOODEN_DOORS, 200);
-        addItemTagBurnTime(map, ItemTags.BOATS, 1200);
-        addItemTagBurnTime(map, ItemTags.WOOL, 100);
-        addItemTagBurnTime(map, ItemTags.WOODEN_BUTTONS, 100);
-        addItemBurnTime(map, Items.STICK, 100);
-        addItemTagBurnTime(map, ItemTags.SAPLINGS, 100);
-        addItemBurnTime(map, Items.BOWL, 100);
-        addItemTagBurnTime(map, ItemTags.CARPETS, 67);
-        addItemBurnTime(map, Blocks.DRIED_KELP_BLOCK, 4001);
-        addItemBurnTime(map, Items.CROSSBOW, 300);
-        addItemBurnTime(map, Blocks.BAMBOO, 50);
-        addItemBurnTime(map, Blocks.DEAD_BUSH, 100);
-        addItemBurnTime(map, Blocks.SCAFFOLDING, 400);
-        addItemBurnTime(map, Blocks.LOOM, 300);
-        addItemBurnTime(map, Blocks.BARREL, 300);
-        addItemBurnTime(map, Blocks.CARTOGRAPHY_TABLE, 300);
-        addItemBurnTime(map, Blocks.FLETCHING_TABLE, 300);
-        addItemBurnTime(map, Blocks.SMITHING_TABLE, 300);
-        addItemBurnTime(map, Blocks.COMPOSTER, 300);
+        addItemTagBurnTime(map, ItemTags.BANNERS, 150);
+        addItemBurnTime(map, Items.BOW, 150);
+        addItemBurnTime(map, Items.FISHING_ROD, 150);
+        addItemBurnTime(map, Blocks.LADDER, 100);
+        addItemTagBurnTime(map, ItemTags.SIGNS, 100);
+        addItemBurnTime(map, Items.WOODEN_SHOVEL, 100);
+        addItemBurnTime(map, Items.WOODEN_SWORD, 100);
+        addItemBurnTime(map, Items.WOODEN_HOE, 100);
+        addItemBurnTime(map, Items.WOODEN_AXE, 100);
+        addItemBurnTime(map, Items.WOODEN_PICKAXE, 100);
+        addItemTagBurnTime(map, ItemTags.WOODEN_DOORS, 100);
+        addItemTagBurnTime(map, ItemTags.BOATS, 600);
+        addItemTagBurnTime(map, ItemTags.WOOL, 50);
+        addItemTagBurnTime(map, ItemTags.WOODEN_BUTTONS, 50);
+        addItemBurnTime(map, Items.STICK, 50);
+        addItemTagBurnTime(map, ItemTags.SAPLINGS, 50);
+        addItemBurnTime(map, Items.BOWL, 50);
+        addItemTagBurnTime(map, ItemTags.CARPETS, 34);
+        addItemBurnTime(map, Blocks.DRIED_KELP_BLOCK, 2001);
+        addItemBurnTime(map, Items.CROSSBOW, 150);
+        addItemBurnTime(map, Blocks.BAMBOO, 25);
+        addItemBurnTime(map, Blocks.DEAD_BUSH, 50);
+        addItemBurnTime(map, Blocks.SCAFFOLDING, 200);
+        addItemBurnTime(map, Blocks.LOOM, 150);
+        addItemBurnTime(map, Blocks.BARREL, 150);
+        addItemBurnTime(map, Blocks.CARTOGRAPHY_TABLE, 150);
+        addItemBurnTime(map, Blocks.FLETCHING_TABLE, 150);
+        addItemBurnTime(map, Blocks.SMITHING_TABLE, 150);
+        addItemBurnTime(map, Blocks.COMPOSTER, 150);
         return map;
     }
 
@@ -209,7 +225,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         return this.burnTime > 0;
     }
 
-    public void read(CompoundNBT compound) {
+    public void read(@Nonnull CompoundNBT compound) {
         super.read(compound);
         this.items = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.items);
@@ -227,7 +243,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
 
     }
 
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundNBT write(@Nonnull CompoundNBT compound) {
         super.write(compound);
         compound.putInt("BurnTime", this.burnTime);
         compound.putInt("CookTime", this.cookTime);
@@ -252,10 +268,11 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
             --this.burnTime;
         }
 
+        assert this.world != null;
         if (!this.world.isRemote) {
             ItemStack itemstack = this.items.get(1);
             if (this.isBurning() || !itemstack.isEmpty() && !this.items.get(0).isEmpty()) {
-                IRecipe<?> irecipe = this.world.getRecipeManager().getRecipe((IRecipeType<AbstractCokeingRecipe>)this.recipeType, this, this.world).orElse(null);
+                IRecipe<?> irecipe = this.world.getRecipeManager().getRecipe((IRecipeType<CokeingRecipe>)this.recipeType, this, this.world).orElse(null);
                 if (!this.isBurning() && this.canSmelt(irecipe)) {
                     this.burnTime = this.getBurnTime(itemstack);
                     this.recipesUsed = this.burnTime;
@@ -291,13 +308,12 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
 
             if (flag != this.isBurning()) {
                 flag1 = true;
-                this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(AbstractFurnaceBlock.LIT, Boolean.valueOf(this.isBurning())), 3);
+                this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(AbstractFurnaceBlock.LIT, this.isBurning()), 3);
             }
         }
 
-        if (flag1) {
             this.markDirty();
-        }
+
 
     }
 
@@ -307,7 +323,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
             if (itemstack.isEmpty()) {
                 return false;
             } else {
-                ItemStack itemstack1 = this.items.get(2);
+                ItemStack itemstack1 = this.items.get(3);
                 if (itemstack1.isEmpty()) {
                     return true;
                 } else if (!itemstack1.isItemEqual(itemstack)) {
@@ -327,13 +343,14 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         if (recipe != null && this.canSmelt(recipe)) {
             ItemStack itemstack = this.items.get(0);
             ItemStack itemstack1 = recipe.getRecipeOutput();
-            ItemStack itemstack2 = this.items.get(2);
+            ItemStack itemstack2 = this.items.get(3);
             if (itemstack2.isEmpty()) {
-                this.items.set(2, itemstack1.copy());
+                this.items.set(3, itemstack1.copy());
             } else if (itemstack2.getItem() == itemstack1.getItem()) {
                 itemstack2.grow(itemstack1.getCount());
             }
 
+            assert this.world != null;
             if (!this.world.isRemote) {
                 this.setRecipeUsed(recipe);
             }
@@ -357,7 +374,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
 
     protected int getCookTime() {
         System.out.println(this.world + " cow ");
-        return this.world.getRecipeManager().getRecipe(this.recipeType, this, this.world).map(AbstractCokeingRecipe::getCookTime).orElse(200);
+        return this.world.getRecipeManager().getRecipe(this.recipeType, this, this.world).map(CokeingRecipe::getCookTime).orElse(200);
     }
 
     public static boolean isFuel(ItemStack stack) {
@@ -452,7 +469,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
      * Don't rename this method to canInteractWith due to conflicts with Container
      */
     //@OnlyIn(Dist.CLIENT)
-    public boolean isUsableByPlayer(PlayerEntity player) {
+    public boolean isUsableByPlayer(@Nonnull PlayerEntity player) {
         //assert this.world != null;
         if(this.world == null)
         {
@@ -472,7 +489,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
      * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot. For
      * guis use Slot.isItemValid
      */
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
+    public boolean isItemValidForSlot(int index, @Nonnull ItemStack stack) {
         if (index == 3) {
             return false;
         } else if (index != 1) {
@@ -501,7 +518,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         return null;
     }
 
-    public void onCrafting(PlayerEntity player) {
+    public void onCrafting(@Nonnull PlayerEntity player) {
     }
 
     public void recipeOutput(PlayerEntity player) {
@@ -510,7 +527,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         for(Map.Entry<ResourceLocation, Integer> entry : this.cokeOvenSlotThings.entrySet()) {
             player.world.getRecipeManager().getRecipe(entry.getKey()).ifPresent((p_213993_3_) -> {
                 list.add(p_213993_3_);
-                spawnExpOrbs(player, entry.getValue(), ((AbstractCokeingRecipe)p_213993_3_).getExperience());
+                spawnExpOrbs(player, entry.getValue(), ((CokeingRecipe)p_213993_3_).getExperience());
             });
         }
 
