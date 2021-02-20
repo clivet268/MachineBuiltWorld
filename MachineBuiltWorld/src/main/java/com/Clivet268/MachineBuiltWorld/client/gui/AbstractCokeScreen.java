@@ -31,6 +31,7 @@ public abstract class AbstractCokeScreen<T extends CokeOvenContainerBase> extend
    public void init() {
       super.init();
       this.widthTooNarrowIn = this.width < 379;
+      assert this.minecraft != null;
       this.recipeGui.init(this.width, this.height, this.minecraft, this.widthTooNarrowIn, this.container);
       this.guiLeft = this.recipeGui.updateScreenPosition(this.widthTooNarrowIn, this.width, this.xSize);
       this.addButton((new ImageButton(this.guiLeft + 20, this.height / 2 - 49, 20, 18, 0, 0, 19, field_214089_l, (p_214087_1_) -> {

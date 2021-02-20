@@ -53,6 +53,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
     private static final int[] SLOTS_DOWN = new int[]{2, 1};
     private static final int[] SLOTS_HORIZONTAL = new int[]{1};
     protected NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
+
     private int burnTime;
     private int recipesUsed;
     private int cookTime;

@@ -24,6 +24,7 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.BlastFurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -44,6 +45,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.stream.Stream;
@@ -109,10 +111,10 @@ public class CokeOven extends Block{
     // public BlockState getStateForPlacement(BlockItemUseContext context) {
     //    return getDefaultState().with(BlockStateProperties.FACING, context.getNearestLookingDirection().getOpposite());
     // }
-
+    /*
     @SuppressWarnings("deprecation")
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+    public ActionResultType onBlockActivated(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, BlockRayTraceResult trace) {
         if (!world.isRemote) {
             TileEntity tileEntity = world.getTileEntity(pos);
             if (tileEntity instanceof CokeOvenTile) {
@@ -123,7 +125,7 @@ public class CokeOven extends Block{
                     }
 
                     @Override
-                    public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+                    public Container createMenu(int i, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
                         return new CokeOvenContainer(i, playerInventory, pos);
                     }
                 };
@@ -135,6 +137,46 @@ public class CokeOven extends Block{
         return ActionResultType.SUCCESS;
     }
 
+     */
+    @Override
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, @Nonnull BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if (!worldIn.isRemote) {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
+            if (tileentity instanceof CokeOvenTile) {
+                INamedContainerProvider containerProvider = new INamedContainerProvider() {
+                    @Override
+                    public ITextComponent getDisplayName() {
+                        return new TranslationTextComponent("screen.machinebuiltworld.coke_oven");
+                    }
+
+                    @Override
+                    public Container createMenu(int i, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
+                        System.out.println(pos);
+                        BlockPos pp = pos;
+                        System.out.println(pp);
+                        return new CokeOvenContainer(i, playerInventory, pp);
+                    }
+                };
+                player.openContainer(containerProvider);
+                //player.addStat(Stats.INTERACT_WITH_BLAST_FURNACE);
+            }
+        }
+        return ActionResultType.SUCCESS;
+    }
+    /**
+     * Called by ItemBlocks after a block is set in the world, to allow post-place logic
+     */
+    @Override
+    public void onBlockPlacedBy(World worldIn, @Nonnull BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        if (stack.hasDisplayName()) {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
+            if (tileentity instanceof CokeOvenTile) {
+                //new CokeOvenContainer(i, playerInventory, pos);
+                ((CokeOvenTile)tileentity).setCustomName(stack.getDisplayName());
+            }
+        }
+
+    }
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(LIT, FACING);

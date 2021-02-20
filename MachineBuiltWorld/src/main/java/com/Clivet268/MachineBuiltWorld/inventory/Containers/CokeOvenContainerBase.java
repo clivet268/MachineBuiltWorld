@@ -26,6 +26,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
+import javax.annotation.Nonnull;
+
 import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.COKE_OVEN_CONTAINER;
 
 public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
@@ -84,8 +86,8 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
 
         this.trackIntArray(furnaceDataIn);
     }
-@Override
-    public void fillStackedContents(RecipeItemHelper itemHelperIn) {
+    @Override
+    public void fillStackedContents(@Nonnull RecipeItemHelper itemHelperIn) {
         if (this.furnaceInventory instanceof IRecipeHelperPopulator) {
             ((IRecipeHelperPopulator)this.furnaceInventory).fillStackedContents(itemHelperIn);
         }
@@ -96,7 +98,7 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
         this.furnaceInventory.clear();
     }
 
-    public void func_217056_a(boolean p_217056_1_, IRecipe<?> p_217056_2_, ServerPlayerEntity p_217056_3_) {
+    public void func_217056_a(boolean p_217056_1_, @Nonnull IRecipe<?> p_217056_2_, @Nonnull ServerPlayerEntity p_217056_3_) {
         (new ServerRecipePlacerFurnace<>(this)).place(p_217056_3_, (IRecipe<IInventory>)p_217056_2_, p_217056_1_);
     }
 
@@ -124,7 +126,7 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
     /**
      * Determines whether supplied player can use this container
      */
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean canInteractWith(@Nonnull PlayerEntity playerIn) {
         return this.furnaceInventory.isUsableByPlayer(playerIn);
     }
 
@@ -132,7 +134,7 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
      * Handle when the stack in slot {@code index} is shift-clicked. Normally this moves the stack between the player
      * inventory and the other inventory(s).
      */
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack transferStackInSlot(@Nonnull PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
         if (slot != null && slot.getHasStack()) {
