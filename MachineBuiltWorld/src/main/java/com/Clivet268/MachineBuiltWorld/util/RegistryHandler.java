@@ -137,6 +137,7 @@ public class RegistryHandler {
     public static final RegistryObject<Block> CRUSHER = BLOCKS.register("crusher", Crusher::new);
     public static final RegistryObject<Block> OXYGEN_FURNACE = BLOCKS.register("oxygen_furnace", Crusher::new);
     public static final RegistryObject<Block> COKE_OVEN = BLOCKS.register("coke_oven", CokeOven::new);
+    public static final RegistryObject<Block> REINFORCED_BRICK = BLOCKS.register("reinforced_brick", CokeOven::new);
 
     //weapons
     public static final RegistryObject<SwordItem> COPPER_SWORD = ITEMS.register("copper_sword", () ->
@@ -202,6 +203,7 @@ public class RegistryHandler {
     public static final RegistryObject<Item> FIBERGLASS_MOULD_ITEM = ITEMS.register("fiberglass_mould", () -> new BlockItemBase(FIBERGLASS_MOULD.get()));
     public static final RegistryObject<Item> CRUSHER_ITEM = ITEMS.register("crusher", () -> new BlockItemBase(CRUSHER.get()));
     public static final RegistryObject<Item> COKE_OVEN_ITEM = ITEMS.register("coke_oven", () -> new BlockItemBase(COKE_OVEN.get()));
+    public static final RegistryObject<Item> REINFORCED_BRICK_ITEM = ITEMS.register("reinforced_brick", () -> new BlockItemBase(REINFORCED_BRICK.get()));
 
     //fluids resource locations
     public static final ResourceLocation BATTERY_ACID_STILL_RL = new ResourceLocation(MachineBuiltWorld.MOD_ID, "blocks/battery_acid_still");
