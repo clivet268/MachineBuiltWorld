@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "xzx",
+    " y ",
+    "xax"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "minecraft:brick"
+    },
+    "y":
+    {
+      "item": "minecraft:water_bucket"
+    },
+    "z":
+    {
+      "item": "machinebuiltworld:steel_ingot"
+    },
+    "a":
+    {
+      "item": "minecraft:yellow_concrete_powder"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:reinforced_brick",
+    "count": 1
+  }
+}
