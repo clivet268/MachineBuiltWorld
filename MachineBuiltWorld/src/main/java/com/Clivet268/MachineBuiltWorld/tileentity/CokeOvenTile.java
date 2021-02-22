@@ -11,6 +11,7 @@ import net.minecraft.inventory.container.FurnaceContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -41,8 +42,6 @@ public class CokeOvenTile extends AbstractCokeOvenTile{
     }
 
     protected Container createMenu(int id, PlayerInventory player) {
-        return new CokeOvenContainer(id, player, this, this.furnaceData, this.pos);
+        return new CokeOvenContainer(world, id, player, this.furnaceData, pos);
     }
-
-
 }

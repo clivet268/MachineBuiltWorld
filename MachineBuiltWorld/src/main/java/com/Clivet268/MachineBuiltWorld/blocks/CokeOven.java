@@ -2,6 +2,7 @@ package com.Clivet268.MachineBuiltWorld.blocks;
 
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.CokeOvenContainer;
 import com.Clivet268.MachineBuiltWorld.state.MoreStateProperties;
+import com.Clivet268.MachineBuiltWorld.tileentity.AbstractCokeOvenTile;
 import com.Clivet268.MachineBuiltWorld.tileentity.CokeOvenTile;
 import com.Clivet268.MachineBuiltWorld.tileentity.FiberglassMouldTile;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
@@ -84,8 +85,8 @@ public class CokeOven extends Block{
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof CokeOvenTile) {
-                InventoryHelper.dropInventoryItems(worldIn, pos, (CokeOvenTile)tileentity);
+            if (tileentity instanceof AbstractCokeOvenTile) {
+                InventoryHelper.dropInventoryItems(worldIn, pos, (AbstractCokeOvenTile)tileentity);
                 worldIn.updateComparatorOutputLevel(pos, this);
             }
 
@@ -141,42 +142,50 @@ public class CokeOven extends Block{
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, @Nonnull BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if (!worldIn.isRemote) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof CokeOvenTile) {
-                INamedContainerProvider containerProvider = new INamedContainerProvider() {
-                    @Override
-                    public ITextComponent getDisplayName() {
-                        return new TranslationTextComponent("screen.machinebuiltworld.coke_oven");
-                    }
-
-                    @Override
-                    public Container createMenu(int i, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
-                        System.out.println(pos);
-                        BlockPos pp = pos;
-                        System.out.println(pp);
-                        return new CokeOvenContainer(i, playerInventory, pp);
-                    }
-                };
-                player.openContainer(containerProvider);
-                //player.addStat(Stats.INTERACT_WITH_BLAST_FURNACE);
+            this.interactWith(worldIn, pos, player);
             }
-        }
+
         return ActionResultType.SUCCESS;
+    }
+    private void interactWith(World world, BlockPos pos, PlayerEntity player) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if (tileEntity instanceof INamedContainerProvider) {
+            NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+            player.addStat(RegistryHandler.MoreStats.INTERACT_WITH_COKE_OVEN);
+        }
     }
     /**
      * Called by ItemBlocks after a block is set in the world, to allow post-place logic
      */
+    /*
     @Override
     public void onBlockPlacedBy(World worldIn, @Nonnull BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         if (stack.hasDisplayName()) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity instanceof CokeOvenTile) {
-                //new CokeOvenContainer(i, playerInventory, pos);
                 ((CokeOvenTile)tileentity).setCustomName(stack.getDisplayName());
             }
         }
 
     }
+
+     */
+
+
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+        if (entity != null) {
+            CokeOvenTile tileEntity = (CokeOvenTile) world.getTileEntity(pos);
+            if (stack.hasDisplayName()) {
+                tileEntity.setCustomName(stack.getDisplayName());
+            }
+        }
+        else {
+            System.out.println("setblock placed");
+        }
+    }
+
+
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(LIT, FACING);

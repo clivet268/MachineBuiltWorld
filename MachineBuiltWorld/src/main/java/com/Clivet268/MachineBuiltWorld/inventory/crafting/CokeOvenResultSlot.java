@@ -1,20 +1,19 @@
 package com.Clivet268.MachineBuiltWorld.inventory.crafting;
 
+import com.Clivet268.MachineBuiltWorld.tileentity.AbstractCokeOvenTile;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
 public class CokeOvenResultSlot extends Slot {
     private final PlayerEntity player;
     private int removeCount;
+    private final AbstractCokeOvenTile tileEntity;
 
-    public CokeOvenResultSlot(PlayerEntity player, IInventory handler, int slotIndex, int xPosition, int yPosition) {
-        super(handler, slotIndex, xPosition, yPosition);
+    public CokeOvenResultSlot(PlayerEntity player, AbstractCokeOvenTile tileIn, int slotIndex, int xPosition, int yPosition) {
+        super(tileIn, slotIndex, xPosition, yPosition);
         this.player = player;
+        this.tileEntity = tileIn;
     }
 
     /**
@@ -55,8 +54,8 @@ public class CokeOvenResultSlot extends Slot {
      */
     protected void onCrafting(ItemStack stack) {
         stack.onCrafting(this.player.world, this.player, this.removeCount);
-        if (!this.player.world.isRemote && this.inventory instanceof AbstractFurnaceTileEntity) {
-            ((AbstractFurnaceTileEntity)this.inventory).func_213995_d(this.player);
+        if (!this.player.world.isRemote && this.inventory instanceof AbstractCokeOvenTile) {
+            ((AbstractCokeOvenTile)this.inventory).recipeOutput(this.player);
         }
 
         this.removeCount = 0;

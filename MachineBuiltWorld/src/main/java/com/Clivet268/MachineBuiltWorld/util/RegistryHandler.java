@@ -25,10 +25,15 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.FurnaceContainer;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.stats.IStatFormatter;
+import net.minecraft.stats.StatType;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
@@ -37,12 +42,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -300,11 +307,9 @@ public class RegistryHandler {
      */
     public static final RegistryObject<ContainerType<CokeOvenContainer>> COKE_OVEN_CONTAINER = CONTAINERS.register("coke_oven", () -> IForgeContainerType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
-        System.out.print(pos);
         World world = inv.player.getEntityWorld();
-        return new CokeOvenContainer(windowId, inv, pos);
+        return new CokeOvenContainer(windowId, world, inv, pos);
     }));
-
 
 
     //translucent layers
@@ -350,6 +355,22 @@ public class RegistryHandler {
         public static final Tag<Item> ION_SHELLS = new ItemTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "ion_shells"));
 
     }
+
+    //Stats
+    public static class MoreStats extends Stats{
+        public static final ResourceLocation INTERACT_WITH_COKE_OVEN = registerCustom("interact_with_coke_oven", IStatFormatter.DEFAULT);
+        private static ResourceLocation registerCustom(String key, IStatFormatter formatter) {
+            ResourceLocation resourcelocation = new ResourceLocation(key);
+            Registry.register(Registry.CUSTOM_STAT, key, resourcelocation);
+            CUSTOM.get(resourcelocation, formatter);
+            return resourcelocation;
+        }
+
+        private static <T> StatType<T> registerType(String key, Registry<T> registry) {
+            return Registry.register(Registry.STATS, key, new StatType<>(registry));
+        }
+    }
+
     //NBT Keys
     public static final String NBT_AMMO = "ammo";
 }
