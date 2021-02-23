@@ -2,18 +2,19 @@ package com.Clivet268.MachineBuiltWorld.inventory.crafting;
 
 import com.Clivet268.MachineBuiltWorld.tileentity.AbstractCokeOvenTile;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
-public class CokeOvenResultSlot extends Slot {
+public class CokeOvenResultSlot extends SlotItemHandler {
     private final PlayerEntity player;
     private int removeCount;
-    private final AbstractCokeOvenTile tileEntity;
 
-    public CokeOvenResultSlot(PlayerEntity player, AbstractCokeOvenTile tileIn, int slotIndex, int xPosition, int yPosition) {
-        super(tileIn, slotIndex, xPosition, yPosition);
+    public CokeOvenResultSlot(PlayerEntity player, IItemHandler handler, int slotIndex, int xPosition, int yPosition) {
+        super(handler, slotIndex, xPosition, yPosition);
         this.player = player;
-        this.tileEntity = tileIn;
     }
 
     /**

@@ -307,8 +307,9 @@ public class RegistryHandler {
      */
     public static final RegistryObject<ContainerType<CokeOvenContainer>> COKE_OVEN_CONTAINER = CONTAINERS.register("coke_oven", () -> IForgeContainerType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
+        System.out.println(pos);
         World world = inv.player.getEntityWorld();
-        return new CokeOvenContainer(windowId, world, inv, pos);
+        return new CokeOvenContainer(windowId,  inv, pos);
     }));
 
 
