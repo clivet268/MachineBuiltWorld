@@ -18,6 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -41,7 +42,7 @@ public class CokeOvenTile extends AbstractCokeOvenTile{
     }
 
     protected Container createMenu(int id, PlayerInventory player) {
-        return new CokeOvenContainer(id, player, this, this.furnaceData, this.pos);
+        return new CokeOvenContainer(id, world, player, this, this.furnaceData, this.pos);
     }
 
 

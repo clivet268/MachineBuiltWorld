@@ -31,6 +31,7 @@ private final int cookingTime;
         if (json.get("result").isJsonObject()) itemstack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
         else {
             String s1 = JSONUtils.getString(json, "result");
+            System.out.println(s1);
             ResourceLocation resourcelocation = new ResourceLocation(s1);
             itemstack = new ItemStack(Registry.ITEM.getValue(resourcelocation).orElseThrow(() -> {
                 return new IllegalStateException("Item: " + s1 + " does not exist");

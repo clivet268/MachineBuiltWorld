@@ -92,6 +92,7 @@ public abstract class AbstractCokeingRecipe implements IRecipe<IInventory> {
         }
         @Override
         public IRecipeSerializer<?> getSerializer() {
+            System.out.println(RegistryHandler.COKEING_RECIPE.get());
            return RegistryHandler.COKEING_RECIPE.get();
           }
         @Override

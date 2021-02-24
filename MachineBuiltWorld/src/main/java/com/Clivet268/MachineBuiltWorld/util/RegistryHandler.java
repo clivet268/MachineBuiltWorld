@@ -65,7 +65,7 @@ public class RegistryHandler {
     private static final DeferredRegister<TileEntityType<?>> TILES = new DeferredRegister<>(ForgeRegistries.TILE_ENTITIES, MachineBuiltWorld.MOD_ID);
     private static final DeferredRegister<ContainerType<?>> CONTAINERS = new DeferredRegister<>(ForgeRegistries.CONTAINERS, MachineBuiltWorld.MOD_ID);
     public static final DeferredRegister<EntityType<?>> ENTITIES = new DeferredRegister<>(ForgeRegistries.ENTITIES, MachineBuiltWorld.MOD_ID);
-
+    public static final DeferredRegister<StatType<?>> STATS = new DeferredRegister<>(ForgeRegistries.STAT_TYPES , MachineBuiltWorld.MOD_ID);
 
     public static void init() {
         RECIPES_SERIALIZER.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -144,7 +144,7 @@ public class RegistryHandler {
     public static final RegistryObject<Block> CRUSHER = BLOCKS.register("crusher", Crusher::new);
     public static final RegistryObject<Block> OXYGEN_FURNACE = BLOCKS.register("oxygen_furnace", Crusher::new);
     public static final RegistryObject<Block> COKE_OVEN = BLOCKS.register("coke_oven", CokeOven::new);
-    public static final RegistryObject<Block> REINFORCED_BRICK = BLOCKS.register("reinforced_brick", CokeOven::new);
+    public static final RegistryObject<Block> REINFORCED_BRICK = BLOCKS.register("reinforced_brick", ReinforcedBrick::new);
 
     //weapons
     public static final RegistryObject<SwordItem> COPPER_SWORD = ITEMS.register("copper_sword", () ->
@@ -309,7 +309,7 @@ public class RegistryHandler {
         BlockPos pos = data.readBlockPos();
         System.out.println(pos);
         World world = inv.player.getEntityWorld();
-        return new CokeOvenContainer(windowId,  inv, pos);
+        return new CokeOvenContainer(windowId, world, inv, pos);
     }));
 
 
@@ -358,6 +358,8 @@ public class RegistryHandler {
     }
 
     //Stats
+    //public static final RegistryObject<StatType<Block>> INTERACT_WITH_COKE_OVEN = STATS.register("interact_with_coke_oven", () -> new StatType<Block>(BLOCKS.).getRegistry());
+
     public static class MoreStats extends Stats{
         public static final ResourceLocation INTERACT_WITH_COKE_OVEN = registerCustom("interact_with_coke_oven", IStatFormatter.DEFAULT);
         private static ResourceLocation registerCustom(String key, IStatFormatter formatter) {

@@ -48,21 +48,22 @@ import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.stream.Stream;
 
+import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.MoreStats.INTERACT_WITH_COKE_OVEN;
+
 public class CokeOven extends Block{
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
         public CokeOven() {
             super(Properties.create((Material.IRON))
-                    .hardnessAndResistance(1.0f, 1.0f)
-                    .sound(SoundType.METAL)
-                    .harvestLevel(0)
-                    .tickRandomly()
-                    .lightValue(2)
+                    .hardnessAndResistance(4.5f, 15.0f)
+                    .sound(SoundType.STONE)
+                    .harvestLevel(1)
+                    .lightValue(6)
             );
         }
-
+    @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite()).with(LIT, false);
     }
 
 
@@ -78,7 +79,7 @@ public class CokeOven extends Block{
     }
 
      */
-
+    @Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
@@ -103,13 +104,6 @@ public class CokeOven extends Block{
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new CokeOvenTile().getTileEntity();
     }
-
-    // @Nullable
-    //@Override
-    // public BlockState getStateForPlacement(BlockItemUseContext context) {
-    //    return getDefaultState().with(BlockStateProperties.FACING, context.getNearestLookingDirection().getOpposite());
-    // }
-
     @SuppressWarnings("deprecation")
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
@@ -124,7 +118,10 @@ public class CokeOven extends Block{
 
                     @Override
                     public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-                        return new CokeOvenContainer(i, playerInventory, pos);
+                        //System.out.println(0xd0d4);
+                        System.out.println(world);
+                        System.out.println(pos);
+                        return new CokeOvenContainer(i, world, playerInventory, pos);
                     }
                 };
                 NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, tileEntity.getPos());
@@ -132,6 +129,7 @@ public class CokeOven extends Block{
                 throw new IllegalStateException("Our named container provider is missing!");
             }
         }
+        player.addStat(INTERACT_WITH_COKE_OVEN);
         return ActionResultType.SUCCESS;
     }
 
@@ -151,7 +149,7 @@ public class CokeOven extends Block{
     public boolean canEntitySpawn(BlockState state, IBlockReader worldIn, BlockPos pos, EntityType<?> type) { return false; }
 
 
-
+    @Override
     @OnlyIn(Dist.CLIENT)
         public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
             if (stateIn.get(LIT)) {

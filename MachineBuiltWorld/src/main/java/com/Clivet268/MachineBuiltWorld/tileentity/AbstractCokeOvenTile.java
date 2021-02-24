@@ -1,6 +1,7 @@
 package com.Clivet268.MachineBuiltWorld.tileentity;
 
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.AbstractCokeingRecipe;
+import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeingRecipe;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.block.AbstractFurnaceBlock;
@@ -133,7 +134,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         super(tileTypeIn);
         this.recipeType = recipeTypeIn;
     }
-
+    @Override
     protected net.minecraftforge.items.IItemHandler createUnSidedHandler() {
         return new InvWrapper(this);
     }
@@ -208,7 +209,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
     private boolean isBurning() {
         return this.burnTime > 0;
     }
-
+    @Override
     public void read(CompoundNBT compound) {
         super.read(compound);
         this.items = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
@@ -226,7 +227,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         }
 
     }
-
+    @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
         compound.putInt("BurnTime", this.burnTime);
@@ -244,18 +245,18 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
 
         return compound;
     }
-
+    @Override
     public void tick() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
         if (this.isBurning()) {
             --this.burnTime;
         }
-
+        System.out.println(world);
         if (!this.world.isRemote) {
             ItemStack itemstack = this.items.get(1);
             if (this.isBurning() || !itemstack.isEmpty() && !this.items.get(0).isEmpty()) {
-                IRecipe<?> irecipe = this.world.getRecipeManager().getRecipe((IRecipeType<AbstractCokeingRecipe>)this.recipeType, this, this.world).orElse(null);
+                IRecipe<?> irecipe = this.world.getRecipeManager().getRecipe((IRecipeType<CokeingRecipe>)this.recipeType, this, this.world).orElse(null);
                 if (!this.isBurning() && this.canSmelt(irecipe)) {
                     this.burnTime = this.getBurnTime(itemstack);
                     this.recipesUsed = this.burnTime;
@@ -291,7 +292,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
 
             if (flag != this.isBurning()) {
                 flag1 = true;
-                this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(AbstractFurnaceBlock.LIT, Boolean.valueOf(this.isBurning())), 3);
+                this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(AbstractFurnaceBlock.LIT, this.isBurning()), 3);
             }
         }
 
@@ -363,7 +364,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
     public static boolean isFuel(ItemStack stack) {
         return net.minecraftforge.common.ForgeHooks.getBurnTime(stack) > 0;
     }
-
+    @Override
     public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) {
             return SLOTS_DOWN;
@@ -375,14 +376,16 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
     /**
      * Returns true if automation can insert the given item in the given slot from the given side.
      */
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+    @Override
+    public boolean canInsertItem(int index, @Nonnull ItemStack itemStackIn, @Nullable Direction direction) {
         return this.isItemValidForSlot(index, itemStackIn);
     }
 
     /**
      * Returns true if automation can extract the given item in the given slot from the given side.
      */
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    @Override
+    public boolean canExtractItem(int index, @Nonnull ItemStack stack, Direction direction) {
         if (direction == Direction.DOWN && index == 1) {
             Item item = stack.getItem();
             return item == Items.WATER_BUCKET || item == Items.BUCKET;
@@ -394,10 +397,12 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
     /**
      * Returns the number of slots in the inventory.
      */
+    @Override
     public int getSizeInventory() {
         return this.items.size();
     }
 
+    @Override
     public boolean isEmpty() {
         for(ItemStack itemstack : this.items) {
             if (!itemstack.isEmpty()) {
@@ -411,6 +416,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
     /**
      * Returns the stack in the given slot.
      */
+    @Override
     public ItemStack getStackInSlot(int index) {
         return this.items.get(index);
     }
@@ -418,6 +424,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
     /**
      * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
      */
+    @Override
     public ItemStack decrStackSize(int index, int count) {
         return ItemStackHelper.getAndSplit(this.items, index, count);
     }
@@ -425,6 +432,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
     /**
      * Removes a stack from the given slot and returns it.
      */
+    @Override
     public ItemStack removeStackFromSlot(int index) {
         return ItemStackHelper.getAndRemove(this.items, index);
     }
@@ -432,6 +440,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
     /**
      * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
      */
+    @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
         ItemStack itemstack = this.items.get(index);
         boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack);
@@ -451,6 +460,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
     /**
      * Don't rename this method to canInteractWith due to conflicts with Container
      */
+    @Override
     //@OnlyIn(Dist.CLIENT)
     public boolean isUsableByPlayer(PlayerEntity player) {
         //assert this.world != null;
@@ -472,6 +482,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
      * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot. For
      * guis use Slot.isItemValid
      */
+    @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         if (index == 3) {
             return false;
@@ -482,11 +493,11 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
             return isFuel(stack) || stack.getItem() == Items.BUCKET && itemstack.getItem() != Items.BUCKET;
         }
     }
-
+    @Override
     public void clear() {
         this.items.clear();
     }
-
+    @Override
     public void setRecipeUsed(@Nullable IRecipe<?> recipe) {
         if (recipe != null) {
             this.cokeOvenSlotThings.compute(recipe.getId(), (p_214004_0_, p_214004_1_) -> {

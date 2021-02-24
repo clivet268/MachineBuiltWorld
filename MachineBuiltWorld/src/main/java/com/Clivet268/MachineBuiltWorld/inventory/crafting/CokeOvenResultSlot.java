@@ -1,6 +1,7 @@
 package com.Clivet268.MachineBuiltWorld.inventory.crafting;
 
 import com.Clivet268.MachineBuiltWorld.tileentity.AbstractCokeOvenTile;
+import com.Clivet268.MachineBuiltWorld.tileentity.CokeOvenTile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
@@ -8,13 +9,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class CokeOvenResultSlot extends SlotItemHandler {
+public class CokeOvenResultSlot extends Slot {
     private final PlayerEntity player;
     private int removeCount;
 
-    public CokeOvenResultSlot(PlayerEntity player, IItemHandler handler, int slotIndex, int xPosition, int yPosition) {
-        super(handler, slotIndex, xPosition, yPosition);
+    public CokeOvenResultSlot(PlayerEntity player, CokeOvenTile cokeOvenTile, int slotIndex, int xPosition, int yPosition) {
+        super(cokeOvenTile, slotIndex, xPosition, yPosition);
         this.player = player;
+        //System.out.println(this.getHasStack());
     }
 
     /**

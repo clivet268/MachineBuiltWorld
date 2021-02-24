@@ -11,11 +11,11 @@ public class CokeingRecipe extends AbstractCokeingRecipe {
     public CokeingRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, float experienceIn, int cookTimeIn) {
         super(IMoreRecipeType.COKEING, idIn, groupIn, ingredientIn, resultIn, experienceIn, cookTimeIn);
     }
-
+    @Override
     public ItemStack getIcon() {
         return new ItemStack(RegistryHandler.COKE_OVEN.get());
     }
-
+    @Override
     public IRecipeSerializer<?> getSerializer() {
         return RegistryHandler.COKEING_RECIPE.get();
     }

@@ -8,11 +8,11 @@ issueTrackerURL="http://my.issue.tracker/" #optional
 
 modId="machinebuiltworld"
 
-version="1.15.2-1.0.0"
+version="1.15.2-1.0.2"
 
 displayName="Machine Built World" #mandatory
 
-updateJSONURL="http://myurl.me/"
+#updateJSONURL="http://myurl.me/"
 
 displayURL="http://example.com/" #optional
 
