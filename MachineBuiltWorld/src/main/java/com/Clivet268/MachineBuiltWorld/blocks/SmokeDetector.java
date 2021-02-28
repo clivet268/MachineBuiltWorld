@@ -2,6 +2,7 @@ package com.Clivet268.MachineBuiltWorld.blocks;
 
 //import com.Clivet268.MachineBuiltWorld.init.ModTileEntityTypes;
 
+import com.Clivet268.MachineBuiltWorld.Config;
 import com.Clivet268.MachineBuiltWorld.state.MoreStateProperties;
 import com.Clivet268.MachineBuiltWorld.tileentity.SmokeDetectorTile;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
@@ -10,10 +11,13 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityType;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -25,6 +29,8 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
@@ -32,6 +38,9 @@ import java.util.Random;
 import java.util.stream.Stream;
 
 public class SmokeDetector extends Block {
+    private int sampleRate = Config.SMOKE_DETECTOR_SAMPLE_RATE.get();
+    public static final BooleanProperty ONOROFF = MoreStateProperties.ONOROFF;
+    public static final BooleanProperty SENSITIVE = MoreStateProperties.ONOROFF;
     public static final BooleanProperty ALARM = MoreStateProperties.ONOROFF;
     private static final VoxelShape REG_SHAPE = Stream.of(
             Block.makeCuboidShape(3, 0, 4, 4, 2, 12),
@@ -93,32 +102,46 @@ public class SmokeDetector extends Block {
                 || hasEnoughSolidSide(worldIn, blockpos, Direction.EAST)|| hasEnoughSolidSide(worldIn, blockpos, Direction.WEST) || hasEnoughSolidSide(worldIn, blockpos, Direction.NORTH)
                 || hasEnoughSolidSide(worldIn, blockpos, Direction.SOUTH);
     }
+
     @Override
-    public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
-        worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_GHAST_SCREAM, SoundCategory.BLOCKS, 10000, 0, false);
+    @OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        System.out.println(sampleRate);
+        if(sampleRate > 0){
+            sampleRate--;
+        }
+        else {
+            sampleRate = Config.SMOKE_DETECTOR_SAMPLE_RATE.get();
+            detect(worldIn, pos, stateIn);
+        }
 
-        detect(worldIn, pos, state);
-
+           // worldIn.addParticle(ParticleTypes.SMOKE, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
     }
 
+
     public void detect(World world, BlockPos pos, BlockState state){
-       // System.out.print("??");
-            //System.out.print("1");
-            for (Direction face : Direction.values()) {
-                System.out.println(face);
-                if (face != Direction.UP) {
-                    System.out.println("3");
-                    for (int o = 1; o <= 2; o++) {
-                        System.out.println("4");
-                        if (world.getBlockState(pos.offset(face, o)).getBlock().isIn(RegistryHandler.Tags.SMOKY)) {
-                            world.setBlockState(pos, state.with(ALARM, Boolean.valueOf(true)), 3);
-                            world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_GHAST_SCREAM, SoundCategory.BLOCKS, 10000, 0, false);
-                            System.out.println("FIRE!!");
-                        }
+        System.out.println("check1");
+        ResourceLocation tag = new ResourceLocation("machinebuiltworld", "smoke_sensitive");
+        for(int x=-5; x <= 5; x++) {
+            for (int y = -5; y <= 5; y++) {
+                for (int z = -5; z <= 5; z++) {
+                    Block block = world.getBlockState(new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z)).getBlock();
+                    System.out.println(block);
+                    //System.out.println(BlockTags.getCollection().getOrCreate(tag).contains(block));
+                    if (RegistryHandler.Tags.SMOKY_SENSITIVE.contains(block)){
+                        
+                        world.setBlockState(pos, state.with(ALARM, Boolean.TRUE), 3);
+                        world.playSound(pos.getX(), pos.getY(), pos.getZ(), RegistryHandler.SMOKE_ALARM.get(), SoundCategory.BLOCKS, 10000, 0, false);
+                        System.out.println("FIRE!!");
                     }
                 }
             }
         }
+    }
+
+
+
+
 
 
     @Override
