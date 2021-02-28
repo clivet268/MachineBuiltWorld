@@ -252,7 +252,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         if (this.isBurning()) {
             --this.burnTime;
         }
-        System.out.println(world);
+        //System.out.println(world);
         if (!this.world.isRemote) {
             ItemStack itemstack = this.items.get(1);
             if (this.isBurning() || !itemstack.isEmpty() && !this.items.get(0).isEmpty()) {
