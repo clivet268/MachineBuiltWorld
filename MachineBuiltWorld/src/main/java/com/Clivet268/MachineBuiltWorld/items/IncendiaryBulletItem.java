@@ -14,7 +14,6 @@ public class IncendiaryBulletItem extends Item {
 
     public AbstractBulletEntity createBullet(World worldIn, ItemStack stack, LivingEntity shooter) {
         BulletEntity bulletEntity = new BulletEntity(worldIn, shooter);
-        bulletEntity.setPotionEffect(stack);
         return bulletEntity;
     }
 }

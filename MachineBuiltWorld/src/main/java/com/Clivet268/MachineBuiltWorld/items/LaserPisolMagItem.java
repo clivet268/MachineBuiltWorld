@@ -68,7 +68,7 @@ public class LaserPisolMagItem extends Item{
             if(playerIn.getHeldItem(handIn).getCount() != 1){
                 return ActionResult.resultFail(playerIn.getHeldItem(handIn));
             }
-            double ammoAmnt = getBulletAmount(playerIn.getHeldItem(handIn));
+            int ammoAmnt = getBulletAmount(playerIn.getHeldItem(handIn));
             if (playerIn.isSneaking()) {
 
                 if(playerIn.getHeldItemOffhand().getItem() == RegistryHandler.LASER_SHELL.get())
@@ -90,13 +90,13 @@ public class LaserPisolMagItem extends Item{
         return ActionResult.resultFail(playerIn.getHeldItem(handIn));
     }
 
-    private static void setBulletAmount(ItemStack mag, double bullets) {
+    public void setBulletAmount(ItemStack mag, int bullets) {
         //Store the tool's mode in NBT as a string
         CompoundNBT tagCompound = mag.getOrCreateTag();
-        tagCompound.putDouble("ammo", bullets);
+        tagCompound.putInt("ammo", bullets);
     }
 
-    public static int getBulletAmount(ItemStack mag) {
+    public int getBulletAmount(ItemStack mag) {
         CompoundNBT tagCompound = mag.getOrCreateTag();
         return tagCompound.getInt("ammo");
     }

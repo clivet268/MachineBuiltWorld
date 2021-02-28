@@ -18,5 +18,25 @@
         "stream": true
       }
     ]
+  },
+  "item.laser_pistol_shoot": {
+    "category": "item",
+    "subtitle": "item.laser_pistol_shoot.sub",
+    "sounds": [
+      {
+        "name": "machinebuiltworld:item/laser_pistol_shoot",
+        "stream": true
+      }
+    ]
+  },
+  "block.smoke_alarm": {
+    "category": "block",
+    "subtitle": "block.smoke_alarm.sub",
+    "sounds": [
+      {
+        "name": "machinebuiltworld:block/smoke_alarm",
+        "stream": true
+      }
+    ]
   }
 }
