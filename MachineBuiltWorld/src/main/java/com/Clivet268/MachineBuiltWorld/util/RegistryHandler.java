@@ -81,6 +81,9 @@ public class RegistryHandler {
     //sounds
     public static final RegistryObject<SoundEvent> BULLET_HIT = SOUNDS.register("bullet_hit",() -> new SoundEvent(new ResourceLocation(MachineBuiltWorld.MOD_ID,"entity.bullet_hit")));
     public static final RegistryObject<SoundEvent> PISTOL_SHOOT = SOUNDS.register("pistol_shoot",() -> new SoundEvent(new ResourceLocation(MachineBuiltWorld.MOD_ID,"item.pistol_shoot")));
+    public static final RegistryObject<SoundEvent> LASER_PISTOL_SHOOT = SOUNDS.register("laser_pistol_shoot",() -> new SoundEvent(new ResourceLocation(MachineBuiltWorld.MOD_ID,"item.laser_pistol_shoot")));
+    public static final RegistryObject<SoundEvent> SMOKE_ALARM = SOUNDS.register("smoke_alarm",() -> new SoundEvent(new ResourceLocation(MachineBuiltWorld.MOD_ID,"block.smoke_alarm")));
+
     //entities
 
     //projectiles
@@ -119,6 +122,12 @@ public class RegistryHandler {
     public static final RegistryObject<Item> STEEL_INGOT = ITEMS.register("steel_ingot", ItemBase::new);
     public static final RegistryObject<Item> PIG_IRON_INGOT = ITEMS.register("pig_iron_ingot", ItemBase::new);
     public static final RegistryObject<Item> COKE = ITEMS.register("coke", ItemBase::new);
+    public static final RegistryObject<Item> CUT_GARNET = ITEMS.register("cut_garnet", ItemBase::new);
+    public static final RegistryObject<Item> CUT_POLISHED_GARNET = ITEMS.register("cut_polished_garnet", ItemBase::new);
+    public static final RegistryObject<Item> LARGE_UNCUT_GARNET = ITEMS.register("large_uncut_garnet", ItemBase::new);
+    public static final RegistryObject<Item> UNCUT_GARNET = ITEMS.register("uncut_garnet", ItemBase::new);
+    public static final RegistryObject<Item> ERBIUM = ITEMS.register("erbium", ItemBase::new);
+    public static final RegistryObject<Item> ALUMINUM_INGOT = ITEMS.register("aluminum_ingot", ItemBase::new);
 
     //blocks
     public static final RegistryObject<Block> COPPER_BLOCK = BLOCKS.register("copper_block", CopperBlock::new);
@@ -145,12 +154,17 @@ public class RegistryHandler {
     public static final RegistryObject<Block> OXYGEN_FURNACE = BLOCKS.register("oxygen_furnace", Crusher::new);
     public static final RegistryObject<Block> COKE_OVEN = BLOCKS.register("coke_oven", CokeOven::new);
     public static final RegistryObject<Block> REINFORCED_BRICK = BLOCKS.register("reinforced_brick", ReinforcedBrick::new);
+    public static final RegistryObject<Block> BAUXITE_ORE = BLOCKS.register("bauxite_ore", BauxiteOre::new);
+    public static final RegistryObject<Block> GARNET_ORE = BLOCKS.register("garnet_ore", GarnetOre::new);
+    public static final RegistryObject<Block> ERBIUM_ORE = BLOCKS.register("erbium_ore", ErbiumOre::new);
 
     //weapons
     public static final RegistryObject<SwordItem> COPPER_SWORD = ITEMS.register("copper_sword", () ->
             new SwordItem(ModItemTier.COPPER, 2, -2.4f, new Item.Properties().group(ItemGroup.COMBAT)));
     public static final RegistryObject<LaserPistolItem> LASER_PISTOL = ITEMS.register("laser_pistol", ()->
-            new LaserPistolItem(new Item.Properties().group(ItemGroup.COMBAT).maxDamage(500)));
+            new LaserPistolItem(new Item.Properties().group(ItemGroup.COMBAT).maxDamage(1200)));
+    public static final RegistryObject<PistolItem> PISTOL = ITEMS.register("pistol", ()->
+            new PistolItem(new Item.Properties().group(ItemGroup.COMBAT).maxDamage(800)));
     public static final RegistryObject<BulletItem> BULLET = ITEMS.register("bullet", ()->
             new BulletItem(new Item.Properties().group(ItemGroup.COMBAT)));
     public static final RegistryObject<IncendiaryBulletItem> INCENDIARY_BULLET = ITEMS.register("incendiary_bullet", ()->
@@ -329,8 +343,7 @@ public class RegistryHandler {
 
         @Override
         protected void registerTags() {
-            this.getBuilder(Tags.SMOKY).add(Blocks.CAMPFIRE);
-            this.getBuilder(Tags.SMOKY).add(Blocks.FIRE);
+            this.getBuilder(Tags.SMOKY_SENSITIVE).add(Blocks.CAMPFIRE).add(Blocks.FIRE);
         }
 
     }
@@ -351,7 +364,7 @@ public class RegistryHandler {
     }
     public static class Tags {
         //public static final Tag<Fluid> RESIN = new FluidTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "resin"));
-        public static final Tag<Block> SMOKY = new BlockTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "smoky"));
+        public static final Tag<Block> SMOKY_SENSITIVE = new BlockTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "smoky_sensitive"));
         public static final Tag<Item> BULLETS = new ItemTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "bullets"));
         public static final Tag<Item> ION_SHELLS = new ItemTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "ion_shells"));
 

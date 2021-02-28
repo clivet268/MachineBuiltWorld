@@ -36,6 +36,7 @@ public class Config {
     public static ForgeConfigSpec.IntValue MIXER_RECEIVE;
     public static ForgeConfigSpec.IntValue CRUSHER_MAXPOWER;
     public static ForgeConfigSpec.IntValue CRUSHER_RECEIVE;
+    public static ForgeConfigSpec.IntValue SMOKE_DETECTOR_SAMPLE_RATE;
 
     static {
 
@@ -48,7 +49,7 @@ public class Config {
 
         SERVER_BUILDER.comment("Power settings").push(CATEGORY_POWER);
 
-        setupBatteriesConfig(SERVER_BUILDER, CLIENT_BUILDER);
+        setupConfig(SERVER_BUILDER, CLIENT_BUILDER);
 
         SERVER_BUILDER.pop();
 
@@ -57,7 +58,7 @@ public class Config {
         CLIENT_CONFIG = CLIENT_BUILDER.build();
     }
 
-    private static void setupBatteriesConfig(ForgeConfigSpec.Builder SERVER_BUILDER, ForgeConfigSpec.Builder CLIENT_BUILDER) {
+    private static void setupConfig(ForgeConfigSpec.Builder SERVER_BUILDER, ForgeConfigSpec.Builder CLIENT_BUILDER) {
         SERVER_BUILDER.comment("Battery settings").push(SUBCATEGORY_BATTERY);
 
         TTTBATTERY_MAXPOWER = SERVER_BUILDER.comment("Maximum power for the FirstBlock generator")
@@ -102,6 +103,8 @@ public class Config {
                 .defineInRange("maxPower", 100000, 0, Integer.MAX_VALUE);
         CRUSHER_RECEIVE = SERVER_BUILDER.comment("Power to recive per tick")
                 .defineInRange("receive", 100, 0, Integer.MAX_VALUE);
+        SMOKE_DETECTOR_SAMPLE_RATE = SERVER_BUILDER.comment("number of ticks inbetween smples")
+                .defineInRange("sampleRate", 2, 1, Integer.MAX_VALUE);
 
         SERVER_BUILDER.pop();
     }

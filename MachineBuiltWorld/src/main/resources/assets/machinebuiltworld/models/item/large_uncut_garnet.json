@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "machinebuiltworld:items/large_uncut_garnet"
+  }
+}

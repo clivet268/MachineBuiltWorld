@@ -50,12 +50,14 @@ Vital texture broken link corrected
 1/1/2021
 Machine Built World V1.0.2 Alpha
 
-Blocks Added: Crusher(WIP), Oxygen Furnace(WIP), Coke Oven(WIP), Reinforced Bricks(WIP)
+Blocks Added: Crusher(WIP), Oxygen Furnace(WIP), Coke Oven(WIP), Reinforced Bricks(WIP), Erbium Ore(WIP),
+Garnet Ore(WIP), Aluminum Ore(WIP),
 
 Items Added: glass shards(WIP), bullet(WIP), incendiary bullet(WIP), ion canister(WIP), laser bullet(WIP),
-micro resonator(WIP), resonator(WIP), large resonator(WIP), steel ingot(WIP), pig iron ingot(WIP), coke(WIP)
+micro resonator(WIP), resonator(WIP), large resonator(WIP), steel ingot(WIP), pig iron ingot(WIP), coke(WIP),
+cut garnet(WIP), polished cut garnet(WIP), large uncut garnet(WIP), uncut garnet(WIP), erbium(WIP), aluminum ingot(WIP)
 
-Tools Added: laser pistol(WIP), laser pistol mag(WIP)
+Tools Added: laser pistol(WIP), laser pistol mag(WIP), pistol(WIP)
 
 Entities Added: Bullet(WIP)
 
@@ -63,5 +65,7 @@ Other:
 Updated lang
 Coke Oven: + GUI(WIP) + Tile Entity(WIP) + Cokeing(WIP)
 Bullet: + impact sound(WIP)
-laser pistol: + shoot sound(WIP)
+laser pistol: + shoot sound(WIP) + bullet hit sound (WIP)
+Smoke Alarm: + alarm sound(WIP)
+pistol: + shoot sound(WIP)
 Vital texture broken link for blocks corrected (again)

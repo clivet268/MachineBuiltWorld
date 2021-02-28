@@ -1,0 +1,20 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "machinebuiltworld:items/resonator"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "machinebuiltworld:fstate": 0.1
+      },
+      "model": "machinebuiltworld:item/resonator_lit_1"
+    },
+    {
+      "predicate": {
+        "machinebuiltworld:fstate": 0.2
+      },
+      "model": "machinebuiltworld:item/resonator_lit_2"
+    }
+  ]
+}
