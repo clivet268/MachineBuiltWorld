@@ -13,7 +13,10 @@ public enum ModItemTier implements IItemTier {
 
     CRAFTING_TOOLS(-1,100, 2.0f, 1.0f, 3, () -> {return Ingredient.fromItems(Items.IRON_NUGGET);}),
 
-    MULTIMETER(-1,100, 2.0f, 1.0f, 3, () -> {return Ingredient.fromItems(Items.IRON_NUGGET);});
+    MULTIMETER(-1,100, 2.0f, 1.0f, 3, () -> {return Ingredient.fromItems(Items.IRON_NUGGET);}),
+
+    LASER_PISTOL(-1,1200, 2.0f, 1.0f, 3, () -> {return Ingredient.fromItems(RegistryHandler.STEEL_INGOT.get());});
+
     private final int harvestLevel;
     private final int maxUses;
     private final float efficiency;

@@ -37,15 +37,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public abstract class AbstractBulletEntity extends Entity implements IProjectile {
-    private static final DataParameter<Byte> CRITICAL = EntityDataManager.createKey(AbstractBulletEntity.class, DataSerializers.BYTE);
-    protected static final DataParameter<Optional<UUID>> field_212362_a = EntityDataManager.createKey(AbstractBulletEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-    private static final DataParameter<Byte> PIERCE_LEVEL = EntityDataManager.createKey(AbstractBulletEntity.class, DataSerializers.BYTE);
+public abstract class AbstractLaserEntity extends Entity implements IProjectile {
+    private static final DataParameter<Byte> CRITICAL = EntityDataManager.createKey(AbstractLaserEntity.class, DataSerializers.BYTE);
+    protected static final DataParameter<Optional<UUID>> field_212362_a = EntityDataManager.createKey(AbstractLaserEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    private static final DataParameter<Byte> PIERCE_LEVEL = EntityDataManager.createKey(AbstractLaserEntity.class, DataSerializers.BYTE);
     @Nullable
     private BlockState inBlockState;
     protected boolean inGround;
     protected int timeInGround;
-    public AbstractBulletEntity.PickupStatus pickupStatus = AbstractBulletEntity.PickupStatus.DISALLOWED;
+    public AbstractLaserEntity.PickupStatus pickupStatus = AbstractLaserEntity.PickupStatus.DISALLOWED;
     public int arrowShake;
     public UUID shootingEntity;
     private int ticksInGround;
@@ -56,20 +56,20 @@ public abstract class AbstractBulletEntity extends Entity implements IProjectile
     private IntOpenHashSet piercedEntities;
     private List<Entity> hitEntities;
 
-    protected AbstractBulletEntity(EntityType<? extends AbstractBulletEntity> type, World worldIn) {
+    protected AbstractLaserEntity(EntityType<? extends AbstractLaserEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
-    protected AbstractBulletEntity(EntityType<? extends AbstractBulletEntity> type, double x, double y, double z, World worldIn) {
+    protected AbstractLaserEntity(EntityType<? extends AbstractLaserEntity> type, double x, double y, double z, World worldIn) {
         this(type, worldIn);
         this.setPosition(x, y, z);
     }
 
-    protected AbstractBulletEntity(EntityType<? extends AbstractBulletEntity> type, LivingEntity shooter, World worldIn) {
+    protected AbstractLaserEntity(EntityType<? extends AbstractLaserEntity> type, LivingEntity shooter, World worldIn) {
         this(type, shooter.getPosX(), shooter.getPosYEye() - (double)0.1F, shooter.getPosZ(), worldIn);
         this.setShooter(shooter);
         if (shooter instanceof PlayerEntity) {
-            this.pickupStatus = AbstractBulletEntity.PickupStatus.ALLOWED;
+            this.pickupStatus = AbstractLaserEntity.PickupStatus.ALLOWED;
         }
 
     }
@@ -371,9 +371,9 @@ public abstract class AbstractBulletEntity extends Entity implements IProjectile
         Entity entity1 = this.getShooter();
         DamageSource damagesource;
         if (entity1 == null) {
-            damagesource = MoreDamageSource.causeBulletDamage(this, this);
+            damagesource = MoreDamageSource.causeLaserDamage(this, this);
         } else {
-            damagesource = MoreDamageSource.causeBulletDamage(this, entity1);
+            damagesource = MoreDamageSource.causeLaserDamage(this, entity1);
             if (entity1 instanceof LivingEntity) {
                 ((LivingEntity)entity1).setLastAttackedEntity(entity);
             }
@@ -381,9 +381,8 @@ public abstract class AbstractBulletEntity extends Entity implements IProjectile
 
         boolean flag = entity.getType() == EntityType.ENDERMAN;
         int j = entity.getFireTimer();
-        if (this.isBurning() && !flag) {
-            entity.setFire(5);
-        }
+        entity.setFire(1);
+
 
         if (entity.attackEntityFrom(damagesource, (float)i)) {
             if (flag) {
@@ -392,8 +391,9 @@ public abstract class AbstractBulletEntity extends Entity implements IProjectile
 
             if (entity instanceof LivingEntity) {
                 LivingEntity livingentity = (LivingEntity)entity;
-                if (!this.world.isRemote && this.getPierceLevel() <= 0) {
-                    livingentity.setArrowCountInEntity(livingentity.getArrowCountInEntity() + 1);
+                MoreLivingEntity specialEntity = new MoreLivingEntity((EntityType<? extends LivingEntity>) livingentity.getType(), entity.world.getWorld());
+                if (!this.world.isRemote) {
+                    specialEntity.setLaserBurnCountInEntity(specialEntity.getLaserBurnCountInEntity() + 1) ;
                 }
 
                 if (this.knockbackStrength > 0) {
@@ -409,7 +409,7 @@ public abstract class AbstractBulletEntity extends Entity implements IProjectile
                 }
 
                 this.bulletHit(livingentity);
-                if (entity1 != null && livingentity != entity1 && livingentity instanceof PlayerEntity && entity1 instanceof ServerPlayerEntity) {
+                if (entity1 != null && livingentity != entity1 && (LivingEntity)livingentity instanceof PlayerEntity && entity1 instanceof ServerPlayerEntity) {
                     ((ServerPlayerEntity)entity1).connection.sendPacket(new SChangeGameStatePacket(6, 0.0F));
                 }
 
@@ -424,16 +424,12 @@ public abstract class AbstractBulletEntity extends Entity implements IProjectile
                 this.remove();
             }
         } else {
-            entity.setFireTimer(j);
+            entity.setFireTimer(2);
             this.setMotion(this.getMotion().scale(-0.1D));
             this.rotationYaw += 180.0F;
             this.prevRotationYaw += 180.0F;
             this.ticksInAir = 0;
             if (!this.world.isRemote && this.getMotion().lengthSquared() < 1.0E-7D) {
-                if (this.pickupStatus == AbstractBulletEntity.PickupStatus.ALLOWED) {
-                    this.entityDropItem(this.getBulletStack(), 0.1F);
-                }
-
                 this.remove();
             }
         }
@@ -498,11 +494,8 @@ public abstract class AbstractBulletEntity extends Entity implements IProjectile
             this.damage = compound.getDouble("damage");
         }
 
-        if (compound.contains("pickup", 99)) {
-            this.pickupStatus = AbstractBulletEntity.PickupStatus.getByOrdinal(compound.getByte("pickup"));
-        } else if (compound.contains("player", 99)) {
-            this.pickupStatus = compound.getBoolean("player") ? AbstractBulletEntity.PickupStatus.ALLOWED : AbstractBulletEntity.PickupStatus.DISALLOWED;
-        }
+
+            this.pickupStatus = PickupStatus.DISALLOWED;
         if (compound.contains("SoundEvent", 8)) {
             this.hitSound = Registry.SOUND_EVENT.getValue(new ResourceLocation(compound.getString("SoundEvent"))).orElse(this.getHitEntitySound());
         }
@@ -512,7 +505,7 @@ public abstract class AbstractBulletEntity extends Entity implements IProjectile
     public void setShooter(@Nullable Entity entityIn) {
         this.shootingEntity = entityIn == null ? null : entityIn.getUniqueID();
         if (entityIn instanceof PlayerEntity) {
-            this.pickupStatus = ((PlayerEntity)entityIn).abilities.isCreativeMode ? AbstractBulletEntity.PickupStatus.CREATIVE_ONLY : AbstractBulletEntity.PickupStatus.ALLOWED;
+            this.pickupStatus = PickupStatus.DISALLOWED;
         }
 
     }
@@ -527,8 +520,8 @@ public abstract class AbstractBulletEntity extends Entity implements IProjectile
      */
     public void onCollideWithPlayer(PlayerEntity entityIn) {
         if (!this.world.isRemote && (this.inGround || this.getNoClip()) && this.arrowShake <= 0) {
-            boolean flag = this.pickupStatus == AbstractBulletEntity.PickupStatus.ALLOWED || this.pickupStatus == AbstractBulletEntity.PickupStatus.CREATIVE_ONLY && entityIn.abilities.isCreativeMode || this.getNoClip() && this.getShooter().getUniqueID() == entityIn.getUniqueID();
-            if (this.pickupStatus == AbstractBulletEntity.PickupStatus.ALLOWED && !entityIn.inventory.addItemStackToInventory(this.getBulletStack())) {
+            boolean flag = this.pickupStatus == AbstractLaserEntity.PickupStatus.ALLOWED || this.pickupStatus == AbstractLaserEntity.PickupStatus.CREATIVE_ONLY && entityIn.abilities.isCreativeMode || this.getNoClip() && this.getShooter().getUniqueID() == entityIn.getUniqueID();
+            if (this.pickupStatus == AbstractLaserEntity.PickupStatus.ALLOWED && !entityIn.inventory.addItemStackToInventory(this.getBulletStack())) {
                 flag = false;
             }
 
@@ -600,24 +593,6 @@ public abstract class AbstractBulletEntity extends Entity implements IProjectile
         return this.dataManager.get(PIERCE_LEVEL);
     }
 
-    public void setEnchantmentEffectsFromEntity(LivingEntity p_190547_1_, float p_190547_2_) {
-        int i = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, p_190547_1_);
-        int j = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.PUNCH, p_190547_1_);
-        this.setDamage((double)(p_190547_2_ * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.world.getDifficulty().getId() * 0.11F));
-        if (i > 0) {
-            this.setDamage(this.getDamage() + (double)i * 0.5D + 0.5D);
-        }
-
-        if (j > 0) {
-            this.setKnockbackStrength(j);
-        }
-
-        if (EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, p_190547_1_) > 0) {
-            this.setFire(100);
-        }
-
-    }
-
     protected float getWaterDrag() {
         return 0.2F;
     }
@@ -652,7 +627,7 @@ public abstract class AbstractBulletEntity extends Entity implements IProjectile
         ALLOWED,
         CREATIVE_ONLY;
 
-        public static AbstractBulletEntity.PickupStatus getByOrdinal(int ordinal) {
+        public static AbstractLaserEntity.PickupStatus getByOrdinal(int ordinal) {
             if (ordinal < 0 || ordinal > values().length) {
                 ordinal = 0;
             }

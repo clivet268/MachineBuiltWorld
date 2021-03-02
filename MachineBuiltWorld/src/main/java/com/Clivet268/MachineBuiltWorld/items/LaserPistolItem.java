@@ -1,13 +1,14 @@
 package com.Clivet268.MachineBuiltWorld.items;
 
 import com.Clivet268.MachineBuiltWorld.entity.AbstractBulletEntity;
-import com.Clivet268.MachineBuiltWorld.entity.BulletEntity;
+import com.Clivet268.MachineBuiltWorld.entity.AbstractLaserEntity;
 import com.Clivet268.MachineBuiltWorld.entity.LaserEntity;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
@@ -53,19 +54,21 @@ public class LaserPistolItem extends ShootableItem {
             boolean flag = playerentity.abilities.isCreativeMode;
             if(getBulletAmount(stack) <= 0)
             {
+                System.out.println("no ammo");
                 return;
             }
             PlayerEntity player = (PlayerEntity)entityLiving;
             float f = getBulletVelocity();
 
             if (!worldIn.isRemote) {
-                AbstractBulletEntity laserEntity = createBullet(worldIn, playerentity);
+                AbstractLaserEntity laserEntity = createLaser(worldIn, playerentity);
                 laserEntity.setDamage(calcDamage(stack));
                 laserEntity.shoot(playerentity, playerentity.rotationPitch, playerentity.rotationYaw, 0.0F, f, 1.0F);
                 stack.damageItem(1, playerentity, (p_220009_1_) -> {
                     p_220009_1_.sendBreakAnimation(playerentity.getActiveHand());
                 });
-                System.out.println(worldIn.addEntity(laserEntity));
+                System.out.println(getBulletAmount(stack) + " left");
+                //System.out.println(worldIn.addEntity(laserEntity));
                 worldIn.addEntity(laserEntity);
             }
             // use ammo
@@ -88,7 +91,7 @@ public class LaserPistolItem extends ShootableItem {
 
     public static float getBulletVelocity() {
 
-        return 10.5F;
+        return 30.5F;
     }
 
 
@@ -101,10 +104,7 @@ public class LaserPistolItem extends ShootableItem {
     protected ItemStack findAmmo(PlayerEntity player, ItemStack itemstack) {
             for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
                 ItemStack itemstack1 = player.inventory.getStackInSlot(i);
-                if (itemstack1.getItem() == RegistryHandler.LASER_SHELL.get() ) {
-                    return itemstack1;
-                }
-                else if (itemstack1.getItem() == RegistryHandler.LASER_PISTOL_MAG.get()) {
+                if (itemstack1.getItem() == RegistryHandler.LASER_PISTOL_MAG.get()) {
                 return  itemstack1;
                 }
             }
@@ -125,37 +125,49 @@ public class LaserPistolItem extends ShootableItem {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         ItemStack ammoStack = findAmmo(playerIn, itemstack);
         if(playerIn.isCrouching()) {
-            if (getBulletAmount(itemstack) < 8 && getMagInOrOut(itemstack) == true &&
+            /*
+            if (getBulletAmount(itemstack) < 8 && getMagInOrOut(itemstack) &&
                     ammoStack.getItem() == RegistryHandler.LASER_SHELL.get()) {
                 setStuffAmount(itemstack, getBulletAmount(itemstack) + 1, getMagInOrOut(itemstack));
                 ammoStack.shrink(1);
                 return ActionResult.resultConsume(itemstack);
-            } else if (getBulletAmount(itemstack) < 1 && getMagInOrOut(itemstack) == false &&
+            } else if (getBulletAmount(itemstack) < 1 && !getMagInOrOut(itemstack) &&
                     ammoStack.getItem() == RegistryHandler.LASER_SHELL.get()) {
                 setStuffAmount(itemstack, getBulletAmount(itemstack) + 1, getMagInOrOut(itemstack));
                 ammoStack.shrink(1);
                 return ActionResult.resultConsume(itemstack);
-            } else if (ammoStack.getItem() == RegistryHandler.LASER_PISTOL_MAG.get()) {
-                setStuffAmount(itemstack, ((LaserPisolMagItem) ammoStack.getItem()).getBulletAmount(ammoStack),
-                        getMagInOrOut(itemstack));
-                ItemStack itemstack1 = new ItemStack(RegistryHandler.LASER_PISTOL_MAG.get());
-                ((LaserPisolMagItem) itemstack1.getItem()).setBulletAmount(itemstack1, getBulletAmount(itemstack));
-                setStuffAmount(itemstack, ((LaserPisolMagItem) ammoStack.getItem()).getBulletAmount(ammoStack), true);
-                ammoStack.shrink(1);
-                playerIn.dropItem(itemstack1, false);
+            } else
+
+             */
+
+                if (ammoStack.getItem() == RegistryHandler.LASER_PISTOL_MAG.get()) {
+
+                    if(getMagInOrOut(itemstack)) {
+                        ItemStack itemstack1 = new ItemStack(RegistryHandler.LASER_PISTOL_MAG.get());
+                        ((LaserPisolMagItem) itemstack1.getItem()).setBulletAmount(itemstack1, getBulletAmount(itemstack));
+                        setStuffAmount(itemstack, ((LaserPisolMagItem) ammoStack.getItem()).getBulletAmount(ammoStack), true);
+                        playerIn.dropItem(itemstack1, false);
+                    }
+                    else{
+                        setStuffAmount(itemstack, ((LaserPisolMagItem) ammoStack.getItem()).getBulletAmount(ammoStack), true);
+                    }
+                    ammoStack.shrink(1);
+
                 return ActionResult.resultConsume(itemstack);
             }
         }
         if (ammoStack.getItem() == Items.AIR) {
-            return ActionResult.resultFail(itemstack);
+            playerIn.setActiveHand(handIn);
+            return ActionResult.resultConsume(itemstack);
         } else {
+
             playerIn.setActiveHand(handIn);
             return ActionResult.resultConsume(itemstack);
         }
     }
 
 
-    public AbstractBulletEntity createBullet(World worldIn, LivingEntity shooter) {
+    public AbstractLaserEntity createLaser(World worldIn, LivingEntity shooter) {
         return new LaserEntity(worldIn, shooter);
     }
 

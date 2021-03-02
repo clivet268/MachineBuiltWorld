@@ -1,6 +1,7 @@
 package com.Clivet268.MachineBuiltWorld.util;
 
 import com.Clivet268.MachineBuiltWorld.entity.AbstractBulletEntity;
+import com.Clivet268.MachineBuiltWorld.entity.AbstractLaserEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IndirectEntityDamageSource;
@@ -14,5 +15,8 @@ public class MoreDamageSource extends DamageSource {
     }
     public static DamageSource causeBulletDamage(AbstractBulletEntity bullet, @Nullable Entity indirectEntityIn) {
         return (new IndirectEntityDamageSource("bullet", bullet, indirectEntityIn)).setProjectile();
+    }
+    public static DamageSource causeLaserDamage(AbstractLaserEntity laser, @Nullable Entity indirectEntityIn) {
+        return (new IndirectEntityDamageSource("laser", laser, indirectEntityIn)).setProjectile().setFireDamage();
     }
 }

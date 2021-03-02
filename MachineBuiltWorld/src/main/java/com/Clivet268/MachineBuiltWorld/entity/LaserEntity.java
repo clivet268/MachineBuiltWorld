@@ -4,12 +4,13 @@ import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class LaserEntity extends AbstractBulletEntity {
+public class LaserEntity extends AbstractLaserEntity {
     //private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(BulletEntity.class, DataSerializers.VARINT);
     //private Potion potion = Potions.EMPTY;
     //private final Set<EffectInstance> customPotionEffects = Sets.newHashSet();
@@ -20,16 +21,15 @@ public class LaserEntity extends AbstractBulletEntity {
     }
 
     public LaserEntity(World worldIn, double x, double y, double z) {
-        super(RegistryHandler.BULLET_ENTITY.get(), x, y, z, worldIn);
+        super(RegistryHandler.LASER_ENTITY.get(), x, y, z, worldIn);
     }
 
     public LaserEntity(World worldIn, LivingEntity shooter) {
-        super(RegistryHandler.BULLET_ENTITY.get(), shooter, worldIn);
+        super(RegistryHandler.LASER_ENTITY.get(), shooter, worldIn);
     }
 
     protected void registerData() {
         super.registerData();
-        //this.dataManager.register(COLOR, -1);
     }
 
     /**
@@ -64,7 +64,7 @@ public class LaserEntity extends AbstractBulletEntity {
 
 
     protected ItemStack getBulletStack() {
-            return new ItemStack(RegistryHandler.BULLET.get());
+            return new ItemStack(Items.AIR);
     }
 
     /**
