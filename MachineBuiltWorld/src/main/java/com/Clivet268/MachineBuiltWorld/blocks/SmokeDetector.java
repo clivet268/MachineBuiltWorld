@@ -106,7 +106,7 @@ public class SmokeDetector extends Block {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        System.out.println(sampleRate);
+        //System.out.println(sampleRate);
         if(sampleRate > 0){
             sampleRate--;
         }
@@ -120,19 +120,19 @@ public class SmokeDetector extends Block {
 
 
     public void detect(World world, BlockPos pos, BlockState state){
-        System.out.println("check1");
+        //System.out.println("check1");
         ResourceLocation tag = new ResourceLocation("machinebuiltworld", "smoke_sensitive");
         for(int x=-5; x <= 5; x++) {
             for (int y = -5; y <= 5; y++) {
                 for (int z = -5; z <= 5; z++) {
                     Block block = world.getBlockState(new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z)).getBlock();
-                    System.out.println(block);
+                    //System.out.println(block);
                     //System.out.println(BlockTags.getCollection().getOrCreate(tag).contains(block));
                     if (RegistryHandler.Tags.SMOKY_SENSITIVE.contains(block)){
                         
                         world.setBlockState(pos, state.with(ALARM, Boolean.TRUE), 3);
                         world.playSound(pos.getX(), pos.getY(), pos.getZ(), RegistryHandler.SMOKE_ALARM.get(), SoundCategory.BLOCKS, 10000, 0, false);
-                        System.out.println("FIRE!!");
+                        //System.out.println("FIRE!!");
                     }
                 }
             }
