@@ -56,5 +56,7 @@
   "item.machinebuiltworld.large_resonator": "Large Resonator",
   "item.machinebuiltworld.coke": "Coke",
   "block.machinebuiltworld.coke_oven": "Coke Oven",
-  "block.machinebuiltworld.crusher": "Crusher"
+  "block.machinebuiltworld.crusher": "Crusher",
+  "item.machinebuiltworld.laser_shell": "Laser Shell",
+  "item.machinebuiltworld.laser_pistol_mag": "Laser Pistol Magazine"
 }

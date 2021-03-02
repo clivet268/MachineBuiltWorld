@@ -3,6 +3,7 @@ package com.Clivet268.MachineBuiltWorld.util;
 import com.Clivet268.MachineBuiltWorld.MachineBuiltWorld;
 import com.Clivet268.MachineBuiltWorld.blocks.*;
 import com.Clivet268.MachineBuiltWorld.entity.BulletEntity;
+import com.Clivet268.MachineBuiltWorld.entity.LaserEntity;
 import com.Clivet268.MachineBuiltWorld.fluids.ResinFluid;
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.*;
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeingRecipe;
@@ -13,10 +14,17 @@ import com.Clivet268.MachineBuiltWorld.tileentity.*;
 import com.Clivet268.MachineBuiltWorld.tools.CraftingToolsItem;
 import com.Clivet268.MachineBuiltWorld.tools.ModItemTier;
 import com.Clivet268.MachineBuiltWorld.tools.MultimeterItem;
+import com.Clivet268.MachineBuiltWorld.util.Renderer.LaserRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.GameSettings;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.TippedArrowRenderer;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
@@ -31,6 +39,7 @@ import net.minecraft.inventory.container.FurnaceContainer;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.stats.IStatFormatter;
 import net.minecraft.stats.StatType;
 import net.minecraft.stats.Stats;
@@ -89,7 +98,22 @@ public class RegistryHandler {
     //projectiles
     public static final RegistryObject<EntityType<BulletEntity>> BULLET_ENTITY = ENTITIES.register("bullet_projectile",
             () -> EntityType.Builder.<BulletEntity>create(BulletEntity::new, EntityClassification.MISC).size(0.5F, 0.9F).build("bullet_projectile"));
+    public static final RegistryObject<EntityType<LaserEntity>> LASER_ENTITY = ENTITIES.register("laser_projectile",
+            () -> EntityType.Builder.<LaserEntity>create(LaserEntity::new, EntityClassification.MISC).size(0.5F, 0.9F).build("bullet_projectile"));
 
+    //entity render managers
+
+    public abstract class MoreEntityRendererManager extends EntityRendererManager{
+        private void registerRenderers(net.minecraft.client.renderer.ItemRenderer itemRendererIn, IReloadableResourceManager resourceManagerIn) {
+            this.register(RegistryHandler.LASER_ENTITY.get(), new LaserRenderer(this));
+        }
+        public MoreEntityRendererManager(TextureManager textureManagerIn, ItemRenderer itemRendererIn, IReloadableResourceManager resourceManagerIn, FontRenderer fontRendererIn, GameSettings gameSettingsIn) {
+            super(textureManagerIn, itemRendererIn, resourceManagerIn, fontRendererIn, gameSettingsIn);
+            this.registerRenderers(itemRendererIn, resourceManagerIn);
+        }
+        //new EntityRendererManager.register(RegistryHandler.LASER_ENTITY.get(), new LaserRenderer(this));
+
+    }
 
     //items
     public static final RegistryObject<Item> GEAR = ITEMS.register("gear", ItemBase::new);

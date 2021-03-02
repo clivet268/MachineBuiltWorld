@@ -1,9 +1,6 @@
 package com.Clivet268.MachineBuiltWorld.inventory.Containers;
 
-import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeOvenFuelSlot;
-import com.Clivet268.MachineBuiltWorld.inventory.crafting.AbstractCokeingRecipe;
-import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeOvenResultSlot;
-import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeingRecipe;
+import com.Clivet268.MachineBuiltWorld.inventory.crafting.*;
 import com.Clivet268.MachineBuiltWorld.tileentity.AbstractCokeOvenTile;
 import com.Clivet268.MachineBuiltWorld.tileentity.CokeOvenTile;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,6 +24,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+
+import javax.annotation.Nonnull;
 
 import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.COKE_OVEN_CONTAINER;
 
@@ -77,8 +76,8 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
         this.furnaceInventory.clear();
     }
     @Override
-    public void func_217056_a(boolean p_217056_1_, IRecipe<?> p_217056_2_, ServerPlayerEntity p_217056_3_) {
-        (new ServerRecipePlacerFurnace<>(this)).place(p_217056_3_, (IRecipe<IInventory>)p_217056_2_, p_217056_1_);
+    public void func_217056_a(boolean p_217056_1_, @Nonnull IRecipe<?> p_217056_2_, ServerPlayerEntity p_217056_3_) {
+        (new ServerPlacerCokeOven<>(this)).place(p_217056_3_, (IRecipe<IInventory>)p_217056_2_, p_217056_1_);
     }
     @Override
     public boolean matches(IRecipe<? super IInventory> recipeIn) {
@@ -88,18 +87,18 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
     public int getOutputSlot() {
         return 3;
     }
-
+    @Override
     public int getWidth() {
         return 1;
     }
-
+    @Override
     public int getHeight() {
         return 1;
     }
 
     @OnlyIn(Dist.CLIENT)
     public int getSize() {
-        return 5;
+        return 4;
     }
 
     /**

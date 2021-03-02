@@ -31,6 +31,12 @@ public abstract class AbstractCokeOvenScreen<T extends CokeOvenContainerBase> ex
    public void init() {
       super.init();
       this.widthTooNarrowIn = this.width < 379;
+      //this.recipeGui.notify();
+      System.out.println(this.recipeGui+ ":(");
+      System.out.println(width);
+      System.out.println(widthTooNarrowIn);
+      System.out.println(this.container);
+      assert this.minecraft != null;
       this.recipeGui.init(this.width, this.height, this.minecraft, this.widthTooNarrowIn, this.container);
       this.guiLeft = this.recipeGui.updateScreenPosition(this.widthTooNarrowIn, this.width, this.xSize);
       this.addButton((new ImageButton(this.guiLeft + 20, this.height / 2 - 49, 20, 18, 0, 0, 19, RECIPE_BOOK, (p_214087_1_) -> {
@@ -53,6 +59,7 @@ public abstract class AbstractCokeOvenScreen<T extends CokeOvenContainerBase> ex
          this.drawGuiContainerBackgroundLayer(p_render_3_, p_render_1_, p_render_2_);
          this.recipeGui.render(p_render_1_, p_render_2_, p_render_3_);
       } else {
+         System.out.println(recipeGui);
          this.recipeGui.render(p_render_1_, p_render_2_, p_render_3_);
          super.render(p_render_1_, p_render_2_, p_render_3_);
          this.recipeGui.renderGhostRecipe(this.guiLeft, this.guiTop, true, p_render_3_);
@@ -78,6 +85,7 @@ public abstract class AbstractCokeOvenScreen<T extends CokeOvenContainerBase> ex
    @Override
    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
       RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+      assert this.minecraft != null;
       this.minecraft.getTextureManager().bindTexture(this.guiTexture);
       int i = this.guiLeft;
       int j = this.guiTop;

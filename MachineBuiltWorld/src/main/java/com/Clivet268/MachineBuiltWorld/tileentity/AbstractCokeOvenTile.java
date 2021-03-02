@@ -217,7 +217,18 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         this.burnTime = compound.getInt("BurnTime");
         this.cookTime = compound.getInt("CookTime");
         this.cookTimeTotal = compound.getInt("CookTimeTotal");
-        this.recipesUsed = this.getBurnTime(this.items.get(1));
+        if(this.getBurnTime(this.items.get(1)) > this.getBurnTime(this.items.get(2)))
+        {
+            this.recipesUsed = this.getBurnTime(this.items.get(2));
+        }
+        else if(this.getBurnTime(this.items.get(1)) < this.getBurnTime(this.items.get(2)))
+        {
+            this.recipesUsed = this.getBurnTime(this.items.get(1));
+        }
+        else
+        {
+            this.recipesUsed = this.getBurnTime(this.items.get(1));
+        }
         int i = compound.getShort("RecipesUsedSize");
 
         for(int j = 0; j < i; ++j) {

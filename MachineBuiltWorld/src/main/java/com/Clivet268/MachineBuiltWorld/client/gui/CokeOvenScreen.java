@@ -16,6 +16,6 @@ public class CokeOvenScreen extends AbstractCokeOvenScreen<CokeOvenContainer> {
    private static final ResourceLocation FURNACE_GUI_TEXTURES = new ResourceLocation(MachineBuiltWorld.MOD_ID,"textures/gui/coke_oven.png");
 
    public CokeOvenScreen(CokeOvenContainer p_i51089_1_, PlayerInventory p_i51089_2_, ITextComponent p_i51089_3_) {
-      super(p_i51089_1_, new FurnaceRecipeGui(), p_i51089_2_, p_i51089_3_, FURNACE_GUI_TEXTURES);
+      super(p_i51089_1_, new CokeOvenGui(), p_i51089_2_, p_i51089_3_, FURNACE_GUI_TEXTURES);
    }
 }
