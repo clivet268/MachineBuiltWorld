@@ -76,7 +76,7 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
         this.furnaceInventory.clear();
     }
     @Override
-    public void func_217056_a(boolean p_217056_1_, @Nonnull IRecipe<?> p_217056_2_, ServerPlayerEntity p_217056_3_) {
+    public void func_217056_a(boolean p_217056_1_, @Nonnull IRecipe<?> p_217056_2_, @Nonnull ServerPlayerEntity p_217056_3_) {
         (new ServerPlacerCokeOven<>(this)).place(p_217056_3_, (IRecipe<IInventory>)p_217056_2_, p_217056_1_);
     }
     @Override

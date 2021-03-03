@@ -307,7 +307,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
             }
         }
 
-        if (flag1) {
+        if(flag1) {
             this.markDirty();
         }
 
@@ -319,7 +319,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
             if (itemstack.isEmpty()) {
                 return false;
             } else {
-                ItemStack itemstack1 = this.items.get(2);
+                ItemStack itemstack1 = this.items.get(3);
                 if (itemstack1.isEmpty()) {
                     return true;
                 } else if (!itemstack1.isItemEqual(itemstack)) {
@@ -339,9 +339,9 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         if (recipe != null && this.canSmelt(recipe)) {
             ItemStack itemstack = this.items.get(0);
             ItemStack itemstack1 = recipe.getRecipeOutput();
-            ItemStack itemstack2 = this.items.get(2);
+            ItemStack itemstack2 = this.items.get(3);
             if (itemstack2.isEmpty()) {
-                this.items.set(2, itemstack1.copy());
+                this.items.set(3, itemstack1.copy());
             } else if (itemstack2.getItem() == itemstack1.getItem()) {
                 itemstack2.grow(itemstack1.getCount());
             }
