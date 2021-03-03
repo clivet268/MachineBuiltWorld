@@ -152,6 +152,7 @@ public class RegistryHandler {
     public static final RegistryObject<Item> UNCUT_GARNET = ITEMS.register("uncut_garnet", ItemBase::new);
     public static final RegistryObject<Item> ERBIUM = ITEMS.register("erbium", ItemBase::new);
     public static final RegistryObject<Item> ALUMINUM_INGOT = ITEMS.register("aluminum_ingot", ItemBase::new);
+    public static final RegistryObject<Item> YTTRIUM = ITEMS.register("yttrium", ItemBase::new);
 
     //blocks
     public static final RegistryObject<Block> COPPER_BLOCK = BLOCKS.register("copper_block", CopperBlock::new);
