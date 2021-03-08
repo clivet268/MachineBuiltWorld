@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "crystallization=0": { "model": "machinebuiltworld:block/crystilization_chamber_part_up" },
+    "crystallization=1": { "model": "machinebuiltworld:block/crystilization_chamber_part_down" },
+    "crystallization=2": { "model": "machinebuiltworld:block/crystilization_chamber_part_combined" },
+    "crystallization=3": { "model": "machinebuiltworld:block/crystilization_chamber_part_combined_with_stick" },
+    "crystallization=4": { "model": "machinebuiltworld:block/crystilization_chamber_part_combined_with_stick" },
+    "crystallization=5": { "model": "machinebuiltworld:block/crystilization_chamber_part_combined_with_stick" },
+    "crystallization=6": { "model": "machinebuiltworld:block/crystilization_chamber_part_combined_with_stick" }
+  }
+}
