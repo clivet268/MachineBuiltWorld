@@ -1,14 +1,10 @@
 package com.Clivet268.MachineBuiltWorld.blocks;
 
-import com.Clivet268.MachineBuiltWorld.inventory.Containers.CokeOvenContainer;
-import com.Clivet268.MachineBuiltWorld.state.MoreStateProperties;
-import com.Clivet268.MachineBuiltWorld.tileentity.CokeOvenTile;
-import com.Clivet268.MachineBuiltWorld.tileentity.FiberglassMouldTile;
-import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
+import com.Clivet268.MachineBuiltWorld.inventory.Containers.IntensiveHeatingOvenContainer;
+import com.Clivet268.MachineBuiltWorld.tileentity.IntensiveHeatingOvenTile;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -16,44 +12,32 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraft.tileentity.BlastFurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Random;
-import java.util.stream.Stream;
 
 import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.MoreStats.INTERACT_WITH_COKE_OVEN;
 
-public class CokeOven extends Block{
+public class IntensiveHeatingOven extends Block{
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
-        public CokeOven() {
+        public IntensiveHeatingOven() {
             super(Properties.create((Material.IRON))
                     .hardnessAndResistance(4.5f, 15.0f)
                     .sound(SoundType.STONE)
@@ -66,25 +50,12 @@ public class CokeOven extends Block{
         return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite()).with(LIT, false);
     }
 
-
-    /*
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        if (stack.hasDisplayName()) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof CokeOvenTile) {
-                ((CokeOvenTile)tileentity).setCustomName(stack.getDisplayName());
-            }
-        }
-
-    }
-
-     */
     @Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof CokeOvenTile) {
-                InventoryHelper.dropInventoryItems(worldIn, pos, (CokeOvenTile)tileentity);
+            if (tileentity instanceof IntensiveHeatingOvenTile) {
+                InventoryHelper.dropInventoryItems(worldIn, pos, (IntensiveHeatingOvenTile)tileentity);
                 worldIn.updateComparatorOutputLevel(pos, this);
             }
 
@@ -102,26 +73,23 @@ public class CokeOven extends Block{
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new CokeOvenTile().getTileEntity();
+        return new IntensiveHeatingOvenTile().getTileEntity();
     }
     @SuppressWarnings("deprecation")
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
         if (!world.isRemote) {
             TileEntity tileEntity = world.getTileEntity(pos);
-            if (tileEntity instanceof CokeOvenTile) {
+            if (tileEntity instanceof IntensiveHeatingOvenTile) {
                 INamedContainerProvider containerProvider = new INamedContainerProvider() {
                     @Override
                     public ITextComponent getDisplayName() {
-                        return new TranslationTextComponent("screen.machinebuiltworld.coke_oven");
+                        return new TranslationTextComponent("screen.machinebuiltworld.intensive_heating_oven");
                     }
 
                     @Override
                     public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-                        //System.out.println(0xd0d4);
-                        System.out.println(world);
-                        System.out.println(pos);
-                        return new CokeOvenContainer(i, world, playerInventory, pos);
+                        return new IntensiveHeatingOvenContainer(i, world, playerInventory, pos);
                     }
                 };
                 NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, tileEntity.getPos());

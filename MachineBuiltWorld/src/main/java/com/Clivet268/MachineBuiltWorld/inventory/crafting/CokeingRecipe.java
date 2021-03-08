@@ -7,15 +7,13 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
-import java.nio.charset.StandardCharsets;
-
 public class CokeingRecipe extends AbstractCokeingRecipe {
     public CokeingRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, float experienceIn, int cookTimeIn) {
         super(IMoreRecipeType.COKEING, idIn, groupIn, ingredientIn, resultIn, experienceIn, cookTimeIn);
     }
     @Override
     public ItemStack getIcon() {
-        return new ItemStack(RegistryHandler.COKE_OVEN.get());
+        return new ItemStack(RegistryHandler.INTENSIVE_HEATING_OVEN.get());
     }
     @Override
     public IRecipeSerializer<?> getSerializer() {

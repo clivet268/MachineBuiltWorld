@@ -55,8 +55,12 @@
   "item.machinebuiltworld.micro_resonator": "Micro Resonator",
   "item.machinebuiltworld.large_resonator": "Large Resonator",
   "item.machinebuiltworld.coke": "Coke",
-  "block.machinebuiltworld.coke_oven": "Coke Oven",
+  "block.machinebuiltworld.intensive_heating_oven": "Intensive Heating Oven",
   "block.machinebuiltworld.crusher": "Crusher",
   "item.machinebuiltworld.laser_shell": "Laser Shell",
-  "item.machinebuiltworld.laser_pistol_mag": "Laser Pistol Magazine"
+  "item.machinebuiltworld.laser_pistol_mag": "Laser Pistol Magazine",
+  "item.machinebuiltworld.steel_ingot": "Steel Ingot",
+  "screen.machinebuiltworld.intensive_heating_oven": "Intensive Heating Oven",
+  "item.machinebuiltworld.glass_shards": "Glass Shards",
+  "item.machinebuiltworld.aluminum_ingot": "Aluminum Ingot"
 }

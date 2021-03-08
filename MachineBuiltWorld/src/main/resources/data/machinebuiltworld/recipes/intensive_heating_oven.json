@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "xxx",
+    "x x",
+    "xxx"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "machinebuiltworld:reinforced_brick"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:intensive_heating_oven",
+    "count": 1
+  }
+}

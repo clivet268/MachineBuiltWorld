@@ -1,16 +1,17 @@
 package com.Clivet268.MachineBuiltWorld.inventory.crafting;
 
+import com.Clivet268.MachineBuiltWorld.items.IHeatInfuseable;
 import com.Clivet268.MachineBuiltWorld.tileentity.IntensiveHeatingOvenTile;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
 
-public class CokeOvenFuelSlot extends Slot {
+public class CokeOvenInfuseSlot extends Slot implements IHeatInfuseable {
 
-    public CokeOvenFuelSlot(IntensiveHeatingOvenTile intensiveHeatingOvenTile1, int index, int x, int y) {
+    public CokeOvenInfuseSlot(IntensiveHeatingOvenTile intensiveHeatingOvenTile1, int index, int x, int y) {
         super(intensiveHeatingOvenTile1, index, x, y);
     }
 
@@ -19,7 +20,7 @@ public class CokeOvenFuelSlot extends Slot {
      */
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return ForgeHooks.getBurnTime(stack) > 0 || isBucket(stack);
+        return canDoSomeInfusin(stack.getItem());
     }
 
     public int getItemStackLimit(@Nonnull ItemStack stack) {

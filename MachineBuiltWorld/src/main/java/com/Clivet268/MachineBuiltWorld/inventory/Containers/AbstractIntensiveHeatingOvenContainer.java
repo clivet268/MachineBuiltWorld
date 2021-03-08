@@ -1,8 +1,8 @@
 package com.Clivet268.MachineBuiltWorld.inventory.Containers;
 
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.*;
-import com.Clivet268.MachineBuiltWorld.tileentity.AbstractCokeOvenTile;
-import com.Clivet268.MachineBuiltWorld.tileentity.CokeOvenTile;
+import com.Clivet268.MachineBuiltWorld.tileentity.AbstractIntensiveHeatingOvenTile;
+import com.Clivet268.MachineBuiltWorld.tileentity.IntensiveHeatingOvenTile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -12,40 +12,36 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nonnull;
 
-import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.COKE_OVEN_CONTAINER;
-
-public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
+public abstract class AbstractIntensiveHeatingOvenContainer extends RecipeBookContainer<IInventory> {
     private final IInventory furnaceInventory;
     private final IIntArray furnaceData;
     public final World world;
     private IItemHandler playerInventory;
-    public CokeOvenTile tileEntity;
+    public IntensiveHeatingOvenTile tileEntity;
     private PlayerEntity playerEntity;
+    private boolean infuse;
 
     private final IRecipeType<? extends AbstractCokeingRecipe> recipeType;
-    public CokeOvenContainerBase(ContainerType<?> containerTypeIn, World wworld, IRecipeType<? extends AbstractCokeingRecipe> recipeTypeIn, int id, PlayerInventory playerInventoryIn, BlockPos pos) {
+    public AbstractIntensiveHeatingOvenContainer(ContainerType<?> containerTypeIn, World wworld, IRecipeType<? extends AbstractCokeingRecipe> recipeTypeIn, int id, PlayerInventory playerInventoryIn, BlockPos pos) {
         this(containerTypeIn, wworld, recipeTypeIn, id, playerInventoryIn, new Inventory(4), new IntArray(5),pos);
     }
 
-    protected CokeOvenContainerBase(ContainerType<?> containerTypeIn, World wworld, IRecipeType<? extends AbstractCokeingRecipe> recipeTypeIn, int id, PlayerInventory playerInventoryIn, IInventory furnaceInventoryIn, IIntArray furnaceDataIn, BlockPos pos) {
+    protected AbstractIntensiveHeatingOvenContainer(ContainerType<?> containerTypeIn, World wworld, IRecipeType<? extends AbstractCokeingRecipe> recipeTypeIn, int id, PlayerInventory playerInventoryIn, IInventory furnaceInventoryIn, IIntArray furnaceDataIn, BlockPos pos) {
         super(containerTypeIn, id);
         this.world = wworld;
-        this.tileEntity = (CokeOvenTile) wworld.getTileEntity(pos);
+        this.tileEntity = (IntensiveHeatingOvenTile) wworld.getTileEntity(pos);
         this.playerEntity = playerInventoryIn.player;
         this.playerInventory = new InvWrapper(playerInventoryIn);
         this.recipeType = recipeTypeIn;
@@ -54,11 +50,10 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
         assertIntArraySize(furnaceDataIn, 4);
         this.furnaceInventory = furnaceInventoryIn;
         this.furnaceData = furnaceDataIn;
-
         if (tileEntity != null) {
             addSlot(new Slot(this.tileEntity, 0, 56, 17));
             addSlot(new CokeOvenFuelSlot(this.tileEntity,  1, 38, 53));
-            addSlot(new CokeOvenFuelSlot(this.tileEntity,  2, 74, 53));
+            addSlot(new CokeOvenInfuseSlot(this.tileEntity,  2, 74, 53));
             addSlot(new CokeOvenResultSlot(playerInventoryIn.player, this.tileEntity,  3, 116, 35));
 
         }
@@ -170,7 +165,7 @@ public class CokeOvenContainerBase extends RecipeBookContainer<IInventory> {
     }
 
     public boolean isFuel(ItemStack stack) {
-        return AbstractCokeOvenTile.isFuel(stack);
+        return AbstractIntensiveHeatingOvenTile.isFuel(stack);
     }
 
     @OnlyIn(Dist.CLIENT)

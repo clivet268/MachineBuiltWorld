@@ -6,7 +6,6 @@ import com.Clivet268.MachineBuiltWorld.entity.BulletEntity;
 import com.Clivet268.MachineBuiltWorld.entity.LaserEntity;
 import com.Clivet268.MachineBuiltWorld.fluids.ResinFluid;
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.*;
-import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeingRecipe;
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeingRecipeSerializer;
 import com.Clivet268.MachineBuiltWorld.items.*;
 import com.Clivet268.MachineBuiltWorld.items.armor.ModArmorMaterial;
@@ -23,7 +22,6 @@ import net.minecraft.client.GameSettings;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.TippedArrowRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
@@ -33,12 +31,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.FurnaceContainer;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.stats.IStatFormatter;
 import net.minecraft.stats.StatType;
@@ -58,7 +53,6 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -145,7 +139,7 @@ public class RegistryHandler {
     public static final RegistryObject<Item> LARGE_RESONATOR = ITEMS.register("large_resonator", ItemBase::new);
     public static final RegistryObject<Item> STEEL_INGOT = ITEMS.register("steel_ingot", ItemBase::new);
     public static final RegistryObject<Item> PIG_IRON_INGOT = ITEMS.register("pig_iron_ingot", ItemBase::new);
-    public static final RegistryObject<Item> COKE = ITEMS.register("coke", ItemBase::new);
+    public static final RegistryObject<Item> COKE = ITEMS.register("coke", () -> new FuelItemBase(1600));
     public static final RegistryObject<Item> CUT_GARNET = ITEMS.register("cut_garnet", ItemBase::new);
     public static final RegistryObject<Item> CUT_POLISHED_GARNET = ITEMS.register("cut_polished_garnet", ItemBase::new);
     public static final RegistryObject<Item> LARGE_UNCUT_GARNET = ITEMS.register("large_uncut_garnet", ItemBase::new);
@@ -153,6 +147,7 @@ public class RegistryHandler {
     public static final RegistryObject<Item> ERBIUM = ITEMS.register("erbium", ItemBase::new);
     public static final RegistryObject<Item> ALUMINUM_INGOT = ITEMS.register("aluminum_ingot", ItemBase::new);
     public static final RegistryObject<Item> YTTRIUM = ITEMS.register("yttrium", ItemBase::new);
+    public static final RegistryObject<Item> RESONATING_CRYSTAL = ITEMS.register("resonating_crystal", ItemBase::new);
 
     //blocks
     public static final RegistryObject<Block> COPPER_BLOCK = BLOCKS.register("copper_block", CopperBlock::new);
@@ -177,11 +172,13 @@ public class RegistryHandler {
     public static final RegistryObject<Block> FIBERGLASS_MOULD = BLOCKS.register("fiberglass_mould", FiberglassMould::new);
     public static final RegistryObject<Block> CRUSHER = BLOCKS.register("crusher", Crusher::new);
     public static final RegistryObject<Block> OXYGEN_FURNACE = BLOCKS.register("oxygen_furnace", Crusher::new);
-    public static final RegistryObject<Block> COKE_OVEN = BLOCKS.register("coke_oven", CokeOven::new);
+    public static final RegistryObject<Block> INTENSIVE_HEATING_OVEN = BLOCKS.register("intensive_heating_oven", IntensiveHeatingOven::new);
     public static final RegistryObject<Block> REINFORCED_BRICK = BLOCKS.register("reinforced_brick", ReinforcedBrick::new);
     public static final RegistryObject<Block> BAUXITE_ORE = BLOCKS.register("bauxite_ore", BauxiteOre::new);
     public static final RegistryObject<Block> GARNET_ORE = BLOCKS.register("garnet_ore", GarnetOre::new);
     public static final RegistryObject<Block> ERBIUM_ORE = BLOCKS.register("erbium_ore", ErbiumOre::new);
+    public static final RegistryObject<Block> CRYSTALLIZATION_CHAMBER_PART = BLOCKS.register("crystallization_chamber_part", CrystallizationChamberPart::new);
+    public static final RegistryObject<Block> BROKEN_GLASS_BUNCH = BLOCKS.register("broken_glass_bunch", BrokenGlassBunch::new);
 
     //weapons
     public static final RegistryObject<SwordItem> COPPER_SWORD = ITEMS.register("copper_sword", () ->
@@ -248,8 +245,11 @@ public class RegistryHandler {
     public static final RegistryObject<Item> SMOKE_DETECTOR_ITEM = ITEMS.register("smoke_detector", () -> new BlockItemBase(SMOKE_DETECTOR.get()));
     public static final RegistryObject<Item> FIBERGLASS_MOULD_ITEM = ITEMS.register("fiberglass_mould", () -> new BlockItemBase(FIBERGLASS_MOULD.get()));
     public static final RegistryObject<Item> CRUSHER_ITEM = ITEMS.register("crusher", () -> new BlockItemBase(CRUSHER.get()));
-    public static final RegistryObject<Item> COKE_OVEN_ITEM = ITEMS.register("coke_oven", () -> new BlockItemBase(COKE_OVEN.get()));
+    public static final RegistryObject<Item> INTENSIVE_HEATING_OVEN_ITEM = ITEMS.register("intensive_heating_oven", () -> new BlockItemBase(INTENSIVE_HEATING_OVEN.get()));
     public static final RegistryObject<Item> REINFORCED_BRICK_ITEM = ITEMS.register("reinforced_brick", () -> new BlockItemBase(REINFORCED_BRICK.get()));
+    public static final RegistryObject<Item> CRYSTALLIZATION_CHAMBER_PART_ITEM = ITEMS.register("crystallization_chamber_part", () -> new BlockItemBase(CRYSTALLIZATION_CHAMBER_PART.get()));
+    public static final RegistryObject<Item> BROKEN_GLASS_BUNCH_ITEM = ITEMS.register("broken_glass_bunch", () -> new BlockItemBase(BROKEN_GLASS_BUNCH.get()));
+
 
     //fluids resource locations
     public static final ResourceLocation BATTERY_ACID_STILL_RL = new ResourceLocation(MachineBuiltWorld.MOD_ID, "blocks/battery_acid_still");
@@ -302,8 +302,11 @@ public class RegistryHandler {
             TILES.register("crusher", () -> TileEntityType.Builder.create(CrusherTile::new, CRUSHER.get()).build(null));
     public static final RegistryObject<TileEntityType<SmokeDetectorTile>> SMOKE_DETECTOR_TILE =
             TILES.register("smoke_detector", () -> TileEntityType.Builder.create(SmokeDetectorTile::new, SMOKE_DETECTOR.get()).build(null));
-    public static final RegistryObject<TileEntityType<CokeOvenTile>> COKE_OVEN_TILE =
-            TILES.register("coke_oven", () -> TileEntityType.Builder.create(CokeOvenTile::new, COKE_OVEN.get()).build(null));
+    public static final RegistryObject<TileEntityType<IntensiveHeatingOvenTile>> INTENSIVE_HEATING_OVEN_TILE =
+            TILES.register("intensive_heating_oven", () -> TileEntityType.Builder.create(IntensiveHeatingOvenTile::new, INTENSIVE_HEATING_OVEN.get()).build(null));
+    public static final RegistryObject<TileEntityType<CrystallizationChamberPartTile>> CRYSTALLIZATION_CHAMBER_PART_TILE =
+            TILES.register("crystallization_chamber_part", () -> TileEntityType.Builder.create(CrystallizationChamberPartTile::new, CRYSTALLIZATION_CHAMBER_PART.get()).build(null));
+
 
     //Containers
     public static final RegistryObject<ContainerType<AtomizerContainer>> ATOMIZER_CONTAINER = CONTAINERS.register("atomizer", () -> IForgeContainerType.create((windowId, inv, data) -> {
@@ -344,11 +347,11 @@ public class RegistryHandler {
     }));
 
      */
-    public static final RegistryObject<ContainerType<CokeOvenContainer>> COKE_OVEN_CONTAINER = CONTAINERS.register("coke_oven", () -> IForgeContainerType.create((windowId, inv, data) -> {
+    public static final RegistryObject<ContainerType<IntensiveHeatingOvenContainer>> INTENSIVE_HEATING_OVEN_CONTAINER = CONTAINERS.register("intensive_heating_oven", () -> IForgeContainerType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
         System.out.println(pos);
         World world = inv.player.getEntityWorld();
-        return new CokeOvenContainer(windowId, world, inv, pos);
+        return new IntensiveHeatingOvenContainer(windowId, world, inv, pos);
     }));
 
 
@@ -358,40 +361,13 @@ public class RegistryHandler {
     //public static final IRecipeType<CrushingRecipe> CRUSHER_RECIPE = new CrusherRecipeType();
     public static final RegistryObject<IRecipeSerializer<?>> COKEING_RECIPE = RECIPES_SERIALIZER.register("cokeing", () -> new CokeingRecipeSerializer(300));
 
-    //tags
-    public static class MoreBlockTagsProvider extends BlockTagsProvider
-    {
 
-        public MoreBlockTagsProvider(DataGenerator generatorIn) {
-            super(generatorIn);
-        }
-
-        @Override
-        protected void registerTags() {
-            this.getBuilder(Tags.SMOKY_SENSITIVE).add(Blocks.CAMPFIRE).add(Blocks.FIRE);
-        }
-
-    }
-    public static class MoreItemTagsProvider extends ItemTagsProvider
-    {
-
-        public MoreItemTagsProvider(DataGenerator generatorIn) {
-            super(generatorIn);
-        }
-
-        @Override
-        protected void registerTags() {
-            this.getBuilder(Tags.ION_SHELLS).add(RegistryHandler.ION_SHELL.get());
-            this.getBuilder(Tags.BULLETS).add(RegistryHandler.BULLET.get());
-            this.getBuilder(Tags.BULLETS).add(RegistryHandler.INCENDIARY_BULLET.get());
-        }
-
-    }
     public static class Tags {
         //public static final Tag<Fluid> RESIN = new FluidTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "resin"));
         public static final Tag<Block> SMOKY_SENSITIVE = new BlockTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "smoky_sensitive"));
-        public static final Tag<Item> BULLETS = new ItemTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "bullets"));
-        public static final Tag<Item> ION_SHELLS = new ItemTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "ion_shells"));
+        //public static final Tag<Item> BULLETS = new ItemTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "bullets"));
+        //public static final Tag<Item> ION_SHELLS = new ItemTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "ion_shells"));
+        public static final Tag<Item> ITEM_HEAT_INFUSEABLE = new ItemTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "item_heat_infuseable"));
 
     }
 

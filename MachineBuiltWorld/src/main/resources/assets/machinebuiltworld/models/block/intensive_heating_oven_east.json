@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "machinebuiltworld:blocks/coke_oven_lit",
-		"particle": "machinebuiltworld:blocks/coke_oven_lit"
+		"0": "machinebuiltworld:blocks/intensive_heating_oven",
+		"particle": "machinebuiltworld:blocks/intensive_heating_oven"
 	},
 	"elements": [
 		{

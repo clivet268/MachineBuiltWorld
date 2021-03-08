@@ -2,6 +2,8 @@ package com.Clivet268.MachineBuiltWorld.tileentity;
 
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.AbstractCokeingRecipe;
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeingRecipe;
+import com.Clivet268.MachineBuiltWorld.items.IHeatInfuseable;
+import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.block.AbstractFurnaceBlock;
@@ -19,14 +21,12 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractCokeOvenTile extends LockableTileEntity implements ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
+public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntity implements IHeatInfuseable, ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
     private ItemStackHandler itemHandler = createHandler();
     // Never create lazy optionals in getCapability. Always place them as fields in the tile entity:
     private LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
@@ -57,13 +57,13 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         public int get(int index) {
             switch(index) {
                 case 0:
-                    return AbstractCokeOvenTile.this.burnTime;
+                    return AbstractIntensiveHeatingOvenTile.this.burnTime;
                 case 1:
-                    return AbstractCokeOvenTile.this.recipesUsed;
+                    return AbstractIntensiveHeatingOvenTile.this.recipesUsed;
                 case 2:
-                    return AbstractCokeOvenTile.this.cookTime;
+                    return AbstractIntensiveHeatingOvenTile.this.cookTime;
                 case 3:
-                    return AbstractCokeOvenTile.this.cookTimeTotal;
+                    return AbstractIntensiveHeatingOvenTile.this.cookTimeTotal;
                 default:
                     return 0;
             }
@@ -72,16 +72,16 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         public void set(int index, int value) {
             switch(index) {
                 case 0:
-                    AbstractCokeOvenTile.this.burnTime = value;
+                    AbstractIntensiveHeatingOvenTile.this.burnTime = value;
                     break;
                 case 1:
-                    AbstractCokeOvenTile.this.recipesUsed = value;
+                    AbstractIntensiveHeatingOvenTile.this.recipesUsed = value;
                     break;
                 case 2:
-                    AbstractCokeOvenTile.this.cookTime = value;
+                    AbstractIntensiveHeatingOvenTile.this.cookTime = value;
                     break;
                 case 3:
-                    AbstractCokeOvenTile.this.cookTimeTotal = value;
+                    AbstractIntensiveHeatingOvenTile.this.cookTimeTotal = value;
             }
 
         }
@@ -90,8 +90,6 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
             return 4;
         }
     };
-
-
 
 
 
@@ -117,7 +115,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
 
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                return stack.getItem() == Items.COAL;
+                return true;
             }
 
             @Nonnull
@@ -130,7 +128,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
     private final Map<ResourceLocation, Integer> cokeOvenSlotThings = Maps.newHashMap();
     protected final IRecipeType<? extends AbstractCokeingRecipe> recipeType;
 
-    protected AbstractCokeOvenTile(TileEntityType<?> tileTypeIn, IRecipeType<? extends AbstractCokeingRecipe> recipeTypeIn) {
+    protected AbstractIntensiveHeatingOvenTile(TileEntityType<?> tileTypeIn, IRecipeType<? extends AbstractCokeingRecipe> recipeTypeIn) {
         super(tileTypeIn);
         this.recipeType = recipeTypeIn;
     }
@@ -139,76 +137,12 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         return new InvWrapper(this);
     }
 
-    @Deprecated //Forge - get burn times by calling ForgeHooks#getBurnTime(ItemStack)
-    public static Map<Item, Integer> getBurnTimes() {
-        Map<Item, Integer> map = Maps.newLinkedHashMap();
-        addItemBurnTime(map, Items.LAVA_BUCKET, 20000);
-        addItemBurnTime(map, Blocks.COAL_BLOCK, 16000);
-        addItemBurnTime(map, Items.BLAZE_ROD, 2400);
-        addItemBurnTime(map, Items.COAL, 1600);
-        addItemBurnTime(map, Items.CHARCOAL, 1600);
-        addItemTagBurnTime(map, ItemTags.LOGS, 300);
-        addItemTagBurnTime(map, ItemTags.PLANKS, 300);
-        addItemTagBurnTime(map, ItemTags.WOODEN_STAIRS, 300);
-        addItemTagBurnTime(map, ItemTags.WOODEN_SLABS, 150);
-        addItemTagBurnTime(map, ItemTags.WOODEN_TRAPDOORS, 300);
-        addItemTagBurnTime(map, ItemTags.WOODEN_PRESSURE_PLATES, 300);
-        addItemTagBurnTime(map, net.minecraftforge.common.Tags.Items.FENCES_WOODEN, 300);
-        addItemTagBurnTime(map, net.minecraftforge.common.Tags.Items.FENCE_GATES_WOODEN, 300);
-        addItemBurnTime(map, Blocks.NOTE_BLOCK, 300);
-        addItemBurnTime(map, Blocks.BOOKSHELF, 300);
-        addItemBurnTime(map, Blocks.LECTERN, 300);
-        addItemBurnTime(map, Blocks.JUKEBOX, 300);
-        addItemBurnTime(map, Blocks.CHEST, 300);
-        addItemBurnTime(map, Blocks.TRAPPED_CHEST, 300);
-        addItemBurnTime(map, Blocks.CRAFTING_TABLE, 300);
-        addItemBurnTime(map, Blocks.DAYLIGHT_DETECTOR, 300);
-        addItemTagBurnTime(map, ItemTags.BANNERS, 300);
-        addItemBurnTime(map, Items.BOW, 300);
-        addItemBurnTime(map, Items.FISHING_ROD, 300);
-        addItemBurnTime(map, Blocks.LADDER, 300);
-        addItemTagBurnTime(map, ItemTags.SIGNS, 200);
-        addItemBurnTime(map, Items.WOODEN_SHOVEL, 200);
-        addItemBurnTime(map, Items.WOODEN_SWORD, 200);
-        addItemBurnTime(map, Items.WOODEN_HOE, 200);
-        addItemBurnTime(map, Items.WOODEN_AXE, 200);
-        addItemBurnTime(map, Items.WOODEN_PICKAXE, 200);
-        addItemTagBurnTime(map, ItemTags.WOODEN_DOORS, 200);
-        addItemTagBurnTime(map, ItemTags.BOATS, 1200);
-        addItemTagBurnTime(map, ItemTags.WOOL, 100);
-        addItemTagBurnTime(map, ItemTags.WOODEN_BUTTONS, 100);
-        addItemBurnTime(map, Items.STICK, 100);
-        addItemTagBurnTime(map, ItemTags.SAPLINGS, 100);
-        addItemBurnTime(map, Items.BOWL, 100);
-        addItemTagBurnTime(map, ItemTags.CARPETS, 67);
-        addItemBurnTime(map, Blocks.DRIED_KELP_BLOCK, 4001);
-        addItemBurnTime(map, Items.CROSSBOW, 300);
-        addItemBurnTime(map, Blocks.BAMBOO, 50);
-        addItemBurnTime(map, Blocks.DEAD_BUSH, 100);
-        addItemBurnTime(map, Blocks.SCAFFOLDING, 400);
-        addItemBurnTime(map, Blocks.LOOM, 300);
-        addItemBurnTime(map, Blocks.BARREL, 300);
-        addItemBurnTime(map, Blocks.CARTOGRAPHY_TABLE, 300);
-        addItemBurnTime(map, Blocks.FLETCHING_TABLE, 300);
-        addItemBurnTime(map, Blocks.SMITHING_TABLE, 300);
-        addItemBurnTime(map, Blocks.COMPOSTER, 300);
-        return map;
-    }
-
-    private static void addItemTagBurnTime(Map<Item, Integer> map, Tag<Item> itemTag, int burnTimeIn) {
-        for(Item item : itemTag.getAllElements()) {
-            map.put(item, burnTimeIn);
-        }
-
-    }
-
-    private static void addItemBurnTime(Map<Item, Integer> map, IItemProvider itemProvider, int burnTimeIn) {
-        map.put(itemProvider.asItem(), burnTimeIn);
-    }
+    //Forge - get burn times by calling ForgeHooks#getBurnTime(ItemStack)
 
     private boolean isBurning() {
         return this.burnTime > 0;
     }
+
     @Override
     public void read(CompoundNBT compound) {
         super.read(compound);
@@ -286,6 +220,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
                     }
                 }
 
+
                 if (this.isBurning() && this.canSmelt(irecipe)) {
                     ++this.cookTime;
                     if (this.cookTime == this.cookTimeTotal) {
@@ -316,9 +251,17 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
     protected boolean canSmelt(@Nullable IRecipe<?> recipeIn) {
         if (!this.items.get(0).isEmpty() && recipeIn != null) {
             ItemStack itemstack = recipeIn.getRecipeOutput();
+            ItemStack itemstack2 = this.items.get(2);
+            ItemStack itemstack3 = this.items.get(0);
+
             if (itemstack.isEmpty()) {
                 return false;
             } else {
+                if(needsSomeInfusin(itemstack3.getItem())){
+                    //System.out.println(itemstack3.getItem());
+                    //System.out.println(whataAmIAGonnaDo(itemstack2.getItem())==itemstack3.getItem());
+                    return whataAmIAGonnaDo(itemstack3.getItem())==itemstack2.getItem();
+                }
                 ItemStack itemstack1 = this.items.get(3);
                 if (itemstack1.isEmpty()) {
                     return true;
@@ -340,7 +283,15 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
             ItemStack itemstack = this.items.get(0);
             ItemStack itemstack1 = recipe.getRecipeOutput();
             ItemStack itemstack2 = this.items.get(3);
-            if (itemstack2.isEmpty()) {
+            ItemStack itemstack3 = this.items.get(2);
+            //System.out.println(itemstack1);
+
+            if(needsSomeInfusin(itemstack.getItem())) {
+                if (!(whataAmIAGonnaDo(itemstack.getItem()) == itemstack3.getItem())) {
+                    return;
+                }
+            }
+            if (itemstack2.isEmpty() || itemstack2.getItem() == Items.AIR) {
                 this.items.set(3, itemstack1.copy());
             } else if (itemstack2.getItem() == itemstack1.getItem()) {
                 itemstack2.grow(itemstack1.getCount());
@@ -354,6 +305,10 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
                 this.items.set(1, new ItemStack(Items.WATER_BUCKET));
             }
 
+            if(needsSomeInfusin(itemstack.getItem()))
+            {
+                itemstack3.shrink(1);
+            }
             itemstack.shrink(1);
         }
     }
@@ -362,8 +317,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         if (fuel.isEmpty()) {
             return 0;
         } else {
-            Item item = fuel.getItem();
-            return net.minecraftforge.common.ForgeHooks.getBurnTime(fuel);
+            return ForgeHooks.getBurnTime(fuel)/3;
         }
     }
 
@@ -373,7 +327,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
     }
 
     public static boolean isFuel(ItemStack stack) {
-        return net.minecraftforge.common.ForgeHooks.getBurnTime(stack) > 0;
+        return ForgeHooks.getBurnTime(stack) > 0;
     }
     @Override
     public int[] getSlotsForFace(Direction side) {
@@ -537,7 +491,7 @@ public abstract class AbstractCokeOvenTile extends LockableTileEntity implements
         }
 
         player.unlockRecipes(list);
-        //this.cokeOvenSlotThings.clear();
+        this.cokeOvenSlotThings.clear();
     }
 
     private static void spawnExpOrbs(PlayerEntity player, int p_214003_1_, float experience) {

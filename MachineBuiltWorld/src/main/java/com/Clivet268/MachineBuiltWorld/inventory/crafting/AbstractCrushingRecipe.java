@@ -11,22 +11,20 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public abstract class AbstractCokeingRecipe implements IRecipe<IInventory> {
+public abstract class AbstractCrushingRecipe implements IRecipe<IInventory> {
         protected final IRecipeType<?> type;
         protected final ResourceLocation id;
         protected final String group;
         protected final Ingredient ingredient;
         protected final ItemStack result;
-        protected final float experience;
         protected final int cookTime;
 
-        public AbstractCokeingRecipe(IRecipeType<?> typeIn, ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, float experienceIn, int cookTimeIn) {
+        public AbstractCrushingRecipe(IRecipeType<?> typeIn, ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, int cookTimeIn) {
             this.type = typeIn;
             this.id = idIn;
             this.group = groupIn;
             this.ingredient = ingredientIn;
             this.result = resultIn;
-            this.experience = experienceIn;
             this.cookTime = cookTimeIn;
         }
 
@@ -59,14 +57,6 @@ public abstract class AbstractCokeingRecipe implements IRecipe<IInventory> {
             nonnulllist.add(this.ingredient);
             return nonnulllist;
         }
-
-        /**
-         * Gets the experience of this recipe
-         */
-        public float getExperience() {
-            return this.experience;
-        }
-
         /**
          * Get the result of this recipe, usually for display purposes (e.g. recipe book). If your recipe has more than one
          * possible result (e.g. it's dynamic and depends on its inputs), then return an empty stack.
@@ -92,6 +82,7 @@ public abstract class AbstractCokeingRecipe implements IRecipe<IInventory> {
         }
         @Override
         public IRecipeSerializer<?> getSerializer() {
+            System.out.println(RegistryHandler.COKEING_RECIPE.get());
            return RegistryHandler.COKEING_RECIPE.get();
           }
         @Override
