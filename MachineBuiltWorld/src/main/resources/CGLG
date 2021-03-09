@@ -27,6 +27,7 @@ laser pistol: + shoot sound(WIP) + bullet hit sound (WIP)
 Smoke Alarm: + alarm sound(WIP) + fire detection(WIP)
 pistol: + shoot sound(WIP)
 Vital texture broken link for blocks corrected (again)
+Glass now drops glass shards
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 11/28/2020
