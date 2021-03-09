@@ -2,6 +2,7 @@ package com.Clivet268.MachineBuiltWorld;
 
 
 import com.Clivet268.MachineBuiltWorld.client.gui.*;
+import com.Clivet268.MachineBuiltWorld.util.LootHandler;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import com.Clivet268.MachineBuiltWorld.util.Renderer.BulletRenderer;
 import com.Clivet268.MachineBuiltWorld.worldgen.MachineBuiltWorldOreGen;
@@ -11,8 +12,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -55,6 +56,8 @@ public class MachineBuiltWorld
         RegistryHandler.init();
 
         MinecraftForge.EVENT_BUS.register(this);
+        LootHandler.makeTheGlasses();
+        MinecraftForge.EVENT_BUS.register(new LootHandler());
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::registerRecipeSerializers);
 
     }
@@ -66,19 +69,28 @@ public class MachineBuiltWorld
             ScreenManager.registerFactory(RegistryHandler.MIXER_CONTAINER.get(), MixerScreen::new);
             ScreenManager.registerFactory(RegistryHandler.ATOMIZER_CONTAINER.get(), AtomizerScreen::new);
             //ScreenManager.registerFactory(RegistryHandler.CRUSHER_CONTAINER.get(), CrusherScreen::new);
-            ScreenManager.registerFactory(RegistryHandler.COKE_OVEN_CONTAINER.get(), CokeOvenScreen::new);
+            ScreenManager.registerFactory(RegistryHandler.INTENSIVE_HEATING_OVEN_CONTAINER.get(), IntensiveHeatingOvenScreen::new);
 
             registerEntityModels(event.getMinecraftSupplier());
         }
     private void registerEntityModels(Supplier<Minecraft> minecraft){
         //ItemRenderer renderer = minecraft.get().getItemRenderer();
-        RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.BULLET_ENTITY.get(), (renderManager) -> new BulletRenderer(renderManager));
+        RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.BULLET_ENTITY.get(), BulletRenderer::new);
     }
     private void setup(final FMLCommonSetupEvent event)
     {
         RenderTypeLookup.setRenderLayer(RegistryHandler.BORONATED_GLASS.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(RegistryHandler.FIBERGLASS_MOULD.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(RegistryHandler.ATOMIZER.get(), RenderType.getTranslucent());
+    }
+
+    @SubscribeEvent
+    public void lootLoad(LootTableLoadEvent evt) {
+        /*if (evt.getName().toString().equals("minecraft:blocks/brown_sained_glass_pane")) {
+            evt.getTable()
+        }
+
+         */
     }
 
     public static ResourceLocation locate(String path) {
