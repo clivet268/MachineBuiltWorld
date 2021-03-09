@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "machinebuiltworld:uncut_garnet"
+        },
+        {
+          "type": "item",
+          "name": "large_uncut_garnet",
+          "weight": 12
+        }
+      ]
+    }
+  ]
+}
