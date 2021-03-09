@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "   ",
+    "xxx",
+    "xxx"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "machinebuiltworld:glass_shards"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:broken_glass_bunch",
+    "count": 1
+  }
+}
