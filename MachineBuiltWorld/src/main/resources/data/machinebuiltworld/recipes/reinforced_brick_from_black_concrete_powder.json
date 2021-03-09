@@ -3,7 +3,7 @@
   "pattern":
   [
     "xzx",
-    " y ",
+    " x ",
     "xax"
   ],
   "key":
@@ -15,10 +15,6 @@
     "y":
     {
       "item": "minecraft:water_bucket"
-    },
-    "z":
-    {
-      "item": "machinebuiltworld:steel_ingot"
     },
     "a":
     {

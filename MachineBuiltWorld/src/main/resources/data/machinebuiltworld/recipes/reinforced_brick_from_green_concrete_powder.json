@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "pattern":
   [
-    "xzx",
-    " y ",
+    "xyx",
+    " x ",
     "xax"
   ],
   "key":
@@ -15,10 +15,6 @@
     "y":
     {
       "item": "minecraft:water_bucket"
-    },
-    "z":
-    {
-      "item": "machinebuiltworld:steel_ingot"
     },
     "a":
     {
