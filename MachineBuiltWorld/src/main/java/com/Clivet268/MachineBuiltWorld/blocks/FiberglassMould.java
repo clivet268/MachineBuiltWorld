@@ -64,7 +64,7 @@ public class FiberglassMould extends Block{
             Block.makeCuboidShape(3.5, 0.75, 2, 12.5, 3.25, 14)
     ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);}).get()};
     public FiberglassMould(){
-        super(Properties.create((Material.GLASS))
+        super(Properties.create((Material.IRON))
                 .hardnessAndResistance(1.0f, 1.0f)
                 .sound(SoundType.METAL)
                 .harvestLevel(0)
