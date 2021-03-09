@@ -1,9 +1,11 @@
 package com.Clivet268.MachineBuiltWorld.state;
 
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.properties.BlockStateProperties;
 
-public class MoreStateProperties {
+public class MoreStateProperties extends BlockStateProperties {
     public static final BooleanProperty ONOROFF = BooleanProperty.create("onoroff");
     public static final IntegerProperty MILLOAS = IntegerProperty.create("milloas", 0, 2);
     public static final IntegerProperty MIXEROAS = IntegerProperty.create("mixeroas", 0, 2);
@@ -11,6 +13,11 @@ public class MoreStateProperties {
     public static final BooleanProperty CRUSHCONTAIN = BooleanProperty.create("crushcontain");
     public static final BooleanProperty OPENCLOSE = BooleanProperty.create("openclose");
     public static final IntegerProperty CRUSHING = IntegerProperty.create("crushing", 0 ,2);
+    public static final IntegerProperty CRYSTILIZATIONSTATES = IntegerProperty.create("crystallization", 0,6);
+    /*public static final EnumProperty<CrystallizationChamberStates> CRYSTILIZATIONSTATES =
+            EnumProperty.create("crystallization", CrystallizationChamberStates.class);
+
+     */
     //public static final EnumProperty<MillBit> MILL_BIT = EnumProperty.create("mill_bit", MillBit.class);
     //public static final IntegerProperty STAGE_0_1 = IntegerProperty.create("stage", 0, 1);
 }
