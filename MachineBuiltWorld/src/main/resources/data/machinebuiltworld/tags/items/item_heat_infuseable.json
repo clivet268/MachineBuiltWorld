@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:coal",
+    "machinebuiltworld:coke",
+    "machinebuiltworld:boron_dust"
+  ]
+}
