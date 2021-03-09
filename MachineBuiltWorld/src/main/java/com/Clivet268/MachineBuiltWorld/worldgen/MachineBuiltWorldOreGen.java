@@ -36,11 +36,11 @@ public class MachineBuiltWorldOreGen {
             biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(
                     new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE,
                             RegistryHandler.BAUXITE_ORE.get().getDefaultState(), 6)).withPlacement(ccb1));
-            ConfiguredPlacement ccg = Placement.COUNT_RANGE.configure(new CountRangeConfig(1, 3, 0,10));
+            ConfiguredPlacement ccg = Placement.COUNT_RANGE.configure(new CountRangeConfig(1, 3, 1,10));
             biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(
                     new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE,
                             RegistryHandler.GARNET_ORE.get().getDefaultState(), 1)).withPlacement(ccg));
-            ConfiguredPlacement cce = Placement.COUNT_RANGE.configure(new CountRangeConfig(1, 3, 0,255));
+            ConfiguredPlacement cce = Placement.COUNT_RANGE.configure(new CountRangeConfig(1, 3, 1,255));
             biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(
                     new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE,
                             RegistryHandler.ERBIUM_ORE.get().getDefaultState(), 1)).withPlacement(cce));
