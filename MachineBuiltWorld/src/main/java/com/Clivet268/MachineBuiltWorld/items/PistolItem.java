@@ -23,9 +23,6 @@ public class PistolItem extends ShootableItem {
         super(builder);
     }
 
-    public static final Predicate<ItemStack> ION_SHELLS = (p_220002_0_) -> {
-        return p_220002_0_.getItem().isIn(RegistryHandler.Tags.ION_SHELLS);
-    };
     public static final Predicate<ItemStack> BULLETS = (p_220002_0_) -> {
         //
         //return p_220002_0_.getItem().isIn(RegistryHandler.Tags.BULLETS);

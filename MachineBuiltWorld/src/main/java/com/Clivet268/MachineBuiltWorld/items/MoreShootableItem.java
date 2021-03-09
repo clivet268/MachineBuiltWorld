@@ -9,9 +9,6 @@ import net.minecraft.util.Hand;
 import java.util.function.Predicate;
 
 public abstract class MoreShootableItem extends Item {
-    public static final Predicate<ItemStack> BULLETS = (isBullet) -> {
-        return isBullet.getItem().isIn(RegistryHandler.Tags.BULLETS);
-    };
     /*
     public static final Predicate<ItemStack> ARROWS_OR_FIREWORKS = ARROWS.or((p_220003_0_) -> {
         return p_220003_0_.getItem() == Items.FIREWORK_ROCKET;
