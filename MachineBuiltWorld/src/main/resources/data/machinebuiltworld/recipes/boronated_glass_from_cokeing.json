@@ -1,0 +1,9 @@
+{
+  "type": "machinebuiltworld:cokeing",
+  "ingredient": {
+    "item": "machinebuiltworld:broken_glass_bunch"
+  },
+  "result": "machinebuiltworld:boronated_glass",
+  "experience": 0.65,
+  "cookingtime": 300
+}
