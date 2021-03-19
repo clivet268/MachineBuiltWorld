@@ -15,7 +15,6 @@ import com.Clivet268.MachineBuiltWorld.tools.ModItemTier;
 import com.Clivet268.MachineBuiltWorld.tools.MultimeterItem;
 import com.Clivet268.MachineBuiltWorld.util.Renderer.LaserRenderer;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.GameSettings;
@@ -23,9 +22,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.data.BlockTagsProvider;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.FlowingFluid;
@@ -138,7 +134,7 @@ public class RegistryHandler {
     public static final RegistryObject<Item> RESONATOR = ITEMS.register("resonator", ItemBase::new);
     public static final RegistryObject<Item> LARGE_RESONATOR = ITEMS.register("large_resonator", ItemBase::new);
     public static final RegistryObject<Item> STEEL_INGOT = ITEMS.register("steel_ingot", ItemBase::new);
-    public static final RegistryObject<Item> PIG_IRON_INGOT = ITEMS.register("pig_iron_ingot", ItemBase::new);
+    //public static final RegistryObject<Item> PIG_IRON_INGOT = ITEMS.register("pig_iron_ingot", ItemBase::new);
     public static final RegistryObject<Item> COKE = ITEMS.register("coke", () -> new FuelItemBase(1600));
     public static final RegistryObject<Item> CUT_GARNET = ITEMS.register("cut_garnet", ItemBase::new);
     public static final RegistryObject<Item> CUT_POLISHED_GARNET = ITEMS.register("cut_polished_garnet", ItemBase::new);
@@ -148,6 +144,8 @@ public class RegistryHandler {
     public static final RegistryObject<Item> ALUMINUM_INGOT = ITEMS.register("aluminum_ingot", ItemBase::new);
     public static final RegistryObject<Item> YTTRIUM = ITEMS.register("yttrium", ItemBase::new);
     public static final RegistryObject<Item> RESONATING_CRYSTAL = ITEMS.register("resonating_crystal", ItemBase::new);
+    public static final RegistryObject<Item> COPPER_NUGGET = ITEMS.register("copper_nugget", ItemBase::new);
+    public static final RegistryObject<Item> STEEL_NUGGET = ITEMS.register("steel_nugget", ItemBase::new);
 
     //blocks
     public static final RegistryObject<Block> COPPER_BLOCK = BLOCKS.register("copper_block", CopperBlock::new);
@@ -179,6 +177,11 @@ public class RegistryHandler {
     public static final RegistryObject<Block> ERBIUM_ORE = BLOCKS.register("erbium_ore", ErbiumOre::new);
     public static final RegistryObject<Block> CRYSTALLIZATION_CHAMBER_PART = BLOCKS.register("crystallization_chamber_part", CrystallizationChamberPart::new);
     public static final RegistryObject<Block> BROKEN_GLASS_BUNCH = BLOCKS.register("broken_glass_bunch", BrokenGlassBunch::new);
+    public static final RegistryObject<Block> MANAGER = BLOCKS.register("manager", Manager::new);
+    public static final RegistryObject<Block> STEEL_FRAME = BLOCKS.register("steel_frame", SteelFrame::new);
+    public static final RegistryObject<Block> PLUG = BLOCKS.register("plug", Plug::new);
+    public static final RegistryObject<Block> GENERATOR = BLOCKS.register("generator", Generator::new);
+
 
     //weapons
     public static final RegistryObject<SwordItem> COPPER_SWORD = ITEMS.register("copper_sword", () ->
@@ -249,7 +252,10 @@ public class RegistryHandler {
     public static final RegistryObject<Item> REINFORCED_BRICK_ITEM = ITEMS.register("reinforced_brick", () -> new BlockItemBase(REINFORCED_BRICK.get()));
     public static final RegistryObject<Item> CRYSTALLIZATION_CHAMBER_PART_ITEM = ITEMS.register("crystallization_chamber_part", () -> new BlockItemBase(CRYSTALLIZATION_CHAMBER_PART.get()));
     public static final RegistryObject<Item> BROKEN_GLASS_BUNCH_ITEM = ITEMS.register("broken_glass_bunch", () -> new BlockItemBase(BROKEN_GLASS_BUNCH.get()));
-
+    public static final RegistryObject<Item> STEEL_FRAME_ITEM = ITEMS.register("steel_frame", () -> new BlockItemBase(STEEL_FRAME.get()));
+    public static final RegistryObject<Item> MANAGER_ITEM = ITEMS.register("manager", () -> new BlockItemBase(MANAGER.get()));
+    public static final RegistryObject<Item> PLUG_ITEM = ITEMS.register("plug", () -> new BlockItemBase(PLUG.get()));
+    public static final RegistryObject<Item> GENERATOR_ITEM = ITEMS.register("generator", () -> new BlockItemBase(GENERATOR.get()));
 
     //fluids resource locations
     public static final ResourceLocation BATTERY_ACID_STILL_RL = new ResourceLocation(MachineBuiltWorld.MOD_ID, "blocks/battery_acid_still");
@@ -306,6 +312,12 @@ public class RegistryHandler {
             TILES.register("intensive_heating_oven", () -> TileEntityType.Builder.create(IntensiveHeatingOvenTile::new, INTENSIVE_HEATING_OVEN.get()).build(null));
     public static final RegistryObject<TileEntityType<CrystallizationChamberPartTile>> CRYSTALLIZATION_CHAMBER_PART_TILE =
             TILES.register("crystallization_chamber_part", () -> TileEntityType.Builder.create(CrystallizationChamberPartTile::new, CRYSTALLIZATION_CHAMBER_PART.get()).build(null));
+    public static final RegistryObject<TileEntityType<WireTile>> WIRE_TILE =
+            TILES.register("wire", () -> TileEntityType.Builder.create(WireTile::new, WIRE.get()).build(null));
+    public static final RegistryObject<TileEntityType<PlugTile>> PLUG_TILE =
+            TILES.register("plug", () -> TileEntityType.Builder.create(PlugTile::new, PLUG.get()).build(null));
+    public static final RegistryObject<TileEntityType<GeneratorTile>> GENERATOR_TILE =
+            TILES.register("generator", () -> TileEntityType.Builder.create(GeneratorTile::new, GENERATOR.get()).build(null));
 
 
     //Containers
@@ -354,6 +366,13 @@ public class RegistryHandler {
         return new IntensiveHeatingOvenContainer(windowId, world, inv, pos);
     }));
 
+    public static final RegistryObject<ContainerType<GeneratorContainer>> GENERATOR_CONTAINER = CONTAINERS.register("generator", () -> IForgeContainerType.create((windowId, inv, data) -> {
+        BlockPos pos = data.readBlockPos();
+        System.out.println(pos);
+        World world = inv.player.getEntityWorld();
+        return new GeneratorContainer(windowId, world, pos, inv);
+    }));
+
 
     //translucent layers
 
@@ -368,6 +387,11 @@ public class RegistryHandler {
         //public static final Tag<Item> BULLETS = new ItemTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "bullets"));
         //public static final Tag<Item> ION_SHELLS = new ItemTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "ion_shells"));
         public static final Tag<Item> ITEM_HEAT_INFUSEABLE = new ItemTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "item_heat_infuseable"));
+
+    }
+    public static class ForgeTags {
+        public static final Tag<Block> SMOKY_SENSITIVE = new BlockTags.Wrapper(new ResourceLocation("forge", "ores/copper"));
+        public static final Tag<Item> ITEM_HEAT_INFUSEABLE = new ItemTags.Wrapper(new ResourceLocation("forge", "item_heat_infuseable"));
 
     }
 
