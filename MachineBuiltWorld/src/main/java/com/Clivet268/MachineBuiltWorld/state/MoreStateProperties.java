@@ -14,6 +14,8 @@ public class MoreStateProperties extends BlockStateProperties {
     public static final BooleanProperty OPENCLOSE = BooleanProperty.create("openclose");
     public static final IntegerProperty CRUSHING = IntegerProperty.create("crushing", 0 ,2);
     public static final IntegerProperty CRYSTILIZATIONSTATES = IntegerProperty.create("crystallization", 0,6);
+    public static final EnumProperty<WireDirectionStates> WIREDIR = EnumProperty.create("wiredir",WireDirectionStates.class);
+
     /*public static final EnumProperty<CrystallizationChamberStates> CRYSTILIZATIONSTATES =
             EnumProperty.create("crystallization", CrystallizationChamberStates.class);
 

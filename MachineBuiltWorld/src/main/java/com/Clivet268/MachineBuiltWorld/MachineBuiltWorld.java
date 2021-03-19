@@ -53,14 +53,19 @@ public class MachineBuiltWorld
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::clientSetup);
+        modEventBus.addListener(this::commonSetup);
         RegistryHandler.init();
 
         MinecraftForge.EVENT_BUS.register(this);
-        LootHandler.makeTheGlasses();
-        MinecraftForge.EVENT_BUS.register(new LootHandler());
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::registerRecipeSerializers);
 
     }
+    
+    private void commonSetup(FMLCommonSetupEvent event)
+    {
+        MinecraftForge.EVENT_BUS.register(new LootHandler());
+    }
+
     private void clientSetup(final FMLClientSetupEvent event) {
             ScreenManager.registerFactory(RegistryHandler.TTTBATTERY_CONTAINER.get(), TTTBatteryScreen::new);
             ScreenManager.registerFactory(RegistryHandler.TTBATTERY_CONTAINER.get(), TTBatteryScreen::new);
@@ -68,6 +73,7 @@ public class MachineBuiltWorld
             ScreenManager.registerFactory(RegistryHandler.BATTERY_POT_CONTAINER.get(), BatteryPotScreen::new);
             ScreenManager.registerFactory(RegistryHandler.MIXER_CONTAINER.get(), MixerScreen::new);
             ScreenManager.registerFactory(RegistryHandler.ATOMIZER_CONTAINER.get(), AtomizerScreen::new);
+            ScreenManager.registerFactory(RegistryHandler.GENERATOR_CONTAINER.get(), GeneratorScreen::new);
             //ScreenManager.registerFactory(RegistryHandler.CRUSHER_CONTAINER.get(), CrusherScreen::new);
             ScreenManager.registerFactory(RegistryHandler.INTENSIVE_HEATING_OVEN_CONTAINER.get(), IntensiveHeatingOvenScreen::new);
 

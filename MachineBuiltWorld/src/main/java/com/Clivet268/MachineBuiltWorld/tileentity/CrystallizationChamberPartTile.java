@@ -5,7 +5,6 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.CRYSTALLIZATION_CHAMBER_PART_TILE;
-import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.FIBERGLASS_MOULD_TILE;
 
 public class CrystallizationChamberPartTile extends TileEntity implements ITickableTileEntity {
 

@@ -1,5 +1,20 @@
 Machine Built World
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+3/9/2021
+Machine Built World V1.0.3 Alpha
+
+Blocks added: Manager(WIP), Steel Frame(WIP), Plug(WIP), Generator(WIP)
+
+Items Added: copper nugget(WIP), steel nugget(WIP)
+
+Other:
+Plug: + Tile Entity(WIP)
+Wire: + Tile Entity(WIP)
+Generator: + Tile Entity(WIP) + GUI(WIP) + Energy Generation(WIP)
+Updated Forge Tags
+Updated Tags
+Fixed accidentally erasing every block loot table in the game
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 1/1/2021
 Machine Built World V1.0.2 Alpha
 
@@ -7,8 +22,8 @@ Blocks Added: Crusher(WIP), Oxygen Furnace(WIP), Intensive Heating Oven(WIP), Re
 Garnet Ore(WIP), Aluminum Ore(WIP), Crystaliztion Chamber(WIP), Broken Glass Bunch (WIP)
 
 Items Added: glass shards, bullet(WIP), incendiary bullet(WIP), ion canister(WIP), laser shell(WIP),
-micro resonator(WIP), resonator(WIP), large resonator(WIP), steel ingot(WIP), pig iron ingot(WIP), coke,
-cut garnet(WIP), polished cut garnet(WIP), large uncut garnet(WIP), uncut garnet(WIP), erbium(WIP), aluminum ingot(WIP)
+micro resonator(WIP), resonator(WIP), large resonator(WIP), steel ingot(WIP), coke, cut garnet(WIP),
+polished cut garnet(WIP), large uncut garnet(WIP), uncut garnet(WIP), erbium(WIP), aluminum ingot(WIP)
 
 Tools Added: laser pistol(WIP), laser pistol mag(WIP), pistol(WIP)
 

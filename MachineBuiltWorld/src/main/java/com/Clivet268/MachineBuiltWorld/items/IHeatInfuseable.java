@@ -1,13 +1,8 @@
 package com.Clivet268.MachineBuiltWorld.items;
 
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
-import com.google.common.collect.Maps;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.tags.Tag;
-import net.minecraft.util.IItemProvider;
-
-import java.util.Map;
 /**
  * If you want to make a new coeking recipe you cant for now :/
  * but eventually youll have to make your own arrays with the infuseable

@@ -9,51 +9,49 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.List;
-
 @Mod.EventBusSubscriber(modid = MachineBuiltWorld.MOD_ID)
 public class LootHandler {
-
-    private static String[] COLORS ={
-            "red","blue", "cyan","black", "white", "magenta", "lime","brown","light_blue", "gray","light_gray","green",
-            "orange","pink", "yellow"
-    };
-
-    private static String[] GLASS_TYPES ={
-            "_stained_glass","_stained_glass_pane"
-    };
-
-
-    private static String[] TABLES = new String[COLORS.length*GLASS_TYPES.length+2];
-
-    public static void makeTheGlasses(){
-        TABLES = new String[COLORS.length*GLASS_TYPES.length+2];
-        int iii = 0;
-        int iiii = 0;
-        for (String i: GLASS_TYPES) {
-            for (String ii: COLORS) {
-                TABLES[(iiii + 1) * iii] = ("" + COLORS[iii] + "" + GLASS_TYPES[iiii]);
-                System.out.println(TABLES[(iiii + 1) * iii]);
-                iii++;
-            }
-            iii=0;
-            iiii++;
-        }
-        iiii=0;
-    }
     @SubscribeEvent
     public static void lootLoad(LootTableLoadEvent evt) {
         String prefix = "minecraft:blocks/";
         String name = evt.getName().toString();
-
         if (name.startsWith(prefix)) {
             String file = name.substring(name.indexOf(prefix) + prefix.length());
-            for(String i: TABLES)
+            switch(file)
             {
-                if(i.equals(file)) {
-                    evt.getTable().addPool(getInjectPool(file));
-                    break;
-                }
+                case"glass":
+                case"glass_pane":
+                case"red_stained_glass":
+                case"blue_stained_glass":
+                case"cyan_stained_glass":
+                case"black_stained_glass":
+                case"white_stained_glass":
+                case"magenta_stained_glass":
+                case"lime_stained_glass":
+                case"brown_stained_glass":
+                case"light_blue_stained_glass":
+                case"gray_stained_glass":
+                case"light_gray_stained_glass":
+                case"green_stained_glass":
+                case"orange_stained_glass":
+                case"pink_stained_glass":
+                case"yellow_stained_glass":
+                case"red_stained_glass_pane":
+                case"blue_stained_glass_pane":
+                case"cyan_stained_glass_pane":
+                case"black_stained_glass_pane":
+                case"white_stained_glass_pane":
+                case"magenta_stained_glass_pane":
+                case"lime_stained_glass_pane":
+                case"brown_stained_glass_pane":
+                case"light_blue_stained_glass_pane":
+                case"gray_stained_glass_pane":
+                case"light_gray_stained_glass_pane":
+                case"green_stained_glass_pane":
+                case"orange_stained_glass_pane":
+                case"pink_stained_glass_pane":
+                case"yellow_stained_glass_pane":evt.getTable().addPool(getInjectPool(file)); break;
+                default:break;
             }
         }
     }
