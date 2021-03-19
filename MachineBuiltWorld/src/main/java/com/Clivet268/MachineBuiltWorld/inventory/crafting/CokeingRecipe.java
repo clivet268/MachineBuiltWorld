@@ -2,7 +2,6 @@ package com.Clivet268.MachineBuiltWorld.inventory.crafting;
 
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
