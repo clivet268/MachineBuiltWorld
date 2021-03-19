@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "yxy",
+    "xxx",
+    "yxy"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "machinebuiltworld:steel_nugget"
+    },
+    "y":
+    {
+      "item": "machinebuiltworld:steel_ingot"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:steel_frame",
+    "count": 1
+  }
+}

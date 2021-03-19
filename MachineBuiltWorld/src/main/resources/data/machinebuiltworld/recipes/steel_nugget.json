@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "machinebuiltworld:steel_ingot"
+    }
+  ],
+  "result":
+  {
+    "item": "machinebuiltworld:steel_nugget",
+    "count": 9
+  }
+}
