@@ -1,9 +1,7 @@
 package com.Clivet268.MachineBuiltWorld.util.Renderer;
 
-import com.Clivet268.MachineBuiltWorld.entity.BulletEntity;
 import com.Clivet268.MachineBuiltWorld.entity.LaserEntity;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

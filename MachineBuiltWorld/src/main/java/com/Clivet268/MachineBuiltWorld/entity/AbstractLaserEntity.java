@@ -6,7 +6,6 @@ import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -391,10 +390,12 @@ public abstract class AbstractLaserEntity extends Entity implements IProjectile 
 
             if (entity instanceof LivingEntity) {
                 LivingEntity livingentity = (LivingEntity)entity;
-                MoreLivingEntity specialEntity = new MoreLivingEntity((EntityType<? extends LivingEntity>) livingentity.getType(), entity.world.getWorld());
+                /*MoreLivingEntity specialEntity = new MoreLivingEntity((EntityType<? extends LivingEntity>) livingentity.getType(), entity.world.getWorld());
                 if (!this.world.isRemote) {
                     specialEntity.setLaserBurnCountInEntity(specialEntity.getLaserBurnCountInEntity() + 1) ;
                 }
+
+                 */
 
                 if (this.knockbackStrength > 0) {
                     Vec3d vec3d = this.getMotion().mul(1.0D, 0.0D, 1.0D).normalize().scale((double)this.knockbackStrength * 0.6D);

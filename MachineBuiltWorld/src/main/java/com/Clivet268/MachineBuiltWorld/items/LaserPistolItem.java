@@ -1,14 +1,15 @@
 package com.Clivet268.MachineBuiltWorld.items;
 
-import com.Clivet268.MachineBuiltWorld.entity.AbstractBulletEntity;
 import com.Clivet268.MachineBuiltWorld.entity.AbstractLaserEntity;
 import com.Clivet268.MachineBuiltWorld.entity.LaserEntity;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.ShootableItem;
+import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;

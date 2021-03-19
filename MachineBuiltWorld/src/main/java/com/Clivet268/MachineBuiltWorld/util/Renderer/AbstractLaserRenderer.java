@@ -1,6 +1,5 @@
 package com.Clivet268.MachineBuiltWorld.util.Renderer;
 
-import com.Clivet268.MachineBuiltWorld.entity.AbstractBulletEntity;
 import com.Clivet268.MachineBuiltWorld.entity.AbstractLaserEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
