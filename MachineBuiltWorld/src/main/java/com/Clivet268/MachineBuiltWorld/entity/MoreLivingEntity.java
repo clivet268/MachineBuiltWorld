@@ -10,8 +10,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.HandSide;
 import net.minecraft.world.World;
 
-import java.util.Optional;
-
 public class MoreLivingEntity extends LivingEntity {
     public static final DataParameter<Integer> LASER_MARK_COUNT_IN_ENTITY = EntityDataManager.createKey(LivingEntity.class, DataSerializers.VARINT);
 

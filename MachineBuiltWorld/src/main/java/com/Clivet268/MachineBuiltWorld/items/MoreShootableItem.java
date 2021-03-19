@@ -1,6 +1,5 @@
 package com.Clivet268.MachineBuiltWorld.items;
 
-import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

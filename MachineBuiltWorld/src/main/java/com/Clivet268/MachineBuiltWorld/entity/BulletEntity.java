@@ -5,10 +5,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BulletEntity extends AbstractBulletEntity {
     //private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(BulletEntity.class, DataSerializers.VARINT);
