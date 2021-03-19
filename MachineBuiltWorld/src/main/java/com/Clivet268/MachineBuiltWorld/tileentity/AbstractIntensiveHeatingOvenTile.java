@@ -3,7 +3,6 @@ package com.Clivet268.MachineBuiltWorld.tileentity;
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.AbstractCokeingRecipe;
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeingRecipe;
 import com.Clivet268.MachineBuiltWorld.items.IHeatInfuseable;
-import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.block.AbstractFurnaceBlock;
@@ -24,7 +23,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.*;
+import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
@@ -187,7 +189,7 @@ public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntit
             compound.putInt("RecipeAmount" + i, entry.getValue());
             ++i;
         }
-
+        System.out.println("wrote");
         return compound;
     }
     @Override
@@ -523,21 +525,6 @@ public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntit
 
     LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
             SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
-
-    /*@Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (!this.removed && facing != null && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (facing == Direction.UP)
-                return handlers[0].cast();
-            else if (facing == Direction.DOWN)
-                return handlers[1].cast();
-            else
-                return handlers[2].cast();
-        }
-        return super.getCapability(capability, facing);
-    }
-
-     */
 
     /**
      * invalidates a tile entity

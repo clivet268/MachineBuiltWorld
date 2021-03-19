@@ -3,7 +3,6 @@ package com.Clivet268.MachineBuiltWorld.inventory.crafting;
 import com.Clivet268.MachineBuiltWorld.items.IHeatInfuseable;
 import com.Clivet268.MachineBuiltWorld.tileentity.IntensiveHeatingOvenTile;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 

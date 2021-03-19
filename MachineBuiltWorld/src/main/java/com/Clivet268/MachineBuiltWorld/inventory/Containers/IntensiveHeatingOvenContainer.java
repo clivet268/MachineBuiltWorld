@@ -19,7 +19,7 @@ public class IntensiveHeatingOvenContainer extends AbstractIntensiveHeatingOvenC
 
     public IntensiveHeatingOvenContainer(int windowId, World world, PlayerInventory pplayerInventory, IInventory iInventory, IIntArray iIntArray, BlockPos pos) {
         super(RegistryHandler.INTENSIVE_HEATING_OVEN_CONTAINER.get(), world, IMoreRecipeType.COKEING, windowId, pplayerInventory, iInventory, iIntArray, pos);
-        System.out.println(world);
+
     }
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
