@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "machinebuiltworld:erbium_ore"
+  },
+  "result": "machinebuiltworld:erbium_chunk",
+  "experience": 1.2,
+  "cookingtime": 450
+}
