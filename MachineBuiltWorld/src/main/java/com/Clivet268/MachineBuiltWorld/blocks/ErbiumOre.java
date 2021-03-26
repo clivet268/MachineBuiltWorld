@@ -8,10 +8,10 @@ import net.minecraftforge.common.ToolType;
 public class ErbiumOre extends Block{
     public ErbiumOre() {
 
-        super(Properties.create(Material.IRON)
-                .hardnessAndResistance(5.0f, 6.0f)
-                .sound(SoundType.METAL)
-                .harvestLevel(2)
+        super(Properties.create(Material.ROCK)
+                .hardnessAndResistance(3.0f, 3.0f)
+                .sound(SoundType.STONE)
+                .harvestLevel(1)
                 .harvestTool(ToolType.PICKAXE)
         );
     }
