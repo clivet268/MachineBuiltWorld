@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "machinebuiltworld:block/conveynorth" },
+    "facing=west": { "model": "machinebuiltworld:block/conveywest" },
+    "facing=south": { "model": "machinebuiltworld:block/conveysouth" },
+    "facing=east": { "model": "machinebuiltworld:block/conveyeast" }
+  }
+}
