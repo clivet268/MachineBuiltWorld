@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "machinebuiltworld:bauxite_ore"
+  },
+  "result": "machinebuiltworld:aluminum_ingot",
+  "experience": 0.7,
+  "cookingtime": 200
+}
