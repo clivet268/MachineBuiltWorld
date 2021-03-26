@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 8,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "machinebuiltworld:glass_shards",
+         "weight": 99
+      },
+      {
+        "type": "empty",
+        "weight": 1
+      }
+      ]
+    }
+  ]
+}

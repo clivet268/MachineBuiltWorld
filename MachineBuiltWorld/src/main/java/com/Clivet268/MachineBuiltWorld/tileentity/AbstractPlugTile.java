@@ -40,7 +40,7 @@ public abstract class AbstractPlugTile extends TileEntity implements ITickableTi
             }
         }
         this.pLuGeD = flag;
-        if(pLuGeD)
+        if(this.pLuGeD)
         {
             transferOverLink();
         }
