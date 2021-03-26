@@ -9,7 +9,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.MAGNET;
+import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.NEODYMIUM_MAGNET;
 
 @Mod.EventBusSubscriber(modid = MachineBuiltWorld.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.DEDICATED_SERVER)
 public class ModServerEvents {
@@ -17,7 +17,7 @@ public class ModServerEvents {
     public static void onMagnetRightClick(PlayerInteractEvent.RightClickItem event)
     {
         LivingEntity player = event.getPlayer();
-        if(player.getHeldItemMainhand().getItem() == MAGNET.get())
+        if(player.getHeldItemMainhand().getItem() == NEODYMIUM_MAGNET.get())
         {
 
 
