@@ -255,13 +255,11 @@ public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntit
             ItemStack itemstack = recipeIn.getRecipeOutput();
             ItemStack itemstack2 = this.items.get(2);
             ItemStack itemstack3 = this.items.get(0);
-
+            System.out.println(recipeIn);
             if (itemstack.isEmpty()) {
                 return false;
             } else {
                 if(needsSomeInfusin(itemstack3.getItem())){
-                    //System.out.println(itemstack3.getItem());
-                    //System.out.println(whataAmIAGonnaDo(itemstack2.getItem())==itemstack3.getItem());
                     return whataAmIAGonnaDo(itemstack3.getItem())==itemstack2.getItem();
                 }
                 ItemStack itemstack1 = this.items.get(3);
