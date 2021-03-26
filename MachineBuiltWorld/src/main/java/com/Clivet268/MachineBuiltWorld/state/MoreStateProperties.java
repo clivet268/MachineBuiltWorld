@@ -7,6 +7,7 @@ import net.minecraft.state.properties.BlockStateProperties;
 
 public class MoreStateProperties extends BlockStateProperties {
     public static final BooleanProperty ONOROFF = BooleanProperty.create("onoroff");
+    public static final BooleanProperty UPORNOT = BooleanProperty.create("upornot");
     public static final IntegerProperty MILLOAS = IntegerProperty.create("milloas", 0, 2);
     public static final IntegerProperty MIXEROAS = IntegerProperty.create("mixeroas", 0, 2);
     public static final IntegerProperty FILLED = IntegerProperty.create("filled",0,3);

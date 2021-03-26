@@ -1,0 +1,11 @@
+{
+  "type": "machinebuiltworld:crushing",
+  "ingredient": {
+    "item": "minecraft:iron_ore"
+  },
+  "result": "machinebuiltworld:iron_dust",
+  "result1": "minecraft:air",
+  "experience": 0.65,
+  "cookingtime": 300,
+  "count": 2
+}

@@ -17,15 +17,21 @@ public abstract class AbstractCrushingRecipe implements IRecipe<IInventory> {
         protected final String group;
         protected final Ingredient ingredient;
         protected final ItemStack result;
+        protected final ItemStack result1;
         protected final int cookTime;
+        protected final int count;
+        protected final int count1;
 
-        public AbstractCrushingRecipe(IRecipeType<?> typeIn, ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, int cookTimeIn) {
+        public AbstractCrushingRecipe(IRecipeType<?> typeIn, ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, ItemStack resultIn1, int cookTimeIn, int countIn, int countIn1) {
             this.type = typeIn;
             this.id = idIn;
             this.group = groupIn;
             this.ingredient = ingredientIn;
             this.result = resultIn;
+            this.result1 = resultIn1;
             this.cookTime = cookTimeIn;
+            this.count = countIn;
+            this.count1 = countIn1;
         }
 
         /**
@@ -66,6 +72,11 @@ public abstract class AbstractCrushingRecipe implements IRecipe<IInventory> {
             return this.result;
         }
 
+
+        public ItemStack getRecipeOutput1() {
+        return this.result1;
+    }
+
         /**
          * Recipes with equal group are combined into one button in the recipe book
          */
@@ -73,6 +84,14 @@ public abstract class AbstractCrushingRecipe implements IRecipe<IInventory> {
         public String getGroup() {
             return this.group;
         }
+
+        public int getCount11() {
+        return this.count1;
+    }
+
+        public int getCount1() {
+        return this.count;
+    }
 
         /**
          * Gets the cook time in ticks
@@ -82,8 +101,7 @@ public abstract class AbstractCrushingRecipe implements IRecipe<IInventory> {
         }
         @Override
         public IRecipeSerializer<?> getSerializer() {
-            System.out.println(RegistryHandler.COKEING_RECIPE.get());
-           return RegistryHandler.COKEING_RECIPE.get();
+           return RegistryHandler.CRUSHING_RECIPE.get();
           }
         @Override
         public ResourceLocation getId() {

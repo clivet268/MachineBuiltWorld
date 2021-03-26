@@ -1,0 +1,11 @@
+{
+  "type": "machinebuiltworld:crushing",
+  "ingredient": {
+    "item": "machinebuiltworld:copper_ore"
+  },
+  "result": "machinebuiltworld:copper_dust",
+  "result1": "minecraft:air",
+  "experience": 0.65,
+  "cookingtime": 300,
+  "count": 2
+}

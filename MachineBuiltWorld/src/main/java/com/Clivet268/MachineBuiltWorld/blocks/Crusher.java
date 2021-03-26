@@ -1,25 +1,29 @@
 package com.Clivet268.MachineBuiltWorld.blocks;
 
+import com.Clivet268.MachineBuiltWorld.inventory.Containers.CrusherContainer;
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.TTTBatteryContainer;
 import com.Clivet268.MachineBuiltWorld.state.MoreStateProperties;
+import com.Clivet268.MachineBuiltWorld.tileentity.CrusherTile;
+import com.Clivet268.MachineBuiltWorld.tileentity.IntensiveHeatingOvenTile;
 import com.Clivet268.MachineBuiltWorld.tileentity.TTTBatteryTile;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.particles.BlockParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.IBooleanFunction;
@@ -31,6 +35,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -43,7 +49,7 @@ public class Crusher extends Block{
 
     public static final IntegerProperty CRUSH = MoreStateProperties.CRUSHING;
     public static final BooleanProperty OC = MoreStateProperties.OPENCLOSE;
-    public static final BooleanProperty FULL = MoreStateProperties.CRUSHCONTAIN;
+    public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public Crusher() {
         super(Properties.create(Material.IRON)
                 .hardnessAndResistance(5.0f, 6.0f)
@@ -51,12 +57,9 @@ public class Crusher extends Block{
                 .harvestLevel(1)
                 .harvestTool(ToolType.PICKAXE));
 
-        this.setDefaultState(this.stateContainer.getBaseState().with(CRUSH, Integer.valueOf(0))
-                .with(OC, Boolean.valueOf(false)).with(FULL, Boolean.valueOf(false)));
-
     }
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(CRUSH,OC,FULL);
+        builder.add(CRUSH,OC,FACING);
     }
     protected static final VoxelShape[] ALLTHESHAPES = new VoxelShape[]{Stream.of(
             Block.makeCuboidShape(0, 2, 0, 1, 17, 16),
@@ -123,82 +126,6 @@ public class Crusher extends Block{
             Block.makeCuboidShape(2, 0, 8, 14, 0, 13)
     ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);}).get()};
 
-
-    public TileEntity createNewTileEntity(IBlockReader p_196283_1_) {
-        return new FurnaceTileEntity();
-    }
-
-    protected void interactWith(World p_220089_1_, BlockPos p_220089_2_, PlayerEntity p_220089_3_) {
-        TileEntity lvt_4_1_ = p_220089_1_.getTileEntity(p_220089_2_);
-        if (lvt_4_1_ instanceof FurnaceTileEntity) {
-            p_220089_3_.openContainer((INamedContainerProvider)lvt_4_1_);
-            p_220089_3_.addStat(Stats.INTERACT_WITH_FURNACE);
-        }
-
-    }
-
-    /*
-    @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
-        if (!world.isRemote) {
-            TileEntity tileEntity = world.getTileEntity(pos);
-            if (tileEntity instanceof CrusherTile) {
-                //if(player.getHeldItemMainhand().getItem() == RegistryHandler.MULTIMETER.get())
-                //{
-                    INamedContainerProvider containerProvider = new INamedContainerProvider() {
-                        @Override
-                        public ITextComponent getDisplayName() {
-                            return new TranslationTextComponent("screen.machinebuiltworld.crusher");
-                        }
-
-                        @Override
-                        public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-                            return new AbstractCrusherContainer(i, world, pos, playerInventory, playerEntity);
-                        }
-                    };
-                    NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, tileEntity.getPos());
-                //}
-                //
-                }else {
-                throw new IllegalStateException("Our named container provider is missing!");
-            }
-                if(state.get(CRUSH) == 0) {
-                    if (player.getHeldItemMainhand().getItem() == Items.AIR) {
-                        world.setBlockState(pos, state.with(CRUSH, Integer.valueOf(1)), 3);
-                        System.out.println("Step 1 success");
-                    }
-                    else {
-                        System.out.println("idk whats wrong");
-                    }
-                }
-
-                else if(state.get(CRUSH) == 1 || state.get(CRUSH) == 2) {
-                    if (player.getHeldItemMainhand().getItem() == Items.AIR) {
-                        world.setBlockState(pos, state.with(CRUSH, Integer.valueOf(0)), 3);
-                        System.out.println("Step 2 success");
-                    }
-                    else {System.out.println("idk still");
-                    }
-                }
-
-
-                if (player.getHeldItemMainhand().getItem() == Items.AIR && player.isCrouching() == true) {
-                    if(state.get(OC) == false) {
-                        world.setBlockState(pos, state.with(OC, Boolean.valueOf(true)), 3);
-                        System.out.println("yay");
-                    }
-                    else if(state.get(OC) == true) {
-                        world.setBlockState(pos, state.with(OC, Boolean.valueOf(false)), 3);
-                        System.out.println("yay");
-                    }
-                    }
-                    else {System.out.println("ono");}
-
-        }
-        return ActionResultType.SUCCESS;
-    }
-
-     */
     @Override
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
     }
@@ -217,30 +144,29 @@ public class Crusher extends Block{
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TTTBatteryTile().getTileEntity();
+        return new CrusherTile().getTileEntity();
     }
 
-    // @Nullable
-    //@Override
-    // public BlockState getStateForPlacement(BlockItemUseContext context) {
-    //    return getDefaultState().with(BlockStateProperties.FACING, context.getNearestLookingDirection().getOpposite());
-    // }
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite()).with(CRUSH, 0);
+    }
 
     @SuppressWarnings("deprecation")
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
         if (!world.isRemote) {
             TileEntity tileEntity = world.getTileEntity(pos);
-            if (tileEntity instanceof TTTBatteryTile) {
+            if (tileEntity instanceof CrusherTile) {
                 INamedContainerProvider containerProvider = new INamedContainerProvider() {
                     @Override
                     public ITextComponent getDisplayName() {
-                        return new TranslationTextComponent("screen.machinebuiltworld.tttbattery");
+                        return new TranslationTextComponent("screen.machinebuiltworld.crusher");
                     }
 
                     @Override
                     public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-                        return new TTTBatteryContainer(i, world, pos, playerInventory, playerEntity);
+                        return new CrusherContainer(i, world, playerInventory, pos);
                     }
                 };
                 NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, tileEntity.getPos());
@@ -251,6 +177,31 @@ public class Crusher extends Block{
         return ActionResultType.SUCCESS;
     }
 
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if (stateIn.get(CRUSH) == 0) {
+            double d0 = (double)pos.getX() + 0.5D;
+            double d1 = (double)pos.getY();
+            double d2 = (double)pos.getZ() + 0.5D;
+            if (rand.nextDouble() < 0.1D) {
+                worldIn.playSound(d0, d1, d2, SoundEvents.BLOCK_BLASTFURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 4.0F, 1.0F, false);
+            }
 
+            Direction direction = stateIn.get(FACING);
+            Direction.Axis direction$axis = direction.getAxis();
+            double d3 = 0.52D;
+            double d4 = rand.nextDouble() * 0.6D - 0.3D;
+            double d5 = direction$axis == Direction.Axis.X ? (double)direction.getXOffset() * 0.52D : d4;
+            double d6 = rand.nextDouble() * 9.0D / 16.0D;
+            double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getZOffset() * 0.52D : d4;
+            //worldIn.addParticle(ParticleTypes.BLOCK, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
+            worldIn.addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.STONE.getDefaultState()),
+                    pos.getX()+0.5D, pos.getY() - 0.1D, pos.getZ()+0.5D, (Math.random()*2) - (Math.random()*2), (Math.random()*4) - (Math.random()*4), (Math.random()*2) - (Math.random()*2));
+            worldIn.addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.STONE.getDefaultState()),
+                    pos.getX()+0.5D, pos.getY() - 0.1D, pos.getZ()+0.5D, (Math.random()*2) - (Math.random()*2), (Math.random()*4) - (Math.random()*4), (Math.random()*2) - (Math.random()*2));
+
+        }
+    }
 
 }
