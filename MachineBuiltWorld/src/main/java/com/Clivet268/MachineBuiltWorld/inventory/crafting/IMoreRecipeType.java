@@ -4,5 +4,6 @@ import net.minecraft.item.crafting.IRecipeType;
 
 public interface IMoreRecipeType extends IRecipeType<CokeingRecipe> {
     IRecipeType<CokeingRecipe> COKEING = IRecipeType.register("cokeing");
+    IRecipeType<CrushingRecipe> CRUSHING = IRecipeType.register("crushing");
 
 }
