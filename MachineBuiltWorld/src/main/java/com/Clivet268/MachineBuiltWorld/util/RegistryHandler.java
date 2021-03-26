@@ -7,6 +7,7 @@ import com.Clivet268.MachineBuiltWorld.entity.LaserEntity;
 import com.Clivet268.MachineBuiltWorld.fluids.ResinFluid;
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.*;
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeingRecipeSerializer;
+import com.Clivet268.MachineBuiltWorld.inventory.crafting.CrushingRecipeSerializer;
 import com.Clivet268.MachineBuiltWorld.items.*;
 import com.Clivet268.MachineBuiltWorld.items.armor.ModArmorMaterial;
 import com.Clivet268.MachineBuiltWorld.tileentity.*;
@@ -16,6 +17,7 @@ import com.Clivet268.MachineBuiltWorld.tools.MultimeterItem;
 import com.Clivet268.MachineBuiltWorld.util.Renderer.LaserRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.gui.FontRenderer;
@@ -44,6 +46,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -110,7 +113,7 @@ public class RegistryHandler {
     public static final RegistryObject<Item> COPPER_INGOT = ITEMS.register("copper_ingot", ItemBase::new);
     public static final RegistryObject<Item> SILVER_INGOT = ITEMS.register("silver_ingot", ItemBase::new);
     public static final RegistryObject<Item> CRUDE_ELECTROMAGNET = ITEMS.register("crude_electromagnet", ItemBase::new);
-    public static final RegistryObject<Item> MAGNET = ITEMS.register("magnet", ItemBase::new);
+    public static final RegistryObject<Item> NEODYMIUM_MAGNET = ITEMS.register("neodymium_magnet", ItemBase::new);
     public static final RegistryObject<Item> GRAPHENE = ITEMS.register("graphene", ItemBase::new);
     public static final RegistryObject<Item> TRACK_GEAR = ITEMS.register("track_gear", ItemBase::new);
     public static final RegistryObject<Item> IRON_ROD = ITEMS.register("iron_rod", ItemBase::new);
@@ -134,18 +137,22 @@ public class RegistryHandler {
     public static final RegistryObject<Item> RESONATOR = ITEMS.register("resonator", ItemBase::new);
     public static final RegistryObject<Item> LARGE_RESONATOR = ITEMS.register("large_resonator", ItemBase::new);
     public static final RegistryObject<Item> STEEL_INGOT = ITEMS.register("steel_ingot", ItemBase::new);
-    //public static final RegistryObject<Item> PIG_IRON_INGOT = ITEMS.register("pig_iron_ingot", ItemBase::new);
     public static final RegistryObject<Item> COKE = ITEMS.register("coke", () -> new FuelItemBase(1600));
     public static final RegistryObject<Item> CUT_GARNET = ITEMS.register("cut_garnet", ItemBase::new);
     public static final RegistryObject<Item> CUT_POLISHED_GARNET = ITEMS.register("cut_polished_garnet", ItemBase::new);
     public static final RegistryObject<Item> LARGE_UNCUT_GARNET = ITEMS.register("large_uncut_garnet", ItemBase::new);
     public static final RegistryObject<Item> UNCUT_GARNET = ITEMS.register("uncut_garnet", ItemBase::new);
-    public static final RegistryObject<Item> ERBIUM = ITEMS.register("erbium", ItemBase::new);
+    public static final RegistryObject<Item> ERBIUM_CHUNK = ITEMS.register("erbium_chunk", ItemBase::new);
     public static final RegistryObject<Item> ALUMINUM_INGOT = ITEMS.register("aluminum_ingot", ItemBase::new);
     public static final RegistryObject<Item> YTTRIUM = ITEMS.register("yttrium", ItemBase::new);
     public static final RegistryObject<Item> RESONATING_CRYSTAL = ITEMS.register("resonating_crystal", ItemBase::new);
     public static final RegistryObject<Item> COPPER_NUGGET = ITEMS.register("copper_nugget", ItemBase::new);
     public static final RegistryObject<Item> STEEL_NUGGET = ITEMS.register("steel_nugget", ItemBase::new);
+    public static final RegistryObject<Item> COPPER_DUST = ITEMS.register("copper_dust", ItemBase::new);
+    public static final RegistryObject<Item> IRON_DUST = ITEMS.register("iron_dust", ItemBase::new);
+    public static final RegistryObject<Item> GARNET_DUST = ITEMS.register("garnet_dust", ItemBase::new);
+    public static final RegistryObject<Item> ERBIUM_DUST = ITEMS.register("erbium_dust", ItemBase::new);
+    public static final RegistryObject<Item> NEODYMIUM_CHUNK = ITEMS.register("neodymium_chunk", ItemBase::new);
 
     //blocks
     public static final RegistryObject<Block> COPPER_BLOCK = BLOCKS.register("copper_block", CopperBlock::new);
@@ -156,7 +163,6 @@ public class RegistryHandler {
     public static final RegistryObject<Block> MELTING_POT = BLOCKS.register("melting_pot", MeltingPot::new);
     public static final RegistryObject<Block> ATOMIZER = BLOCKS.register("atomizer", Atomizer::new);
     public static final RegistryObject<Block> MOULDING_SAND = BLOCKS.register("moulding_sand", MouldingSand::new);
-    public static final RegistryObject<Block> TRACK = BLOCKS.register("track", Track::new);
     public static final RegistryObject<Block> BORONATED_GLASS = BLOCKS.register("boronated_glass", BoronatedGlass::new);
     public static final RegistryObject<Block> COPPER_ORE = BLOCKS.register("copper_ore", CopperOre::new);
     public static final RegistryObject<Block> BORON_ORE = BLOCKS.register("boron_ore", BoronOre::new);
@@ -181,7 +187,19 @@ public class RegistryHandler {
     public static final RegistryObject<Block> STEEL_FRAME = BLOCKS.register("steel_frame", SteelFrame::new);
     public static final RegistryObject<Block> PLUG = BLOCKS.register("plug", Plug::new);
     public static final RegistryObject<Block> GENERATOR = BLOCKS.register("generator", Generator::new);
+    public static final RegistryObject<Block> NEODYMIUM_ORE = BLOCKS.register("neodymium_ore", NeodymiumOre::new);
 
+    //special blocks
+    public static final RegistryObject<Block> CONVEYOR = BLOCKS.register("conveyor",() -> new Conveyor(Block.Properties.create(Material.IRON)
+            .hardnessAndResistance(5.0f, 6.0f)
+            .sound(SoundType.METAL)
+            .harvestLevel(1)
+            .harvestTool(ToolType.PICKAXE)));
+    public static final RegistryObject<Block> CONVEYOR_UP = BLOCKS.register("conveyor_up",() -> new ConveyorUp(Block.Properties.create(Material.IRON)
+            .hardnessAndResistance(5.0f, 6.0f)
+            .sound(SoundType.METAL)
+            .harvestLevel(1)
+            .harvestTool(ToolType.PICKAXE)));
 
     //weapons
     public static final RegistryObject<SwordItem> COPPER_SWORD = ITEMS.register("copper_sword", () ->
@@ -235,7 +253,7 @@ public class RegistryHandler {
     public static final RegistryObject<Item> MELTING_POT_ITEM = ITEMS.register("melting_pot", () -> new BlockItemBase(MELTING_POT.get()));
     public static final RegistryObject<Item> ATOMIZER_ITEM = ITEMS.register("atomizer", () -> new BlockItemBase(ATOMIZER.get()));
     public static final RegistryObject<Item> MOULDING_SAND_ITEM = ITEMS.register("moulding_sand", () -> new BlockItemBase(MOULDING_SAND.get()));
-    public static final RegistryObject<Item> TRACK_ITEM = ITEMS.register("track", () -> new BlockItemBase(TRACK.get()));
+    //public static final RegistryObject<Item> CONVEYOR_ITEM = ITEMS.register("conveyor", () -> new BlockItemBase(CONVEYOR.get()));
     public static final RegistryObject<Item> BORONATED_GLASS_ITEM = ITEMS.register("boronated_glass", () -> new BlockItemBase(BORONATED_GLASS.get()));
     public static final RegistryObject<Item> COPPER_ORE_ITEM = ITEMS.register("copper_ore", () -> new BlockItemBase(COPPER_ORE.get()));
     public static final RegistryObject<Item> BORON_ORE_ITEM = ITEMS.register("boron_ore", () -> new BlockItemBase(BORON_ORE.get()));
@@ -256,6 +274,13 @@ public class RegistryHandler {
     public static final RegistryObject<Item> MANAGER_ITEM = ITEMS.register("manager", () -> new BlockItemBase(MANAGER.get()));
     public static final RegistryObject<Item> PLUG_ITEM = ITEMS.register("plug", () -> new BlockItemBase(PLUG.get()));
     public static final RegistryObject<Item> GENERATOR_ITEM = ITEMS.register("generator", () -> new BlockItemBase(GENERATOR.get()));
+    public static final RegistryObject<Item> BAUXITE_ORE_ITEM = ITEMS.register("bauxite_ore", () -> new BlockItemBase(BAUXITE_ORE.get()));
+    public static final RegistryObject<Item> GARNET_ORE_ITEM = ITEMS.register("garnet_ore", () -> new BlockItemBase(GARNET_ORE.get()));
+    public static final RegistryObject<Item> NEODYMIUM_ORE_ITEM = ITEMS.register("neodymium_ore", () -> new BlockItemBase(NEODYMIUM_ORE.get()));
+
+    //special block items
+    public static final RegistryObject<Item> CONVEYOR_ITEM = ITEMS.register("conveyor",
+            () -> new WallOrFloorItem(CONVEYOR.get(),CONVEYOR_UP.get(), (new Item.Properties()).group(ItemGroup.BUILDING_BLOCKS)));
 
     //fluids resource locations
     public static final ResourceLocation BATTERY_ACID_STILL_RL = new ResourceLocation(MachineBuiltWorld.MOD_ID, "blocks/battery_acid_still");
@@ -351,14 +376,13 @@ public class RegistryHandler {
         World world = inv.player.getEntityWorld();
         return new MixerContainer(windowId, world, pos, inv, inv.player);
     }));
-    /*
+
     public static final RegistryObject<ContainerType<CrusherContainer>> CRUSHER_CONTAINER = CONTAINERS.register("crusher", () -> IForgeContainerType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
         World world = inv.player.getEntityWorld();
-        return new CrusherContainer(windowId, world, pos, inv, inv.player);
+        return new CrusherContainer(windowId, world, inv, pos);
     }));
 
-     */
     public static final RegistryObject<ContainerType<IntensiveHeatingOvenContainer>> INTENSIVE_HEATING_OVEN_CONTAINER = CONTAINERS.register("intensive_heating_oven", () -> IForgeContainerType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
         System.out.println(pos);
@@ -379,6 +403,7 @@ public class RegistryHandler {
     //recipes
     //public static final IRecipeType<CrushingRecipe> CRUSHER_RECIPE = new CrusherRecipeType();
     public static final RegistryObject<IRecipeSerializer<?>> COKEING_RECIPE = RECIPES_SERIALIZER.register("cokeing", () -> new CokeingRecipeSerializer(300));
+    public static final RegistryObject<IRecipeSerializer<?>> CRUSHING_RECIPE = RECIPES_SERIALIZER.register("crushing", () -> new CrushingRecipeSerializer(200));
 
 
     public static class Tags {
@@ -390,8 +415,8 @@ public class RegistryHandler {
 
     }
     public static class ForgeTags {
-        public static final Tag<Block> SMOKY_SENSITIVE = new BlockTags.Wrapper(new ResourceLocation("forge", "ores/copper"));
-        public static final Tag<Item> ITEM_HEAT_INFUSEABLE = new ItemTags.Wrapper(new ResourceLocation("forge", "item_heat_infuseable"));
+        public static final Tag<Block> COPPER_ORE = new BlockTags.Wrapper(new ResourceLocation("forge", "ores/copper"));
+        //public static final Tag<Item> ITEM_HEAT_INFUSEABLE = new ItemTags.Wrapper(new ResourceLocation("forge", "item_heat_infuseable"));
 
     }
 
