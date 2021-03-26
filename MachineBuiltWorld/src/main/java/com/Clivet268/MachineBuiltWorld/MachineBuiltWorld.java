@@ -74,7 +74,7 @@ public class MachineBuiltWorld
             ScreenManager.registerFactory(RegistryHandler.MIXER_CONTAINER.get(), MixerScreen::new);
             ScreenManager.registerFactory(RegistryHandler.ATOMIZER_CONTAINER.get(), AtomizerScreen::new);
             ScreenManager.registerFactory(RegistryHandler.GENERATOR_CONTAINER.get(), GeneratorScreen::new);
-            //ScreenManager.registerFactory(RegistryHandler.CRUSHER_CONTAINER.get(), CrusherScreen::new);
+            ScreenManager.registerFactory(RegistryHandler.CRUSHER_CONTAINER.get(), CrusherScreen::new);
             ScreenManager.registerFactory(RegistryHandler.INTENSIVE_HEATING_OVEN_CONTAINER.get(), IntensiveHeatingOvenScreen::new);
 
             registerEntityModels(event.getMinecraftSupplier());
