@@ -1,9 +1,10 @@
 {
   "type": "machinebuiltworld:cokeing",
   "ingredient": {
-    "item": "minecraft:iron_ore"
+    "tag": "forge:dusts/iron"
   },
   "result": "machinebuiltworld:steel_ingot",
+  "infusie": "machinebuiltworld:coke",
   "experience": 0.65,
-  "cookingtime": 250
+  "cookingtime": 300
 }
