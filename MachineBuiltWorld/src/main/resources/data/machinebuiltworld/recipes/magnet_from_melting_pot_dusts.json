@@ -1,0 +1,22 @@
+{
+  "type": "machinebuiltworld:melting_pot",
+  "ingredients": {
+    "item":"machinebuiltworld:iron_dust"
+  },
+  "ingredients1": {
+    "item":"machinebuiltworld:neodymium_dust"
+  },
+  "ingredients2": {
+    "item":"machinebuiltworld:boron_dust"
+  },
+  "ingredients3": {
+    "item":"minecraft:air"
+  },
+  "result": "machinebuiltworld:neodymium_magnet",
+  "experience": 3.35,
+  "cookingtime": 1300,
+  "count": 10,
+  "count1": 14,
+  "count2": 2,
+  "count3": 2
+}
