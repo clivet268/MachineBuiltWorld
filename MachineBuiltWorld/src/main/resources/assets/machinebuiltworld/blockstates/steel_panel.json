@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=north": { "model": "machinebuiltworld:block/steelpanelnorth" },
+    "facing=south": { "model": "machinebuiltworld:block/steelpanelsouth" },
+    "facing=east": { "model": "machinebuiltworld:block/steelpaneleast" },
+    "facing=west": { "model": "machinebuiltworld:block/steelpanelwest" },
+    "facing=up": { "model": "machinebuiltworld:block/steelpanelup" },
+    "facing=down": { "model": "machinebuiltworld:block/steelpaneldown" }
+  }
+}
