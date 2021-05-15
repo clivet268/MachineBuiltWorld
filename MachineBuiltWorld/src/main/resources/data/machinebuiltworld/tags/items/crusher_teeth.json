@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "machinebuiltworld:iron_crusher_teeth",
+    "machinebuiltworld:copper_crusher_teeth",
+    "machinebuiltworld:gold_crusher_teeth",
+    "machinebuiltworld:steel_crusher_teeth",
+    "machinebuiltworld:diamond_crusher_teeth"
+  ]
+}
