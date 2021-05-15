@@ -1,0 +1,10 @@
+{
+  "type": "machinebuiltworld:cokeing",
+  "ingredient": {
+    "item": "minecraft:coal_block"
+  },
+  "result": "machinebuiltworld:polyurethane_bucket",
+  "infusie": "minecraft:bucket",
+  "experience": 0.65,
+  "cookingtime": 3000
+}
