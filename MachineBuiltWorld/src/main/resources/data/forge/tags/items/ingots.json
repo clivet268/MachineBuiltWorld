@@ -2,6 +2,7 @@
   "values": [
     "#forge:ingots/steel",
     "#forge:ingots/copper",
-    "#forge:ingots/aluminum"
+    "#forge:ingots/aluminum",
+    "#forge:ingots/tin"
   ]
 }
