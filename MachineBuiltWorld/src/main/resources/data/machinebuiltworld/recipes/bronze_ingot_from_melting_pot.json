@@ -1,0 +1,21 @@
+{
+  "type": "machinebuiltworld:melting_pot",
+  "ingredients": {
+    "tag": "forge:ingots/copper"
+  },
+  "ingredients1": {
+    "tag": "forge:ingots/tin"
+  },
+  "ingredients2": {
+    "item":"minecraft:air"
+  },
+  "ingredients3": {
+    "item":"minecraft:air"
+  },
+  "result": "machinebuiltworld:bronze_ingot",
+  "experience": 2.1,
+  "cookingtime": 1600,
+  "count": 8,
+  "count1": 8,
+  "count2": 1
+}
