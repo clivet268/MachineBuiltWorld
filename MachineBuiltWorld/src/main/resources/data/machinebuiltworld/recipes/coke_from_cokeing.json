@@ -4,6 +4,7 @@
     "item": "minecraft:coal"
   },
   "result": "machinebuiltworld:coke",
+  "infusie": "minecraft:coal",
   "experience": 0.65,
   "cookingtime": 300
 }
