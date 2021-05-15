@@ -1,12 +1,19 @@
 package com.Clivet268.MachineBuiltWorld.tileentity;
 
 import com.Clivet268.MachineBuiltWorld.util.CustomEnergyStorage;
+import com.Clivet268.MachineBuiltWorld.util.SidedEnergyWrapper;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -14,85 +21,26 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class EnergyHoldableTile extends TileEntity implements ITickableTileEntity {
-    private ItemStackHandler itemHandler = createHandler();
-    private CustomEnergyStorage energyStorage = createEnergy();
-
+public abstract class EnergyHoldableTile extends TileEntity {
+    private CustomEnergyStorage energyStorage;
     // Never create lazy optionals in getCapability. Always place them as fields in the tile entity:
-    private LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
+
     private LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
-    private int maxCap = 0;
-    private int maxRec = 0;
-    private int maxTra = 0;
-
-    public EnergyHoldableTile(TileEntityType<?> tileTypeIn, int maxCap, int maxRec, int maxTra) {
+    public EnergyHoldableTile(TileEntityType<?> tileTypeIn, int i, int ie)
+    {
         super(tileTypeIn);
-        this.maxCap=maxCap;
-        this.maxRec=maxRec;
-        this.maxTra=maxTra;
-    }
-
-    @Override
-    public void remove() {
-        super.remove();
-        handler.invalidate();
-        energy.invalidate();
-    }
-
-    @Override
-    public void tick() {
-        if (world.isRemote) {
-            return;
-        }
+        energyStorage = createEnergy(i, ie);
 
     }
 
 
-    @Override
-    public void read(CompoundNBT tag) {
-        itemHandler.deserializeNBT(tag.getCompound("inv"));
-        energyStorage.deserializeNBT(tag.getCompound("energy"));
-
-        super.read(tag);
-    }
-
-    @Override
-    public CompoundNBT write(CompoundNBT tag) {
-        tag.put("inv", itemHandler.serializeNBT());
-        tag.put("energy", energyStorage.serializeNBT());
-
-        return super.write(tag);
-    }
-
-    private ItemStackHandler createHandler() {
-        return new ItemStackHandler(1) {
-
-            @Override
-            protected void onContentsChanged(int slot) {
-                // To make sure the TE persists when the chunk is saved later we need to
-                // mark it dirty every time the item handler changes
-                markDirty();
-            }
-
-            @Override
-            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                return true;
-            }
-
-            @Nonnull
-            @Override
-            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-                return super.insertItem(slot, stack, simulate);
-            }
-        };
-    }
-
-    private CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(maxCap, maxTra) {
+    private CustomEnergyStorage createEnergy(int i , int e) {
+        return new CustomEnergyStorage(i, e) {
             @Override
             protected void onEnergyChanged() {
                 markDirty();
@@ -100,24 +48,47 @@ public abstract class EnergyHoldableTile extends TileEntity implements ITickable
         };
     }
 
-    @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return handler.cast();
-        }
-        if (cap == CapabilityEnergy.ENERGY) {
-            return energy.cast();
-        }
-        return super.getCapability(cap, side);
+    public void read(CompoundNBT tag) {
+        super.read(tag);
+        this.energyStorage.deserializeNBT(tag.getCompound("energy"));
     }
 
-    public CustomEnergyStorage getEnergyS()
-    {
-        return this.energyStorage;
+    @Override
+    public CompoundNBT write(CompoundNBT tag) {
+        super.write(tag);
+        tag.put("energy", this.energyStorage.serializeNBT());
+        return tag;
     }
-    public ItemStackHandler getItemS()
-    {
-        return this.itemHandler;
+
+    LazyOptional<? extends IEnergyStorage>[] handlerss =
+            SidedEnergyWrapper.create(this.energyStorage, Direction.NORTH, Direction.EAST, Direction.WEST,
+                    Direction.SOUTH, Direction.UP, Direction.DOWN);
+
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        if(!this.removed && facing != null && capability == CapabilityEnergy.ENERGY)
+        {
+            if(facing == Direction.NORTH){
+                return handlerss[0].cast();
+            }
+            else if(facing == Direction.EAST){
+                return handlerss[1].cast();
+            }
+            else if(facing == Direction.WEST){
+                return handlerss[2].cast();
+            }
+            else if(facing == Direction.SOUTH){
+                return handlerss[3].cast();
+            }
+            else if(facing == Direction.UP){
+                return handlerss[4].cast();
+            }
+            else if(facing == Direction.DOWN){
+                return handlerss[5].cast();
+            }
+        }
+        return super.getCapability(capability, facing);
     }
 }
