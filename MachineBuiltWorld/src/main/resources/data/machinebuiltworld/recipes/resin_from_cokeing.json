@@ -1,0 +1,10 @@
+{
+  "type": "machinebuiltworld:cokeing",
+  "ingredient": {
+    "tag": "minecraft:logs"
+  },
+  "result": "machinebuiltworld:resin_bucket",
+  "infusie": "minecraft:bucket",
+  "experience": 0.65,
+  "cookingtime": 300
+}
