@@ -4,6 +4,7 @@ import com.Clivet268.MachineBuiltWorld.MachineBuiltWorld;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -15,8 +16,12 @@ import java.util.function.Supplier;
 public enum ModArmorMaterial implements IArmorMaterial {
     COPPER(MachineBuiltWorld.MOD_ID + ":copper", 13, new int[] {2, 4, 6 ,2}, 15,
             SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F, () ->{return Ingredient.fromItems(RegistryHandler.COPPER_INGOT.get());}),
+
     PUNCH(MachineBuiltWorld.MOD_ID + ":scuba_set", 13, new int[] {2, 4, 6 ,2}, 15,
-    SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F, () ->{return Ingredient.fromItems(RegistryHandler.COPPER_INGOT.get());});
+    SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F, () ->{return Ingredient.fromItems(RegistryHandler.COPPER_INGOT.get());}),
+
+    STEEL(MachineBuiltWorld.MOD_ID + ":steel", 15, new int[]{3, 5, 7, 3}, 9, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.5F, () -> {
+        return Ingredient.fromItems(RegistryHandler.STEEL_INGOT.get());});
 
     private static final int[] MAX_DAMAGE_ARRAY = new int[] {11, 16, 15, 13};
     private final String name;
