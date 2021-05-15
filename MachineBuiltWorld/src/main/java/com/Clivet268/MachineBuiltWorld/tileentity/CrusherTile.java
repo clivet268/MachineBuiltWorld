@@ -14,7 +14,7 @@ import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.INTENSIVE_HEA
 public class CrusherTile extends AbstractCrusherTile {
 
     public CrusherTile() {
-        super(CRUSHER_TILE.get(), IMoreRecipeType.CRUSHING);
+        super(CRUSHER_TILE.get(), IMoreRecipeType.MoreCrushes.CRUSHING);
 
 
     }

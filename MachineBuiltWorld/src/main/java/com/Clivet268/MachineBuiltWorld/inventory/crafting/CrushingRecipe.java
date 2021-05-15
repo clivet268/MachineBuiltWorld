@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class CrushingRecipe extends AbstractCrushingRecipe {
     public CrushingRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, ItemStack resultIn1, int cookTimeIn, int c, int c1) {
-        super(IMoreRecipeType.CRUSHING, idIn, groupIn, ingredientIn, resultIn, resultIn1, cookTimeIn, c, c1);
+        super(IMoreRecipeType.MoreCrushes.CRUSHING, idIn, groupIn, ingredientIn, resultIn, resultIn1, cookTimeIn, c, c1);
     }
     @Override
     public ItemStack getIcon() {

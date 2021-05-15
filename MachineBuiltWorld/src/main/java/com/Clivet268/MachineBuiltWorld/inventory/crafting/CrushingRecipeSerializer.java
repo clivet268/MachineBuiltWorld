@@ -51,6 +51,11 @@ private final int cookingTime;
         int i = JSONUtils.getInt(json, "cookingtime", this.cookingTime);
         int c = JSONUtils.getInt(json, "count", 1);
         int c1 = JSONUtils.getInt(json, "count1", 1);
+        double chance = (double)JSONUtils.getFloat(json, "chance", 1.0F);
+        if(chance < Math.random())
+        {
+            itemstack1 = ItemStack.EMPTY;
+        }
         return new CrushingRecipe(recipeId, s, ingredient, itemstack, itemstack1, i, c, c1);
     }
 

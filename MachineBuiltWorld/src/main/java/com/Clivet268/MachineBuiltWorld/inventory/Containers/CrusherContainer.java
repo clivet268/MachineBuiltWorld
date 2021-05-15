@@ -14,11 +14,11 @@ import java.util.Objects;
 
 public class CrusherContainer extends AbstractCrusherContainer{
     public CrusherContainer(int windowId, World world, PlayerInventory playerInventory, BlockPos pos) {
-        super(RegistryHandler.CRUSHER_CONTAINER.get(), world, IMoreRecipeType.CRUSHING, windowId, playerInventory, pos);
+        super(RegistryHandler.CRUSHER_CONTAINER.get(), world, IMoreRecipeType.MoreCrushes.CRUSHING, windowId, playerInventory, pos);
     }
 
     public CrusherContainer(int windowId, World world, PlayerInventory pplayerInventory, IInventory iInventory, IIntArray iIntArray, BlockPos pos) {
-        super(RegistryHandler.CRUSHER_CONTAINER.get(), world, IMoreRecipeType.CRUSHING, windowId, pplayerInventory, iInventory, iIntArray, pos);
+        super(RegistryHandler.CRUSHER_CONTAINER.get(), world, IMoreRecipeType.MoreCrushes.CRUSHING, windowId, pplayerInventory, iInventory, iIntArray, pos);
 
     }
     @Override

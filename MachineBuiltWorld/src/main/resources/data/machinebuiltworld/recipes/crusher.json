@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "xxx",
+    "xyx",
+    " z "
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "machinebuiltworld:steel_panel"
+    },
+    "y":
+    {
+      "item": "minecraft:hopper"
+    },
+    "z":
+    {
+      "item": "machinebuiltworld:outlet"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:crusher",
+    "count": 1
+  }
+}
