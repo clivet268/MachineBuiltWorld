@@ -4,6 +4,7 @@
     "item": "machinebuiltworld:broken_glass_bunch"
   },
   "result": "machinebuiltworld:boronated_glass",
+  "infusie": "machinebuiltworld:boron_chunk",
   "experience": 0.65,
   "cookingtime": 300
 }
