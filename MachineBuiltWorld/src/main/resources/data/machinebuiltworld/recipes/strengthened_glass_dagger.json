@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "z z",
+    " y "
+  ],
+  "key":
+  {
+    "y":
+    {
+      "tag": "machinebuiltworld:strengthened_glass_dagger_blade"
+    },
+    "z":
+    {
+      "item": "machinebuiltworld:steel_grip"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:strengthened_glass_dagger",
+    "count": 1
+  }
+}
