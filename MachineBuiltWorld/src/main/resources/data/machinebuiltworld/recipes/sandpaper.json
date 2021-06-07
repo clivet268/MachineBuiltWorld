@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " y ",
+    "xxx",
+    " z "
+  ],
+  "key":
+  {
+    "y":
+    {
+      "tag": "forge:sands"
+    },
+    "z":
+    {
+      "item": "machinebuiltworld:resin_bucket"
+    },
+    "x":
+    {
+      "item": "minecraft:paper"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:sandpaper",
+    "count": 3
+  }
+}
