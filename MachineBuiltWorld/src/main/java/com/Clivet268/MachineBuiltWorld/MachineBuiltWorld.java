@@ -1,28 +1,39 @@
 package com.Clivet268.MachineBuiltWorld;
 
 
+import com.Clivet268.MachineBuiltWorld.client.ClientProxy;
+import com.Clivet268.MachineBuiltWorld.client.Renderer.GearFactory;
+import com.Clivet268.MachineBuiltWorld.client.Renderer.LaserRenderFactory;
+import com.Clivet268.MachineBuiltWorld.client.Renderer.SprocketeerRenderFactory;
 import com.Clivet268.MachineBuiltWorld.client.gui.*;
+import com.Clivet268.MachineBuiltWorld.util.DimensionRegisterer;
 import com.Clivet268.MachineBuiltWorld.util.LootHandler;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
-import com.Clivet268.MachineBuiltWorld.util.Renderer.BulletRenderer;
-import com.Clivet268.MachineBuiltWorld.worldgen.MachineBuiltWorldOreGen;
-import net.minecraft.client.Minecraft;
+import com.Clivet268.MachineBuiltWorld.util.packets.PacketHandler;
+import com.Clivet268.MachineBuiltWorld.world.ModDimensions;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.world.RegisterDimensionsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DeferredWorkQueue;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,9 +46,22 @@ import java.util.function.Supplier;
 @Mod.EventBusSubscriber(modid = MachineBuiltWorld.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MachineBuiltWorld
 {
-
+    public static PacketHandler PACKETHANDLER = new PacketHandler();
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "machinebuiltworld";
+    private static final String NETWORK_PROTOCOL_VERSION = "1";
+    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
+            new ResourceLocation(MOD_ID, "main"),
+            () -> NETWORK_PROTOCOL_VERSION,
+            NETWORK_PROTOCOL_VERSION::equals,
+            NETWORK_PROTOCOL_VERSION::equals
+    );
+
+    @OnlyIn(Dist.CLIENT)
+    public static Supplier<ClientProxy> getClientProxy() {
+        //NOTE: This extra method is needed to avoid classloading issues on servers
+        return ClientProxy::new;
+    }
 
     private void registerRecipeSerializers (RegistryEvent.Register<IRecipeSerializer<?>> event) {
 
@@ -53,17 +77,19 @@ public class MachineBuiltWorld
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::clientSetup);
-        modEventBus.addListener(this::commonSetup);
         RegistryHandler.init();
+        ClientProxy.init();
+        PACKETHANDLER.initialize();
+        modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::registerRecipeSerializers);
 
     }
-    
     private void commonSetup(FMLCommonSetupEvent event)
     {
         MinecraftForge.EVENT_BUS.register(new LootHandler());
+        //MinecraftForge.EVENT_BUS.register(new DimensionRegisterer());
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
@@ -73,40 +99,38 @@ public class MachineBuiltWorld
             ScreenManager.registerFactory(RegistryHandler.BATTERY_POT_CONTAINER.get(), BatteryPotScreen::new);
             ScreenManager.registerFactory(RegistryHandler.MIXER_CONTAINER.get(), MixerScreen::new);
             ScreenManager.registerFactory(RegistryHandler.ATOMIZER_CONTAINER.get(), AtomizerScreen::new);
-            ScreenManager.registerFactory(RegistryHandler.GENERATOR_CONTAINER.get(), GeneratorScreen::new);
+            ScreenManager.registerFactory(RegistryHandler.GENERATOR_CONTAINER.get(),  GeneratorScreen::new);
             ScreenManager.registerFactory(RegistryHandler.CRUSHER_CONTAINER.get(), CrusherScreen::new);
             ScreenManager.registerFactory(RegistryHandler.INTENSIVE_HEATING_OVEN_CONTAINER.get(), IntensiveHeatingOvenScreen::new);
-
-            registerEntityModels(event.getMinecraftSupplier());
+            ScreenManager.registerFactory(RegistryHandler.MELTING_POT_CONTAINER.get(), MeltingPotScreen::new);
+            ScreenManager.registerFactory(RegistryHandler.SPROCKETEERER_CONTAINER.get(), SprocketeererScreen::new);
+            ScreenManager.registerFactory(RegistryHandler.MILL_CONTAINER.get(), MillScreen::new);
+            RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.LASER_ENTITY.get(), LaserRenderFactory.instance);
+            RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.SPROCKETEER.get(), SprocketeerRenderFactory.instance);
+            RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.GEAR_ENTITY.get(), GearFactory.instance);
         }
-    private void registerEntityModels(Supplier<Minecraft> minecraft){
-        //ItemRenderer renderer = minecraft.get().getItemRenderer();
-        RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.BULLET_ENTITY.get(), BulletRenderer::new);
-    }
+
     private void setup(final FMLCommonSetupEvent event)
     {
         RenderTypeLookup.setRenderLayer(RegistryHandler.BORONATED_GLASS.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(RegistryHandler.FIBERGLASS_MOULD.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(RegistryHandler.ATOMIZER.get(), RenderType.getTranslucent());
-    }
-
-    @SubscribeEvent
-    public void lootLoad(LootTableLoadEvent evt) {
-        /*if (evt.getName().toString().equals("minecraft:blocks/brown_sained_glass_pane")) {
-            evt.getTable()
-        }
-
-         */
+        //DeferredWorkQueue.runLater(MachineBuiltWorld::onDimensionRegistry(e));
     }
 
     public static ResourceLocation locate(String path) {
         return new ResourceLocation(MachineBuiltWorld.MOD_ID, path);
     }
 
+
+
+
+/*
     @SubscribeEvent
-    public static void loadCompleteEvent(final FMLLoadCompleteEvent event)
-    {
-        MachineBuiltWorldOreGen.generateOre();
+    public static void onDimensionRegistry(RegisterDimensionsEvent event) {
+        ModDimensions.DIMENSION_TYPE = DimensionManager.registerOrGetDimension(ModDimensions.DIMENSION_ID, RegistryHandler.THE_MACHINE_BUILT_WORLD.get(), null, true);
     }
+
+ */
 
 }

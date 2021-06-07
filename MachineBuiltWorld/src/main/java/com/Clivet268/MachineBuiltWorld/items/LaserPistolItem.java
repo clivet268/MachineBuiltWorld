@@ -23,10 +23,15 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class LaserPistolItem extends ShootableItem {
+public class LaserPistolItem extends ShootableItem implements IReloadable{
     public LaserPistolItem(Properties builder) {
         super(builder);
     }
+
+    public boolean isReloadable(PlayerEntity player){
+        return getBulletAmount(player.getHeldItemMainhand()) <8;
+    }
+
 
     public static final Predicate<ItemStack> LASER_MAGS = (p_220002_0_) -> {
         return p_220002_0_.getItem() == RegistryHandler.LASER_PISTOL_MAG.get();
@@ -38,10 +43,7 @@ public class LaserPistolItem extends ShootableItem {
     public Predicate<ItemStack> getInventoryAmmoPredicate() {
         return LASER_BULLETS;
     }
-    //@Override
-    public Predicate<ItemStack> getInventoryAmmoPredicate1() {
-        return LASER_MAGS;
-    }
+
     @Override
     public UseAction getUseAction(ItemStack stack) {
         return UseAction.NONE;
@@ -51,6 +53,7 @@ public class LaserPistolItem extends ShootableItem {
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
         if (entityLiving instanceof PlayerEntity) {
 
+            System.out.println("eee");
             PlayerEntity playerentity = (PlayerEntity)entityLiving;
             boolean flag = playerentity.abilities.isCreativeMode;
             if(getBulletAmount(stack) <= 0)
@@ -102,7 +105,7 @@ public class LaserPistolItem extends ShootableItem {
     }
 
     @Nullable
-    protected ItemStack findAmmo(PlayerEntity player, ItemStack itemstack) {
+    public ItemStack findAmmo(PlayerEntity player) {
             for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
                 ItemStack itemstack1 = player.inventory.getStackInSlot(i);
                 if (itemstack1.getItem() == RegistryHandler.LASER_PISTOL_MAG.get()) {
@@ -110,7 +113,7 @@ public class LaserPistolItem extends ShootableItem {
                 }
             }
             return new ItemStack(Items.AIR);
-        }
+    }
 
 
 
@@ -118,53 +121,32 @@ public class LaserPistolItem extends ShootableItem {
      * How long it takes to use or consume an item
      */
     public int getUseDuration(ItemStack stack) {
-        return 72000;
+        return 7200;
+    }
+
+    public void reload(PlayerEntity playerIn) {
+        ItemStack ammoStack = findAmmo(playerIn);
+        ItemStack itemstack = playerIn.getHeldItemMainhand();
+        if (ammoStack.getItem() == RegistryHandler.LASER_PISTOL_MAG.get()) {
+            if (getMagInOrOut(itemstack)) {
+                ItemStack itemstack1 = new ItemStack(RegistryHandler.LASER_PISTOL_MAG.get());
+                ((LaserPisolMagItem) itemstack1.getItem()).setBulletAmount(itemstack1, getBulletAmount(itemstack));
+                setStuffAmount(itemstack, ((LaserPisolMagItem) ammoStack.getItem()).getBulletAmount(ammoStack), true);
+                System.out.println(":)");
+                playerIn.dropItem(itemstack1, false);
+            } else {
+                setStuffAmount(itemstack, ((LaserPisolMagItem) ammoStack.getItem()).getBulletAmount(ammoStack), true);
+            }
+            playerIn.world.playSound(playerIn,playerIn.getPosition(), RegistryHandler.SPROCKETEER_STEP.get(), SoundCategory.PLAYERS, 100, 1);
+            ammoStack.shrink(1);
+
+        }
     }
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
-        ItemStack ammoStack = findAmmo(playerIn, itemstack);
-        if(playerIn.isCrouching()) {
-            /*
-            if (getBulletAmount(itemstack) < 8 && getMagInOrOut(itemstack) &&
-                    ammoStack.getItem() == RegistryHandler.LASER_SHELL.get()) {
-                setStuffAmount(itemstack, getBulletAmount(itemstack) + 1, getMagInOrOut(itemstack));
-                ammoStack.shrink(1);
-                return ActionResult.resultConsume(itemstack);
-            } else if (getBulletAmount(itemstack) < 1 && !getMagInOrOut(itemstack) &&
-                    ammoStack.getItem() == RegistryHandler.LASER_SHELL.get()) {
-                setStuffAmount(itemstack, getBulletAmount(itemstack) + 1, getMagInOrOut(itemstack));
-                ammoStack.shrink(1);
-                return ActionResult.resultConsume(itemstack);
-            } else
-
-             */
-
-                if (ammoStack.getItem() == RegistryHandler.LASER_PISTOL_MAG.get()) {
-
-                    if(getMagInOrOut(itemstack)) {
-                        ItemStack itemstack1 = new ItemStack(RegistryHandler.LASER_PISTOL_MAG.get());
-                        ((LaserPisolMagItem) itemstack1.getItem()).setBulletAmount(itemstack1, getBulletAmount(itemstack));
-                        setStuffAmount(itemstack, ((LaserPisolMagItem) ammoStack.getItem()).getBulletAmount(ammoStack), true);
-                        playerIn.dropItem(itemstack1, false);
-                    }
-                    else{
-                        setStuffAmount(itemstack, ((LaserPisolMagItem) ammoStack.getItem()).getBulletAmount(ammoStack), true);
-                    }
-                    ammoStack.shrink(1);
-
-                return ActionResult.resultConsume(itemstack);
-            }
-        }
-        if (ammoStack.getItem() == Items.AIR) {
             playerIn.setActiveHand(handIn);
-            return ActionResult.resultConsume(itemstack);
-        } else {
-
-            playerIn.setActiveHand(handIn);
-            return ActionResult.resultConsume(itemstack);
-        }
+            return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
     }
 
 
