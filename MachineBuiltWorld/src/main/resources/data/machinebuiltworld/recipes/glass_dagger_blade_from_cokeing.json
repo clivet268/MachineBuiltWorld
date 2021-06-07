@@ -1,0 +1,10 @@
+{
+  "type": "machinebuiltworld:cokeing",
+  "ingredient": {
+    "item": "machinebuiltworld:glass_shards"
+  },
+  "result": "machinebuiltworld:garnet_dust",
+  "infusie": "minecraft:bucket",
+  "experience": 0.85,
+  "cookingtime": 500
+}
