@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "z z",
+    " y "
+  ],
+  "key":
+  {
+    "y":
+    {
+      "tag": "forge:ingots/steel"
+    },
+    "z":
+    {
+      "item": "forge:nuggets/steel"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:steel_grip",
+    "count": 1
+  }
+}
