@@ -29,19 +29,16 @@ public class LaserPistolItem extends ShootableItem implements IReloadable{
     }
 
     public boolean isReloadable(PlayerEntity player){
-        return getBulletAmount(player.getHeldItemMainhand()) <8;
+        return true;
     }
 
 
     public static final Predicate<ItemStack> LASER_MAGS = (p_220002_0_) -> {
         return p_220002_0_.getItem() == RegistryHandler.LASER_PISTOL_MAG.get();
     };
-    public static final Predicate<ItemStack> LASER_BULLETS = (p_220002_0_) -> {
-        return p_220002_0_.getItem() == RegistryHandler.LASER_SHELL.get();
-    };
     @Override
     public Predicate<ItemStack> getInventoryAmmoPredicate() {
-        return LASER_BULLETS;
+        return LASER_MAGS;
     }
 
     @Override
@@ -58,8 +55,10 @@ public class LaserPistolItem extends ShootableItem implements IReloadable{
             boolean flag = playerentity.abilities.isCreativeMode;
             if(getBulletAmount(stack) <= 0)
             {
-                System.out.println("no ammo");
-                return;
+                if(!flag) {
+                    System.out.println("no ammo");
+                    return;
+                }
             }
             PlayerEntity player = (PlayerEntity)entityLiving;
             float f = getBulletVelocity();
@@ -108,8 +107,9 @@ public class LaserPistolItem extends ShootableItem implements IReloadable{
     public ItemStack findAmmo(PlayerEntity player) {
             for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
                 ItemStack itemstack1 = player.inventory.getStackInSlot(i);
-                if (itemstack1.getItem() == RegistryHandler.LASER_PISTOL_MAG.get()) {
-                return  itemstack1;
+                if (itemstack1.getItem() == ((LaserPisolMagItem)RegistryHandler.LASER_PISTOL_MAG.get())) {
+                    if(((LaserPisolMagItem)(itemstack1.getItem())).getBulletAmount(itemstack1) > 0)
+                    return  itemstack1;
                 }
             }
             return new ItemStack(Items.AIR);

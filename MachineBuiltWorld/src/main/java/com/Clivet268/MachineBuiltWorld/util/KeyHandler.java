@@ -67,7 +67,6 @@ public class KeyHandler {
             Item thing = player.getHeldItemMainhand().getItem();
             if (thing instanceof IReloadable) {
                 ((IReloadable) thing).reload(player);
-
                 MachineBuiltWorld.PACKETHANDLER.sendToServer(new ReloadPacket(EquipmentSlotType.MAINHAND));
             }
         }

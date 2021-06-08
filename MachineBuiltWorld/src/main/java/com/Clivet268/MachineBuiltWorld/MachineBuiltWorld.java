@@ -2,15 +2,14 @@ package com.Clivet268.MachineBuiltWorld;
 
 
 import com.Clivet268.MachineBuiltWorld.client.ClientProxy;
-import com.Clivet268.MachineBuiltWorld.client.Renderer.GearFactory;
-import com.Clivet268.MachineBuiltWorld.client.Renderer.LaserRenderFactory;
-import com.Clivet268.MachineBuiltWorld.client.Renderer.SprocketeerRenderFactory;
+import com.Clivet268.MachineBuiltWorld.client.renderer.GearFactory;
+import com.Clivet268.MachineBuiltWorld.client.renderer.LaserRenderFactory;
+import com.Clivet268.MachineBuiltWorld.client.renderer.SprocketeerRenderFactory;
 import com.Clivet268.MachineBuiltWorld.client.gui.*;
-import com.Clivet268.MachineBuiltWorld.util.DimensionRegisterer;
+import com.Clivet268.MachineBuiltWorld.util.KeyHandler;
 import com.Clivet268.MachineBuiltWorld.util.LootHandler;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import com.Clivet268.MachineBuiltWorld.util.packets.PacketHandler;
-import com.Clivet268.MachineBuiltWorld.world.ModDimensions;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -18,15 +17,9 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.world.RegisterDimensionsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DeferredWorkQueue;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -46,6 +39,7 @@ import java.util.function.Supplier;
 @Mod.EventBusSubscriber(modid = MachineBuiltWorld.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MachineBuiltWorld
 {
+    //public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
     public static PacketHandler PACKETHANDLER = new PacketHandler();
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "machinebuiltworld";
@@ -75,21 +69,14 @@ public class MachineBuiltWorld
     }
     public MachineBuiltWorld() {
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modEventBus.addListener(this::setup);
         modEventBus.addListener(this::clientSetup);
         RegistryHandler.init();
-        ClientProxy.init();
         PACKETHANDLER.initialize();
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::registerRecipeSerializers);
 
-    }
-    private void commonSetup(FMLCommonSetupEvent event)
-    {
-        MinecraftForge.EVENT_BUS.register(new LootHandler());
-        //MinecraftForge.EVENT_BUS.register(new DimensionRegisterer());
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
@@ -110,11 +97,13 @@ public class MachineBuiltWorld
             RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.GEAR_ENTITY.get(), GearFactory.instance);
         }
 
-    private void setup(final FMLCommonSetupEvent event)
+    private void commonSetup(final FMLCommonSetupEvent event)
     {
         RenderTypeLookup.setRenderLayer(RegistryHandler.BORONATED_GLASS.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(RegistryHandler.FIBERGLASS_MOULD.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(RegistryHandler.ATOMIZER.get(), RenderType.getTranslucent());
+        MinecraftForge.EVENT_BUS.register(new KeyHandler());
+        MinecraftForge.EVENT_BUS.register(new LootHandler());
         //DeferredWorkQueue.runLater(MachineBuiltWorld::onDimensionRegistry(e));
     }
 
