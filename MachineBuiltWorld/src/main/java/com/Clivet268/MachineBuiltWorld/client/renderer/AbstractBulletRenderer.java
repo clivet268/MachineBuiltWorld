@@ -1,4 +1,4 @@
-package com.Clivet268.MachineBuiltWorld.util.Renderer;
+package com.Clivet268.MachineBuiltWorld.client.renderer;
 
 import com.Clivet268.MachineBuiltWorld.entity.AbstractBulletEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;

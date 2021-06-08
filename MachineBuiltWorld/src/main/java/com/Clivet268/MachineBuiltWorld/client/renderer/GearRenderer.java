@@ -1,4 +1,4 @@
-package com.Clivet268.MachineBuiltWorld.client.Renderer;
+package com.Clivet268.MachineBuiltWorld.client.renderer;
 
 import com.Clivet268.MachineBuiltWorld.MachineBuiltWorld;
 import com.Clivet268.MachineBuiltWorld.entity.GearEntity;
