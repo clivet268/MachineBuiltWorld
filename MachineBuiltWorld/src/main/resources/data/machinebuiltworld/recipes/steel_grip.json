@@ -13,7 +13,7 @@
     },
     "z":
     {
-      "item": "forge:nuggets/steel"
+      "tag": "forge:nuggets/steel"
     }
   },
   "result":
