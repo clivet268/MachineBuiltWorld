@@ -1,0 +1,12 @@
+{
+  "type": "mekanism:enriching",
+  "input": {
+    "ingredient": {
+      "item": "machinebuiltworld:coke"
+    }
+  },
+  "output": {
+    "item": "mekanism:enriched_carbon",
+    "count": 2
+  }
+}
