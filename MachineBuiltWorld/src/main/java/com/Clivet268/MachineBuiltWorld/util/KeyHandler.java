@@ -66,7 +66,7 @@ public class KeyHandler {
         if (kb == reloadKey) {
             Item thing = player.getHeldItemMainhand().getItem();
             if (thing instanceof IReloadable) {
-                //((IReloadable) thing).reload(player);
+                ((IReloadable) thing).reload(player);
 
                 MachineBuiltWorld.PACKETHANDLER.sendToServer(new ReloadPacket(EquipmentSlotType.MAINHAND));
             }
