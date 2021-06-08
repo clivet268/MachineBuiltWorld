@@ -10,17 +10,26 @@ import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.server.ServerMain;
 import org.lwjgl.glfw.GLFW;
+
+import java.util.function.Supplier;
 
 import static com.Clivet268.MachineBuiltWorld.MachineBuiltWorld.CHANNEL;
 
+/**
+ * do logic on server because smart guy said so, idk what logic to do on it but whatever
+ */
 public class KeyHandler {
-    private static boolean chacha = true;
+    private boolean chacha = true;
     public static KeyBinding reloadKey = new KeyBinding("reload", KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM,
             GLFW.GLFW_KEY_R, "machine_built_world");
 
@@ -32,13 +41,16 @@ public class KeyHandler {
 
      */
     //MachineBuiltWorld.CHANNEL.sendToServer(new C2SRequestEnableTerrainCollisions())
-    private KeyBinding[] keyBindings = new KeyBinding[1];
+    public KeyBinding[] keyBindings = new KeyBinding[1];
 
     public KeyHandler() {
-        ClientRegistry.registerKeyBinding(reloadKey);
         keyBindings[0] = reloadKey;
+
+        ClientRegistry.registerKeyBinding(reloadKey);
+
         MinecraftForge.EVENT_BUS.addListener(this::onTick);
     }
+
 
 
     private void onTick(InputEvent.KeyInputEvent event) {
@@ -54,17 +66,26 @@ public class KeyHandler {
         if (kb == reloadKey) {
             Item thing = player.getHeldItemMainhand().getItem();
             if (thing instanceof IReloadable) {
-                ((IReloadable) thing).reload(player);
+                //((IReloadable) thing).reload(player);
+
                 MachineBuiltWorld.PACKETHANDLER.sendToServer(new ReloadPacket(EquipmentSlotType.MAINHAND));
             }
         }
     }
+    public void keyUp(KeyBinding kb) {
+        this.chacha = true;
+    }
     public void keyTick() {
         for (KeyBinding keyBinding : keyBindings) {
-            if (keyBinding.isPressed() && chacha) {
-                keyDown(keyBinding);
-                //chacha=false;
-                System.out.println("chacharealsmooth");
+            if (keyBinding.isPressed() ) {
+               if(this.chacha) {
+                   keyDown(keyBinding);
+                   this.chacha = false;
+                   System.out.println("chacharealsmooth");
+               }
+            }
+            else {
+                keyUp(keyBinding);
             }
         }
     }
