@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "x",
+    "y",
+    "z"
+  ],
+  "key":
+  {
+    "y":
+    {
+      "item": "machinebuiltworld:pistol_mag"
+    },
+    "z":
+    {
+      "tag": "forge:nuggets/steel"
+    },
+    "x":
+    {
+      "item": "minecraft:glass_pane"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:laser_pistol_mag",
+    "count": 1
+  }
+}
