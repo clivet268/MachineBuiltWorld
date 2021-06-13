@@ -1,0 +1,9 @@
+{
+  "type": "machinebuiltworld:milling",
+  "ingredient": {
+    "item": "machinebuiltworld:steel_plate"
+  },
+  "result": "machinebuiltworld:pistol_mag",
+  "experience": 0.75,
+  "cookingtime": 450
+}
