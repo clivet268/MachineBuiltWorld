@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Stream;
 
+//TODO add recipe
 public class BatteryPot extends Block{
 
     private static final VoxelShape NORTH = Stream.of(

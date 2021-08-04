@@ -1,46 +1,42 @@
 package com.Clivet268.MachineBuiltWorld.tileentity;
 
 import com.Clivet268.MachineBuiltWorld.util.CustomEnergyStorage;
-import com.Clivet268.MachineBuiltWorld.util.SidedEnergyWrapper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class EnergyHoldableTile extends TileEntity {
     private CustomEnergyStorage energyStorage;
     // Never create lazy optionals in getCapability. Always place them as fields in the tile entity:
 
     private LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
-    public EnergyHoldableTile(TileEntityType<?> tileTypeIn, int i, int ie)
+    public EnergyHoldableTile(TileEntityType<?> tileTypeIn, int i, int ie, int tra)
     {
         super(tileTypeIn);
-        energyStorage = createEnergy(i, ie);
+        energyStorage = createEnergy(i, ie, tra);
+
+    }
+
+    public void tick()
+    {
+        /*rip fish the cat on -----'s server*/
+        sendEnergy();
+        this.markDirty();
 
     }
 
 
-    private CustomEnergyStorage createEnergy(int i , int e) {
-        return new CustomEnergyStorage(i, e) {
+    private CustomEnergyStorage createEnergy(int i , int e, int tra) {
+        return new CustomEnergyStorage(i, e, tra) {
             @Override
             protected void onEnergyChanged() {
                 markDirty();
@@ -61,34 +57,42 @@ public abstract class EnergyHoldableTile extends TileEntity {
         return tag;
     }
 
-    LazyOptional<? extends IEnergyStorage>[] handlerss =
-            SidedEnergyWrapper.create(this.energyStorage, Direction.NORTH, Direction.EAST, Direction.WEST,
-                    Direction.SOUTH, Direction.UP, Direction.DOWN);
-
-
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+
         if(!this.removed && facing != null && capability == CapabilityEnergy.ENERGY)
         {
-            if(facing == Direction.NORTH){
-                return handlerss[0].cast();
-            }
-            else if(facing == Direction.EAST){
-                return handlerss[1].cast();
-            }
-            else if(facing == Direction.WEST){
-                return handlerss[2].cast();
-            }
-            else if(facing == Direction.SOUTH){
-                return handlerss[3].cast();
-            }
-            else if(facing == Direction.UP){
-                return handlerss[4].cast();
-            }
-            else if(facing == Direction.DOWN){
-                return handlerss[5].cast();
-            }
+            return LazyOptional.of(() -> energyStorage).cast();
         }
         return super.getCapability(capability, facing);
+    }
+
+    private void sendEnergy()
+    {
+        this.energy.ifPresent(energy ->
+        {
+            AtomicInteger capacity = new AtomicInteger(energy.getEnergyStored());
+
+            for(int i = 0; (i < Direction.values().length) && (capacity.get() > 0); i++)
+            {
+                Direction facing = Direction.values()[i];
+                if(facing != Direction.UP)
+                {
+                    TileEntity tileEntity = world.getTileEntity(pos.offset(facing));
+                    if(tileEntity != null)
+                    {
+                        tileEntity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).ifPresent(handler ->
+                        {
+                            if(handler.canReceive())
+                            {
+                                int received = handler.receiveEnergy(Math.min(capacity.get(), this.energyStorage.maxTransfer), false);
+                                capacity.addAndGet(-received);
+                                (this.energyStorage).consumeEnergy(received);
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 }

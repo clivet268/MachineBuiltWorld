@@ -7,7 +7,7 @@ public class TTBatteryTile extends EnergyHoldableTile {
 
     public TTBatteryTile()
     {
-        super(TTBATTERY_TILE.get() , TTBATTERY_MAXPOWER.get(), 1000);
+        super(TTBATTERY_TILE.get() , TTBATTERY_MAXPOWER.get(), 1000, 10);
     }
 
 }

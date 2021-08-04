@@ -5,16 +5,23 @@ import net.minecraftforge.energy.EnergyStorage;
 
 public class CustomEnergyStorage extends EnergyStorage implements INBTSerializable<CompoundNBT> {
 
-    public CustomEnergyStorage(int capacity, int maxTransfer) {
-        super(capacity, maxTransfer);
+    public int capacity;
+    public int maxTransfer;
+    public int macsRecive;
+
+    public CustomEnergyStorage(int carpacity,int maxRecive, int maxTranrsfer) {
+        super(carpacity, maxRecive, maxTranrsfer);
+        this.capacity=carpacity;
+        this.maxTransfer = maxTranrsfer;
+        this.macsRecive = maxRecive;
     }
 
     protected void onEnergyChanged() {
 
     }
 
-    public void setEnergy(int energy) {
-        this.energy = energy;
+    public void setEnergy(int eenergy) {
+        this.energy = eenergy;
         onEnergyChanged();
     }
 

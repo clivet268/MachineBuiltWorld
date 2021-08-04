@@ -16,69 +16,29 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 
+//TODO model the wire in adaptive states
+//TODO make texture
+//TODO make it worky
 public class Wire extends Block {
-    private static final VoxelShape[] DASHEPS =
-            {
-                    Block.makeCuboidShape(5, 0, 0, 11, 4, 16),
-                    Block.makeCuboidShape(5, 0, 0, 11, 4, 16),
-                    Block.makeCuboidShape(5, 0, 0, 11, 4, 16),
-                    Block.makeCuboidShape(5, 0, 0, 11, 4, 16),
-                    Block.makeCuboidShape(5, 0, 0, 11, 4, 16),
-                    Block.makeCuboidShape(5, 0, 0, 11, 4, 16),
-                    Block.makeCuboidShape(5, 0, 0, 11, 4, 16),
-                    Block.makeCuboidShape(5, 0, 0, 11, 4, 16),
-                    Block.makeCuboidShape(5, 0, 0, 11, 4, 16),
-                    Block.makeCuboidShape(5, 0, 0, 11, 4, 16),
-                    Block.makeCuboidShape(5, 0, 0, 11, 4, 16),
-                    Block.makeCuboidShape(5, 0, 0, 11, 4, 16),
-                    Block.makeCuboidShape(5, 0, 0, 11, 4, 16)
-            };
     AbstractWireTile te;
     public static final EnumProperty<WireDirectionStates> DIRS = MoreStateProperties.WIREDIR;
     Direction ff;
     Direction bf;
-    int laglimiter = 0;
+
     public Wire() {
         super(Block.Properties.create(Material.IRON)
                 .hardnessAndResistance(1.0f, 1.0f)
-                .sound(SoundType.BAMBOO)
+                .sound(SoundType.STONE)
                 .harvestLevel(0));
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        switch(state.get(DIRS).getName()) {
-            case ("ns"):
-                return DASHEPS[0];
-            case ("ne"):
-                return DASHEPS[1];
-            case ("nw"):
-                return DASHEPS[2];
-            case ("ws"):
-                return DASHEPS[3];
-            case ("we"):
-                return DASHEPS[4];
-            case ("wn"):
-                return DASHEPS[5];
-            case ("sw"):
-                return DASHEPS[6];
-            case ("se"):
-                return DASHEPS[7];
-            case ("sn"):
-                return DASHEPS[8];
-            case ("ew"):
-                return DASHEPS[9];
-            case ("es"):
-                return DASHEPS[10];
-            case ("en"):
-                return DASHEPS[11];
-            case ("none"):
-                return DASHEPS[12];
-            default:
-                return DASHEPS[13];
-        }
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    {
+        return VoxelShapes.empty();
     }
 
     @Override
