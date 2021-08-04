@@ -1,15 +1,15 @@
-package com.Clivet268.MachineBuiltWorld.client.model;
+package com.Clivet268.MachineBuiltWorld.client.model.entity;
 
 import com.Clivet268.MachineBuiltWorld.entity.SprocketeerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
+//TODO arm clipping
 public class SprocketeerModel<T extends SprocketeerEntity> extends EntityModel<T> {
     private final ModelRenderer bb_main;
     private final ModelRenderer cube_r1;
