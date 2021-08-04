@@ -1,4 +1,4 @@
-package com.Clivet268.MachineBuiltWorld.worldgen;
+package com.Clivet268.MachineBuiltWorld.world;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;

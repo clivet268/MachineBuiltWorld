@@ -2,7 +2,6 @@ package com.Clivet268.MachineBuiltWorld.tileentity;
 
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.AbstractCokeingRecipe;
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeingRecipe;
-import com.Clivet268.MachineBuiltWorld.items.IHeatInfuseable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.block.AbstractFurnaceBlock;
@@ -42,13 +41,13 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntity implements IHeatInfuseable, ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
+public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntity implements ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
     private ItemStackHandler itemHandler = createHandler();
     // Never create lazy optionals in getCapability. Always place them as fields in the tile entity:
     private LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
     private static final int[] SLOTS_UP = new int[]{0};
-    private static final int[] SLOTS_DOWN = new int[]{2, 1};
-    private static final int[] SLOTS_HORIZONTAL = new int[]{1};
+    private static final int[] SLOTS_DOWN = new int[]{3};
+    private static final int[] SLOTS_HORIZONTAL = new int[]{1,2};
     protected NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
     private int burnTime;
     private int recipesUsed;
@@ -93,16 +92,18 @@ public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntit
         }
     };
 
-
-
-
-    @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return handler.cast();
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        if (!this.removed && facing != null && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            if (facing == Direction.UP)
+                return handlers[0].cast();
+            else if (facing == Direction.DOWN)
+                return handlers[1].cast();
+            else
+                return handlers[2].cast();
         }
-        return super.getCapability(cap, side);
+        return super.getCapability(capability, facing);
+
     }
 
     private ItemStackHandler createHandler() {
@@ -189,7 +190,6 @@ public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntit
             compound.putInt("RecipeAmount" + i, entry.getValue());
             ++i;
         }
-        System.out.println("wrote");
         return compound;
     }
     @Override
@@ -199,11 +199,11 @@ public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntit
         if (this.isBurning()) {
             --this.burnTime;
         }
-        //System.out.println(world);
         if (!this.world.isRemote) {
             ItemStack itemstack = this.items.get(1);
             if (this.isBurning() || !itemstack.isEmpty() && !this.items.get(0).isEmpty()) {
                 IRecipe<?> irecipe = this.world.getRecipeManager().getRecipe((IRecipeType<CokeingRecipe>)this.recipeType, this, this.world).orElse(null);
+
                 if (!this.isBurning() && this.canSmelt(irecipe)) {
                     this.burnTime = this.getBurnTime(itemstack);
                     this.recipesUsed = this.burnTime;
@@ -255,12 +255,13 @@ public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntit
             ItemStack itemstack = recipeIn.getRecipeOutput();
             ItemStack itemstack2 = this.items.get(2);
             ItemStack itemstack3 = this.items.get(0);
-            System.out.println(recipeIn);
+            ItemStack itemstack4 = ((CokeingRecipe)recipeIn).getInfusie();
+            //System.out.println(recipeIn);
             if (itemstack.isEmpty()) {
                 return false;
             } else {
-                if(needsSomeInfusin(itemstack3.getItem())){
-                    return whataAmIAGonnaDo(itemstack3.getItem())==itemstack2.getItem();
+                if(itemstack4.getItem() != Items.AIR){
+                    return itemstack2.getItem() == itemstack4.getItem();
                 }
                 ItemStack itemstack1 = this.items.get(3);
                 if (itemstack1.isEmpty()) {
@@ -284,13 +285,19 @@ public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntit
             ItemStack itemstack1 = recipe.getRecipeOutput();
             ItemStack itemstack2 = this.items.get(3);
             ItemStack itemstack3 = this.items.get(2);
+            boolean flag = false;
+            ItemStack itemstack4 = ((CokeingRecipe)recipe).getInfusie();
             //System.out.println(itemstack1);
 
-            if(needsSomeInfusin(itemstack.getItem())) {
-                if (!(whataAmIAGonnaDo(itemstack.getItem()) == itemstack3.getItem())) {
+            if(itemstack4.getItem() != Items.AIR) {
+                if (itemstack3.getItem() != itemstack4.getItem()) {
                     return;
                 }
+                else{
+                    flag = true;
+                }
             }
+
             if (itemstack2.isEmpty() || itemstack2.getItem() == Items.AIR) {
                 this.items.set(3, itemstack1.copy());
             } else if (itemstack2.getItem() == itemstack1.getItem()) {
@@ -305,7 +312,7 @@ public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntit
                 this.items.set(1, new ItemStack(Items.WATER_BUCKET));
             }
 
-            if(needsSomeInfusin(itemstack.getItem()))
+            if(flag)
             {
                 itemstack3.shrink(1);
             }
@@ -322,7 +329,6 @@ public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntit
     }
 
     protected int getCookTime() {
-        System.out.println(this.world + " cow ");
         return this.world.getRecipeManager().getRecipe(this.recipeType, this, this.world).map(AbstractCokeingRecipe::getCookTime).orElse(200);
     }
 
@@ -351,11 +357,6 @@ public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntit
      */
     @Override
     public boolean canExtractItem(int index, @Nonnull ItemStack stack, Direction direction) {
-        if (direction == Direction.DOWN && index == 1) {
-            Item item = stack.getItem();
-            return item == Items.WATER_BUCKET || item == Items.BUCKET;
-        }
-
         return true;
     }
 
@@ -471,6 +472,7 @@ public abstract class AbstractIntensiveHeatingOvenTile extends LockableTileEntit
         }
 
     }
+
 
     @Nullable
     public IRecipe<?> getRecipeUsed() {

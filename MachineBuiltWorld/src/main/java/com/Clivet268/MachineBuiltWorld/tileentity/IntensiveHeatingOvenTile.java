@@ -12,7 +12,7 @@ import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.INTENSIVE_HEA
 public class IntensiveHeatingOvenTile extends AbstractIntensiveHeatingOvenTile {
 
     public IntensiveHeatingOvenTile() {
-        super(INTENSIVE_HEATING_OVEN_TILE.get(), IMoreRecipeType.COKEING);
+        super(INTENSIVE_HEATING_OVEN_TILE.get(), IMoreRecipeType.MoreCokes.COKEING);
 
 
     }

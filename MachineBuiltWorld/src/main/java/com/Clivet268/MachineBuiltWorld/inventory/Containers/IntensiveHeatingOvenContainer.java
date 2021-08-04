@@ -14,11 +14,11 @@ import java.util.Objects;
 
 public class IntensiveHeatingOvenContainer extends AbstractIntensiveHeatingOvenContainer {
     public IntensiveHeatingOvenContainer(int windowId, World world, PlayerInventory playerInventory, BlockPos pos) {
-        super(RegistryHandler.INTENSIVE_HEATING_OVEN_CONTAINER.get(), world, IMoreRecipeType.COKEING, windowId, playerInventory, pos);
+        super(RegistryHandler.INTENSIVE_HEATING_OVEN_CONTAINER.get(), world, IMoreRecipeType.MoreCokes.COKEING, windowId, playerInventory, pos);
     }
 
     public IntensiveHeatingOvenContainer(int windowId, World world, PlayerInventory pplayerInventory, IInventory iInventory, IIntArray iIntArray, BlockPos pos) {
-        super(RegistryHandler.INTENSIVE_HEATING_OVEN_CONTAINER.get(), world, IMoreRecipeType.COKEING, windowId, pplayerInventory, iInventory, iIntArray, pos);
+        super(RegistryHandler.INTENSIVE_HEATING_OVEN_CONTAINER.get(), world, IMoreRecipeType.MoreCokes.COKEING, windowId, pplayerInventory, iInventory, iIntArray, pos);
 
     }
     @Override

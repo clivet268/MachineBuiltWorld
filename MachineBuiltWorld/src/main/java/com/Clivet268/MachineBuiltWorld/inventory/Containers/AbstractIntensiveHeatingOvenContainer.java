@@ -34,23 +34,19 @@ public abstract class AbstractIntensiveHeatingOvenContainer extends RecipeBookCo
     public final World world;
     private IItemHandler playerInventory;
     public IntensiveHeatingOvenTile tileEntity;
-    private PlayerEntity playerEntity;
-    private boolean infuse;
 
     private final IRecipeType<? extends AbstractCokeingRecipe> recipeType;
     public AbstractIntensiveHeatingOvenContainer(ContainerType<?> containerTypeIn, World wworld, IRecipeType<? extends AbstractCokeingRecipe> recipeTypeIn, int id, PlayerInventory playerInventoryIn, BlockPos pos) {
-        this(containerTypeIn, wworld, recipeTypeIn, id, playerInventoryIn, new Inventory(4), new IntArray(5),pos);
+        this(containerTypeIn, wworld, recipeTypeIn, id, playerInventoryIn, new Inventory(4), new IntArray(4),pos);
     }
 
     protected AbstractIntensiveHeatingOvenContainer(ContainerType<?> containerTypeIn, World wworld, IRecipeType<? extends AbstractCokeingRecipe> recipeTypeIn, int id, PlayerInventory playerInventoryIn, IInventory furnaceInventoryIn, IIntArray furnaceDataIn, BlockPos pos) {
         super(containerTypeIn, id);
         this.world = wworld;
         this.tileEntity = (IntensiveHeatingOvenTile) wworld.getTileEntity(pos);
-        this.playerEntity = playerInventoryIn.player;
         this.playerInventory = new InvWrapper(playerInventoryIn);
         this.recipeType = recipeTypeIn;
         assertInventorySize(furnaceInventoryIn, 4);
-        System.out.println(furnaceDataIn.size());
         assertIntArraySize(furnaceDataIn, 4);
         this.furnaceInventory = furnaceInventoryIn;
         this.furnaceData = furnaceDataIn;
@@ -62,6 +58,7 @@ public abstract class AbstractIntensiveHeatingOvenContainer extends RecipeBookCo
 
         }
         layoutPlayerInventorySlots(8,84);
+        this.trackIntArray(furnaceDataIn);
     }
     @Override
     public void fillStackedContents(RecipeItemHelper itemHelperIn) {
@@ -185,7 +182,7 @@ public abstract class AbstractIntensiveHeatingOvenContainer extends RecipeBookCo
         if (i == 0) {
             i = 200;
         }
-
+        System.out.println("one "+ this.furnaceData.get(0) * 13 / i);
         return this.furnaceData.get(0) * 13 / i;
     }
 
