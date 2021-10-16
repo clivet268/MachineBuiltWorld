@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "xxx",
+    "xyx",
+    "xxx"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "y":
+    {
+      "item": "machinebuiltworld:iron_axle"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:iron_roller",
+    "count": 1
+  }
+}

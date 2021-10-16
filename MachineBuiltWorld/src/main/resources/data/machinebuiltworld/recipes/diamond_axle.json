@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "y",
+    "y",
+    "y"
+  ],
+  "key":
+  {
+    "y":
+    {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:diamond_axle",
+    "count": 2
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "xxx",
+    "xyx",
+    "xxx"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "minecraft:diamond"
+    },
+    "y":
+    {
+      "item": "machinebuiltworld:diamond_axle"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:diamond_roller",
+    "count": 1
+  }
+}

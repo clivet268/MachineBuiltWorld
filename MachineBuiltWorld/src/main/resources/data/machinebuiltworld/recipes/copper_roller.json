@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "xxx",
+    "xyx",
+    "xxx"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "tag": "forge:ingots/copper"
+    },
+    "y":
+    {
+      "item": "machinebuiltworld:copper_axle"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:copper_roller",
+    "count": 1
+  }
+}

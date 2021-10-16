@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "y",
+    "y",
+    "y"
+  ],
+  "key":
+  {
+    "y":
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:gold_axle",
+    "count": 2
+  }
+}

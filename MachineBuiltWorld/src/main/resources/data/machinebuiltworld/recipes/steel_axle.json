@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "y",
+    "y",
+    "y"
+  ],
+  "key":
+  {
+    "y":
+    {
+      "tag": "forge:ingots/steel"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:steel_axle",
+    "count": 2
+  }
+}
