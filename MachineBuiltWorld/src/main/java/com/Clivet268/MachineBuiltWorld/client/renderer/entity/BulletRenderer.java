@@ -1,4 +1,4 @@
-package com.Clivet268.MachineBuiltWorld.client.renderer;
+package com.Clivet268.MachineBuiltWorld.client.renderer.entity;
 
 import com.Clivet268.MachineBuiltWorld.entity.BulletEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;

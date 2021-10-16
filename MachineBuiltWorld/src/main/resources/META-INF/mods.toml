@@ -6,42 +6,31 @@ issueTrackerURL="https://github.com/clivet268/MachineBuiltWorld/issues"
 
 [[mods]] #mandatory
 
-modId="machinebuiltworld"
+    modId="machinebuiltworld"
+    version="1.15.2-1.0.5"
+    displayName="Machine Built World" #mandatory
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/machine-built-world"
+    logoFile="logo.png"
+    credits="Thanks fur myself"
+    authors="Clivet268"
+    description='''e'''
 
-version="1.15.2-1.0.3"
-
-displayName="Machine Built World" #mandatory
-
-#updateJSONURL="http://myurl.me/"
-
-displayURL="https://www.curseforge.com/minecraft/mc-mods/machine-built-world" #optional
-
-logoFile="logo.png" #optional
-
-credits="Thanks fur myself" #optional
-
-authors="Clivet268" #optional
-
-description='''
-Downloads: 45
-Epic
-'''
-
-[[dependencies.examplemod]] #optional
-    # the modid of the dependency
-    modId="forge" #mandatory
-    # Does this dependency have to exist - if not, ordering below must be specified
-    mandatory=true #mandatory
-    # The version range of the dependency
-    versionRange="[31,)" #mandatory
-    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
-    ordering="NONE"
-    # Side this dependency is applied on - BOTH, CLIENT or SERVER
+[[dependencies.machinebuiltworld]] #optional
+    modId="forge"
+    mandatory=true
+    versionRange="[${forge_version},)"
     side="BOTH"
 
-[[dependencies.examplemod]]
+[[dependencies.machinebuiltworld]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.15.2]"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.machinebuiltworld]]
+    modId="mekanism"
+    mandatory=false
+    versionRange="[${top_version},)"
     ordering="NONE"
     side="BOTH"

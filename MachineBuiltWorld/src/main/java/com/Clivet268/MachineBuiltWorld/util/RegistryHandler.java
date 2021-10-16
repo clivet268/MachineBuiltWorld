@@ -1,22 +1,21 @@
 package com.Clivet268.MachineBuiltWorld.util;
 
-import com.Clivet268.MachineBuiltWorld.MachineBuiltWorld;
 import com.Clivet268.MachineBuiltWorld.blocks.*;
-import com.Clivet268.MachineBuiltWorld.entity.BulletEntity;
-import com.Clivet268.MachineBuiltWorld.entity.GearEntity;
-import com.Clivet268.MachineBuiltWorld.entity.LaserEntity;
-import com.Clivet268.MachineBuiltWorld.entity.SprocketeerEntity;
+import com.Clivet268.MachineBuiltWorld.entity.*;
 import com.Clivet268.MachineBuiltWorld.fluids.ResinFluid;
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.*;
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.*;
 import com.Clivet268.MachineBuiltWorld.items.*;
 import com.Clivet268.MachineBuiltWorld.items.armor.ModArmorMaterial;
-import com.Clivet268.MachineBuiltWorld.tileentity.*;
 import com.Clivet268.MachineBuiltWorld.items.tools.CraftingToolsItem;
 import com.Clivet268.MachineBuiltWorld.items.tools.ModItemTier;
 import com.Clivet268.MachineBuiltWorld.items.tools.MultimeterItem;
+import com.Clivet268.MachineBuiltWorld.tileentity.*;
 import com.Clivet268.MachineBuiltWorld.world.TheMachineBuiltWorldModDimension;
+import com.Clivet268.MachineBuiltWorld.world.biome.TheMachineBuiltWorldBarrenLands;
+import com.Clivet268.MachineBuiltWorld.world.biome.TheMachineBuiltWorldBarrenLandsSurfaceBuilder;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -28,6 +27,8 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.particles.BasicParticleType;
+import net.minecraft.particles.ParticleType;
 import net.minecraft.stats.IStatFormatter;
 import net.minecraft.stats.StatType;
 import net.minecraft.stats.Stats;
@@ -41,7 +42,11 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.surfacebuilders.*;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
@@ -52,20 +57,24 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-//import com.Clivet268.MachineBuiltWorld.blocks.BatteryPot;
+import static com.Clivet268.MachineBuiltWorld.MachineBuiltWorld.MOD_ID;
 
+//import com.Clivet268.MachineBuiltWorld.blocks.BatteryPot;
+//TODO are the steel and copper tools and armor a goo ide to have, if so we can readded but it can be readded if nececary
 public class RegistryHandler {
     //public static final DeferredRegister<LootTable> LOOT_TABLES = new DeferredRegister<>(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS)
-    public static final DeferredRegister<IRecipeSerializer<?>> RECIPES_SERIALIZER = new DeferredRegister<>(ForgeRegistries.RECIPE_SERIALIZERS, MachineBuiltWorld.MOD_ID);
-    public static final DeferredRegister<SoundEvent> SOUNDS = new DeferredRegister<>(ForgeRegistries.SOUND_EVENTS, MachineBuiltWorld.MOD_ID);
-    public static final DeferredRegister<Fluid> FLUIDS = new DeferredRegister<>(ForgeRegistries.FLUIDS, MachineBuiltWorld.MOD_ID);
-    public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, MachineBuiltWorld.MOD_ID);
-    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, MachineBuiltWorld.MOD_ID);
-    private static final DeferredRegister<TileEntityType<?>> TILES = new DeferredRegister<>(ForgeRegistries.TILE_ENTITIES, MachineBuiltWorld.MOD_ID);
-    private static final DeferredRegister<ContainerType<?>> CONTAINERS = new DeferredRegister<>(ForgeRegistries.CONTAINERS, MachineBuiltWorld.MOD_ID);
-    public static final DeferredRegister<EntityType<?>> ENTITIES = new DeferredRegister<>(ForgeRegistries.ENTITIES, MachineBuiltWorld.MOD_ID);
-    public static final DeferredRegister<StatType<?>> STATS = new DeferredRegister<>(ForgeRegistries.STAT_TYPES , MachineBuiltWorld.MOD_ID);
-    public static final DeferredRegister<ModDimension> DIMENSIONS = new DeferredRegister<>(ForgeRegistries.MOD_DIMENSIONS, MachineBuiltWorld.MOD_ID);
+    public static final DeferredRegister<IRecipeSerializer<?>> RECIPES_SERIALIZER = new DeferredRegister<>(ForgeRegistries.RECIPE_SERIALIZERS, MOD_ID);
+    public static final DeferredRegister<SoundEvent> SOUNDS = new DeferredRegister<>(ForgeRegistries.SOUND_EVENTS, MOD_ID);
+    public static final DeferredRegister<Fluid> FLUIDS = new DeferredRegister<>(ForgeRegistries.FLUIDS, MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, MOD_ID);
+    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, MOD_ID);
+    private static final DeferredRegister<TileEntityType<?>> TILES = new DeferredRegister<>(ForgeRegistries.TILE_ENTITIES, MOD_ID);
+    private static final DeferredRegister<ContainerType<?>> CONTAINERS = new DeferredRegister<>(ForgeRegistries.CONTAINERS, MOD_ID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = new DeferredRegister<>(ForgeRegistries.ENTITIES, MOD_ID);
+    public static final DeferredRegister<StatType<?>> STATS = new DeferredRegister<>(ForgeRegistries.STAT_TYPES , MOD_ID);
+    public static final DeferredRegister<ModDimension> DIMENSIONS = new DeferredRegister<>(ForgeRegistries.MOD_DIMENSIONS, MOD_ID);
+    public static final  DeferredRegister<Biome> BIOMES = new DeferredRegister<>(ForgeRegistries.BIOMES, MOD_ID);
+    public static final  DeferredRegister<ParticleType<?>> PARTICLES = new DeferredRegister<>(ForgeRegistries.PARTICLE_TYPES, MOD_ID);
 
     public static void init() {
         RECIPES_SERIALIZER.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -76,18 +85,20 @@ public class RegistryHandler {
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         TILES.register(FMLJavaModLoadingContext.get().getModEventBus());
         CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
-
+        BIOMES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        DIMENSIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        PARTICLES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     //sounds
-    public static final RegistryObject<SoundEvent> BULLET_HIT = SOUNDS.register("bullet_hit",() -> new SoundEvent(new ResourceLocation(MachineBuiltWorld.MOD_ID,"entity.bullet_hit")));
-    public static final RegistryObject<SoundEvent> PISTOL_SHOOT = SOUNDS.register("pistol_shoot",() -> new SoundEvent(new ResourceLocation(MachineBuiltWorld.MOD_ID,"item.pistol_shoot")));
-    public static final RegistryObject<SoundEvent> LASER_PISTOL_SHOOT = SOUNDS.register("laser_pistol_shoot",() -> new SoundEvent(new ResourceLocation(MachineBuiltWorld.MOD_ID,"item.laser_pistol_shoot")));
-    public static final RegistryObject<SoundEvent> SMOKE_ALARM = SOUNDS.register("smoke_alarm",() -> new SoundEvent(new ResourceLocation(MachineBuiltWorld.MOD_ID,"block.smoke_alarm")));
-    public static final RegistryObject<SoundEvent> CRUSHER_CRUSHING = SOUNDS.register("crusher_crushing",() -> new SoundEvent(new ResourceLocation(MachineBuiltWorld.MOD_ID,"block.crusher_crushing")));
-    public static final RegistryObject<SoundEvent> SPROCKETEER_STEP = SOUNDS.register("sprocketeer_step",() -> new SoundEvent(new ResourceLocation(MachineBuiltWorld.MOD_ID,"entity.sprocketeer_step")));
-    public static final RegistryObject<SoundEvent> PITTERBOT_SHOOT = SOUNDS.register("pitterbot_shoot",() -> new SoundEvent(new ResourceLocation(MachineBuiltWorld.MOD_ID,"entity.pitterbot_shoot")));
-    public static final RegistryObject<SoundEvent> SHREDDER_SHOOT = SOUNDS.register("shredderbot_shoot",() -> new SoundEvent(new ResourceLocation(MachineBuiltWorld.MOD_ID,"entity.shredderbot_shoot")));
+    public static final RegistryObject<SoundEvent> BULLET_HIT = SOUNDS.register("bullet_hit",() -> new SoundEvent(new ResourceLocation(MOD_ID,"entity.bullet_hit")));
+    public static final RegistryObject<SoundEvent> PISTOL_SHOOT = SOUNDS.register("pistol_shoot",() -> new SoundEvent(new ResourceLocation(MOD_ID,"item.pistol_shoot")));
+    public static final RegistryObject<SoundEvent> LASER_PISTOL_SHOOT = SOUNDS.register("laser_pistol_shoot",() -> new SoundEvent(new ResourceLocation(MOD_ID,"item.laser_pistol_shoot")));
+    public static final RegistryObject<SoundEvent> SMOKE_ALARM = SOUNDS.register("smoke_alarm",() -> new SoundEvent(new ResourceLocation(MOD_ID,"block.smoke_alarm")));
+    public static final RegistryObject<SoundEvent> CRUSHER_CRUSHING = SOUNDS.register("crusher_crushing",() -> new SoundEvent(new ResourceLocation(MOD_ID,"block.crusher_crushing")));
+    public static final RegistryObject<SoundEvent> SPROCKETEER_STEP = SOUNDS.register("sprocketeer_step",() -> new SoundEvent(new ResourceLocation(MOD_ID,"entity.sprocketeer_step")));
+    public static final RegistryObject<SoundEvent> PITTERBOT_SHOOT = SOUNDS.register("pitterbot_shoot",() -> new SoundEvent(new ResourceLocation(MOD_ID,"entity.pitterbot_shoot")));
+    public static final RegistryObject<SoundEvent> SHREDDER_SHOOT = SOUNDS.register("shredderbot_shoot",() -> new SoundEvent(new ResourceLocation(MOD_ID,"entity.shredderbot_shoot")));
 
     //entities
     public static final RegistryObject<EntityType<SprocketeerEntity>> SPROCKETEER = ENTITIES.register("sprocketeer",
@@ -112,14 +123,18 @@ public class RegistryHandler {
             () -> EntityType.Builder.<LaserEntity>create(LaserEntity::new, EntityClassification.MISC).size(0.5F, 0.9F).build("laser_projectile"));
     public static final RegistryObject<EntityType<GearEntity>> GEAR_ENTITY = ENTITIES.register("gear_projectile",
             () -> EntityType.Builder.<GearEntity>create(GearEntity::new, EntityClassification.MISC).size(0.5F, 0.9F).build("gear_projectile"));
+    public static final RegistryObject<EntityType<SickShotEntity>> SICK_SHOT_ENTITY = ENTITIES.register("sick_shot_projectile",
+            () -> EntityType.Builder.<SickShotEntity>create(SickShotEntity::new, EntityClassification.MISC).size(0.5F, 0.9F).build("sick_shot_projectile"));
 
     //items
     public static final RegistryObject<Item> IRON_GEAR = ITEMS.register("iron_gear", ItemBase::new);
     public static final RegistryObject<Item> COPPER_INGOT = ITEMS.register("copper_ingot", ItemBase::new);
+    //TODO needed?
     public static final RegistryObject<Item> TIN_INGOT = ITEMS.register("tin_ingot", ItemBase::new);
     public static final RegistryObject<Item> BRONZE_INGOT = ITEMS.register("bronze_ingot", ItemBase::new);
     public static final RegistryObject<Item> SILVER_INGOT = ITEMS.register("silver_ingot", ItemBase::new);
     public static final RegistryObject<Item> CRUDE_ELECTROMAGNET = ITEMS.register("crude_electromagnet", ItemBase::new);
+    //TODO fix the texture/improve it
     public static final RegistryObject<Item> NEODYMIUM_MAGNET = ITEMS.register("neodymium_magnet", ItemBase::new);
     public static final RegistryObject<Item> GRAPHENE = ITEMS.register("graphene", ItemBase::new);
     public static final RegistryObject<Item> TRACK_GEAR = ITEMS.register("track_gear", ItemBase::new);
@@ -137,6 +152,7 @@ public class RegistryHandler {
     public static final RegistryObject<Item> NEODYMIUM_DUST = ITEMS.register("neodymium_dust", ItemBase::new);
     public static final RegistryObject<Item> DIRTY_BORON_DUST = ITEMS.register("dirty_boron_dust", ItemBase::new);
     public static final RegistryObject<Item> CIRCUIT_BOARD = ITEMS.register("circuit_board", ItemBase::new);
+    //needed?
     public static final RegistryObject<Item> SILICONE_GLOB = ITEMS.register("silicone_glob", ItemBase::new);
     public static final RegistryObject<Item> WOOD_GEAR = ITEMS.register("wood_gear", ItemBase::new);
     public static final RegistryObject<Item> EPOXY = ITEMS.register("epoxy", ItemBase::new);
@@ -158,21 +174,38 @@ public class RegistryHandler {
     public static final RegistryObject<Item> LARGE_UNCUT_GARNET = ITEMS.register("large_uncut_garnet", ItemBase::new);
     public static final RegistryObject<Item> UNCUT_GARNET = ITEMS.register("uncut_garnet", ItemBase::new);
     public static final RegistryObject<Item> ERBIUM_CHUNK = ITEMS.register("erbium_chunk", ItemBase::new);
+    //TODO attach texture
     public static final RegistryObject<Item> XENOTIME_CHUNK = ITEMS.register("xenotime_chunk", ItemBase::new);
     public static final RegistryObject<Item> ALUMINUM_INGOT = ITEMS.register("aluminum_ingot", ItemBase::new);
     public static final RegistryObject<Item> YTTRIUM = ITEMS.register("yttrium", ItemBase::new);
+    //TODO how we gonna make this? maybe atomize or something to make it more epic
     public static final RegistryObject<Item> RESONATING_CRYSTAL = ITEMS.register("resonating_crystal", ItemBase::new);
     public static final RegistryObject<Item> ALUMINUM_NUGGET = ITEMS.register("aluminum_nugget", ItemBase::new);
     public static final RegistryObject<Item> COPPER_NUGGET = ITEMS.register("copper_nugget", ItemBase::new);
+    //TODO make texture
     public static final RegistryObject<Item> STEEL_NUGGET = ITEMS.register("steel_nugget", ItemBase::new);
     public static final RegistryObject<Item> ERBIUM_DUST = ITEMS.register("erbium_dust", ItemBase::new);
     public static final RegistryObject<Item> NEODYMIUM_CHUNK = ITEMS.register("neodymium_chunk", ItemBase::new);
     public static final RegistryObject<Item> COPPER_ROLLER = ITEMS.register("copper_roller", ItemBase::new);
+    //TODO do we really want to add another step to the crafting? i mean it makes since that you have to add
+    // some umph to the axle.
+    //TODO make textures
     public static final RegistryObject<Item> IRON_ROLLER = ITEMS.register("iron_roller", ItemBase::new);
     public static final RegistryObject<Item> GOLD_ROLLER = ITEMS.register("gold_roller", ItemBase::new);
     public static final RegistryObject<Item> STEEL_ROLLER = ITEMS.register("steel_roller", ItemBase::new);
     public static final RegistryObject<Item> DIAMOND_ROLLER = ITEMS.register("diamond_roller", ItemBase::new);
     public static final RegistryObject<Item> INDUCTION_PLATE = ITEMS.register("induction_plate", ItemBase::new);
+    public static final RegistryObject<Item> PISTOL_BODY = ITEMS.register("pistol_body", ItemBase::new);
+    public static final RegistryObject<Item> STEEL_GRIP = ITEMS.register("steel_grip", ItemBase::new);
+    public static final RegistryObject<Item> GLASS_DAGGER_BLADE = ITEMS.register("glass_dagger_blade", ItemBase::new);
+    //TODO buff and make harder to get somehow
+    public static final RegistryObject<Item> STRENGTHENED_GLASS_DAGGER_BLADE = ITEMS.register("strengthened_glass_dagger_blade", ItemBase::new);
+    public static final RegistryObject<Item> SICK_SHOT = ITEMS.register("sick_shot", ItemBase::new);
+    //TODO do
+    public static final RegistryObject<Item> SYNTHETIC_SOUL = ITEMS.register("synthetic_soul", ItemBase::new);
+    //TODO do texture
+    public static final RegistryObject<Item> UNFUN_LUMP = ITEMS.register("unfun_lump", ItemBase::new);
+
 
     //special items
     public static final RegistryObject<CrusherTeethBase> COPPER_CRUSHER_TEETH = ITEMS.register("copper_crusher_teeth", ()->
@@ -193,6 +226,7 @@ public class RegistryHandler {
     public static final RegistryObject<Block> BATTERY_POT = BLOCKS.register("battery_pot", BatteryPot::new);
     public static final RegistryObject<Block> MAGNETS = BLOCKS.register("magnets", Magnets::new);
     public static final RegistryObject<Block> CRUDE_ELECTROMAGNETA = BLOCKS.register("crude_electromagneta", CrudeElectromagnetA::new);
+//TODO voxel shapes are apparantly not optional, maybe just a AABB something like that?
     public static final RegistryObject<Block> WIRE = BLOCKS.register("wire", Wire::new);
     public static final RegistryObject<Block> MELTING_POT = BLOCKS.register("melting_pot", MeltingPot::new);
     public static final RegistryObject<Block> ATOMIZER = BLOCKS.register("atomizer", Atomizer::new);
@@ -208,7 +242,6 @@ public class RegistryHandler {
     public static final RegistryObject<Block> SMOKE_DETECTOR = BLOCKS.register("smoke_detector", SmokeDetector::new);
     public static final RegistryObject<Block> FIBERGLASS_MOULD = BLOCKS.register("fiberglass_mould", FiberglassMould::new);
     public static final RegistryObject<Block> CRUSHER = BLOCKS.register("crusher", Crusher::new);
-    public static final RegistryObject<Block> OXYGEN_FURNACE = BLOCKS.register("oxygen_furnace", Crusher::new);
     public static final RegistryObject<Block> INTENSIVE_HEATING_OVEN = BLOCKS.register("intensive_heating_oven", IntensiveHeatingOven::new);
     public static final RegistryObject<Block> REINFORCED_BRICK = BLOCKS.register("reinforced_brick", ReinforcedBrick::new);
     public static final RegistryObject<Block> BAUXITE_ORE = BLOCKS.register("bauxite_ore", BauxiteOre::new);
@@ -224,17 +257,32 @@ public class RegistryHandler {
     public static final RegistryObject<Block> STEEL_PANEL = BLOCKS.register("steel_panel", SteelPanel::new);
     public static final RegistryObject<Block> INDUCTOR = BLOCKS.register("inductor", SteelPanel::new);
     public static final RegistryObject<Block> SPROCKETEERER = BLOCKS.register("sprocketeerer", Sprocketeerer::new);
+    public static final RegistryObject<Block> PRESSURIZED_GAS_CONTAINER = BLOCKS.register("pressurized_gas_container", PressurizedGasContainer::new);
+    //TODO do?
+    public static final RegistryObject<Block> COMPLEX_FABRICATOR = BLOCKS.register("complex_fabricator", PressurizedGasContainer::new);
+    //TODO do
+    public static final RegistryObject<Block> MINI_MOULDER = BLOCKS.register("mini-moulder", PressurizedGasContainer::new);
+    //TODO do
+    public static final RegistryObject<Block> MOULDER = BLOCKS.register("moulder", PressurizedGasContainer::new);
+    //TODO do
+    public static final RegistryObject<Block> DISASSOCIATED_ATOM_CONTAINER = BLOCKS.register("disassociated_atom_container", DisasossiatedAtomContainer::new);
+    //TODO do
+    public static final RegistryObject<Block> ATOMIC_MANAGER = BLOCKS.register("atomic_manager", PressurizedGasContainer::new);
+
 
     //special blocks
     public static final RegistryObject<Block> IRON_OXIDE = BLOCKS.register("iron_oxide",
             () -> new IronOxide(13190441));
+    //TODO needed?
     public static final RegistryObject<Block> MOULDING_SAND = BLOCKS.register("moulding_sand",
             () -> new MouldingSand(10130441));
+    //TODO design
+    //TODO tweak functionality
+    //TODO carry items better
     public static final RegistryObject<Block> CONVEYOR = BLOCKS.register("conveyor",() -> new Conveyor(Block.Properties.create(Material.IRON)
             .hardnessAndResistance(5.0f, 6.0f)
             .sound(SoundType.METAL)
-            .harvestLevel(1)
-            .harvestTool(ToolType.PICKAXE)));
+            .harvestLevel(0)));
     public static final RegistryObject<Block> CONVEYOR_UP = BLOCKS.register("conveyor_up",() -> new ConveyorUp(Block.Properties.create(Material.IRON)
             .hardnessAndResistance(5.0f, 6.0f)
             .sound(SoundType.METAL)
@@ -242,10 +290,14 @@ public class RegistryHandler {
             .harvestTool(ToolType.PICKAXE)));
 
     //weapons
-    public static final RegistryObject<SwordItem> COPPER_SWORD = ITEMS.register("copper_sword", () ->
-            new SwordItem(ModItemTier.COPPER, 2, -2.4f, new Item.Properties().group(MachineBuiltWorldItemGroup.instance)));
+    public static final RegistryObject<GlassDaggerItem> GLASS_DAGGER = ITEMS.register("glass_dagger", () ->
+            new GlassDaggerItem(ModItemTier.GLASS_DAGGER, 1, 1.0f, new Item.Properties().group(MachineBuiltWorldItemGroup.instance).maxDamage(150)));
+    public static final RegistryObject<GlassDaggerItem> STRENGTHENED_GLASS_DAGGER = ITEMS.register("strengthened_glass_dagger", () ->
+            new GlassDaggerItem(ModItemTier.STRENGTHENED_GLASS_DAGGER, 3, 1.1f, new Item.Properties().group(MachineBuiltWorldItemGroup.instance).maxDamage(150)));
     public static final RegistryObject<LaserPistolItem> LASER_PISTOL = ITEMS.register("laser_pistol", ()->
             new LaserPistolItem(new Item.Properties().group(MachineBuiltWorldItemGroup.instance).maxDamage(1800)));
+    public static final RegistryObject<SickerItem> SICKER = ITEMS.register("sicker", ()->
+            new SickerItem(new Item.Properties().group(MachineBuiltWorldItemGroup.instance).maxDamage(1800)));
     public static final RegistryObject<PistolItem> PISTOL = ITEMS.register("pistol", ()->
             new PistolItem(new Item.Properties().group(MachineBuiltWorldItemGroup.instance).maxDamage(800)));
     public static final RegistryObject<BulletItem> BULLET = ITEMS.register("bullet", ()->
@@ -254,7 +306,8 @@ public class RegistryHandler {
             new IncendiaryBulletItem(new Item.Properties().group(MachineBuiltWorldItemGroup.instance)));
     public static final RegistryObject<LaserPisolMagItem> LASER_PISTOL_MAG = ITEMS.register("laser_pistol_mag", ()->
             new LaserPisolMagItem(new Item.Properties().group(MachineBuiltWorldItemGroup.instance).maxStackSize(8)));
-
+    public static final RegistryObject<PisolMagItem> PISTOL_MAG = ITEMS.register("pistol_mag", ()->
+            new PisolMagItem(new Item.Properties().group(MachineBuiltWorldItemGroup.instance).maxStackSize(8)));
 
     /*
     public static final RegistryObject<IncendiaryBulletItem> INCENDIARY_BULLET = ITEMS.register("incendiary_bullet", ()->
@@ -269,27 +322,10 @@ public class RegistryHandler {
             new CraftingToolsItem(ModItemTier.CRAFTING_TOOLS, 2, -2.4f, new Item.Properties().group(MachineBuiltWorldItemGroup.instance)));
     public static final RegistryObject<MultimeterItem> MULTIMETER = ITEMS.register("multimeter", () ->
             new MultimeterItem(ModItemTier.MULTIMETER, 2, -2.4f, new Item.Properties().group(MachineBuiltWorldItemGroup.instance)));
-
+    public static final RegistryObject<CraftingToolsItem> SANDPAPER = ITEMS.register("sandpaper", () ->
+            new CraftingToolsItem(ModItemTier.CRAFTING_TOOLS, 2, -2.4f, new Item.Properties().group(MachineBuiltWorldItemGroup.instance).maxDamage(70)));
 
     //armor
-    public static final RegistryObject<ArmorItem> COPPER_HELMET = ITEMS.register("copper_helmet", () ->
-            new ArmorItem(ModArmorMaterial.COPPER, EquipmentSlotType.HEAD, new Item.Properties().group(MachineBuiltWorldItemGroup.instance)));
-    public static final RegistryObject<ArmorItem> COPPER_CHESTPLATE = ITEMS.register("copper_chestplate", () ->
-            new ArmorItem(ModArmorMaterial.COPPER, EquipmentSlotType.CHEST, new Item.Properties().group(MachineBuiltWorldItemGroup.instance)));
-    public static final RegistryObject<ArmorItem> COPPER_LEGGINGS = ITEMS.register("copper_leggings", () ->
-            new ArmorItem(ModArmorMaterial.COPPER, EquipmentSlotType.LEGS, new Item.Properties().group(MachineBuiltWorldItemGroup.instance)));
-    public static final RegistryObject<ArmorItem> COPPER_BOOTS = ITEMS.register("copper_boots", () ->
-            new ArmorItem(ModArmorMaterial.COPPER, EquipmentSlotType.FEET, new Item.Properties().group(MachineBuiltWorldItemGroup.instance)));
-    public static final RegistryObject<ArmorItem> POWER_PUNCHERS = ITEMS.register("power_punchers", () ->
-            new ArmorItem(ModArmorMaterial.COPPER, EquipmentSlotType.HEAD, new Item.Properties().group(MachineBuiltWorldItemGroup.instance)));
-    public static final RegistryObject<ArmorItem> STEEL_HELMET = ITEMS.register("steel_helmet", () ->
-            new ArmorItem(ModArmorMaterial.STEEL, EquipmentSlotType.HEAD, new Item.Properties().group(MachineBuiltWorldItemGroup.instance)));
-    public static final RegistryObject<ArmorItem> STEEL_CHESTPLATE = ITEMS.register("steel_chestplate", () ->
-            new ArmorItem(ModArmorMaterial.STEEL, EquipmentSlotType.CHEST, new Item.Properties().group(MachineBuiltWorldItemGroup.instance)));
-    public static final RegistryObject<ArmorItem> STEEL_LEGGINGS = ITEMS.register("steel_leggings", () ->
-            new ArmorItem(ModArmorMaterial.STEEL, EquipmentSlotType.LEGS, new Item.Properties().group(MachineBuiltWorldItemGroup.instance)));
-    public static final RegistryObject<ArmorItem> STEEL_BOOTS = ITEMS.register("steel_boots", () ->
-            new ArmorItem(ModArmorMaterial.STEEL, EquipmentSlotType.FEET, new Item.Properties().group(MachineBuiltWorldItemGroup.instance)));
 
 
     //block items
@@ -309,7 +345,7 @@ public class RegistryHandler {
     public static final RegistryObject<Item> TTTBATTERY_ITEM = ITEMS.register("tttbattery", () -> new BlockItemBase(TTTBATTERY.get()));
     public static final RegistryObject<Item> TTBATTERY_ITEM = ITEMS.register("ttbattery", () -> new BlockItemBase(TTBATTERY.get()));
     public static final RegistryObject<Item> TBATTERY_ITEM = ITEMS.register("tbattery", () -> new BlockItemBase(TBATTERY.get()));
-    public static final RegistryObject<Item> MACHINING_BENCH_ITEM = ITEMS.register("mill", () -> new BlockItemBase(MILL.get()));
+    public static final RegistryObject<Item> MILL_ITEM = ITEMS.register("mill", () -> new BlockItemBase(MILL.get()));
     public static final RegistryObject<Item> MIXER_ITEM = ITEMS.register("mixer", () -> new BlockItemBase(MIXER.get()));
     public static final RegistryObject<Item> SMOKE_DETECTOR_ITEM = ITEMS.register("smoke_detector", () -> new BlockItemBase(SMOKE_DETECTOR.get()));
     public static final RegistryObject<Item> FIBERGLASS_MOULD_ITEM = ITEMS.register("fiberglass_mould", () -> new BlockItemBase(FIBERGLASS_MOULD.get()));
@@ -329,20 +365,22 @@ public class RegistryHandler {
     public static final RegistryObject<Item> STEEL_PANEL_ITEM = ITEMS.register("steel_panel", () -> new BlockItemBase(STEEL_PANEL.get()));
     public static final RegistryObject<Item> SPROCKETEERER_ITEM = ITEMS.register("sprocketeerer", () -> new BlockItemBase(SPROCKETEERER.get()));
     public static final RegistryObject<Item> IRON_OXIDE_ITEM = ITEMS.register("iron_oxide", () -> new BlockItemBase(IRON_OXIDE.get()));
+    public static final RegistryObject<Item> PRESSURIZED_GAS_CONTAINER_ITEM = ITEMS.register("pressurized_gas_container", () -> new BlockItemBase(PRESSURIZED_GAS_CONTAINER.get()));
 
     //special block items
     public static final RegistryObject<Item> CONVEYOR_ITEM = ITEMS.register("conveyor",
             () -> new WallOrFloorItem(CONVEYOR.get(),CONVEYOR_UP.get(), (new Item.Properties()).group(MachineBuiltWorldItemGroup.instance)));
 
     //fluids resource locations
-    public static final ResourceLocation BATTERY_ACID_STILL_RL = new ResourceLocation(MachineBuiltWorld.MOD_ID, "blocks/battery_acid_still");
-    public static final ResourceLocation BATTERY_ACID_FLOWING_RL = new ResourceLocation(MachineBuiltWorld.MOD_ID, "blocks/battery_acid_flowing");
-    public static final ResourceLocation BATTERY_ACID_OVERLAY_RL = new ResourceLocation(MachineBuiltWorld.MOD_ID, "blocks/battery_acid_overlay");
-    public static final ResourceLocation RESIN_STILL_RL = new ResourceLocation(MachineBuiltWorld.MOD_ID, "blocks/resin_still");
-    public static final ResourceLocation RESIN_FLOWING_RL = new ResourceLocation(MachineBuiltWorld.MOD_ID, "blocks/resin_flowing");
-    public static final ResourceLocation RESIN_OVERLAY_RL = new ResourceLocation(MachineBuiltWorld.MOD_ID, "blocks/resin_overlay");
+    public static final ResourceLocation BATTERY_ACID_STILL_RL = new ResourceLocation(MOD_ID, "blocks/battery_acid_still");
+    public static final ResourceLocation BATTERY_ACID_FLOWING_RL = new ResourceLocation(MOD_ID, "blocks/battery_acid_flowing");
+    public static final ResourceLocation BATTERY_ACID_OVERLAY_RL = new ResourceLocation(MOD_ID, "blocks/battery_acid_overlay");
+    public static final ResourceLocation RESIN_STILL_RL = new ResourceLocation(MOD_ID, "blocks/resin_still");
+    public static final ResourceLocation RESIN_FLOWING_RL = new ResourceLocation(MOD_ID, "blocks/resin_flowing");
+    public static final ResourceLocation RESIN_OVERLAY_RL = new ResourceLocation(MOD_ID, "blocks/resin_overlay");
 
     //fluids
+    //TODO battery acid no worky, brokey somehow, learn how to fix it
     public static final RegistryObject<FlowingFluid> BATTERY_ACID_FLUID = FLUIDS.register("battery_acid_fluid",
             () -> new ForgeFlowingFluid.Source(RegistryHandler.BATTERY_ACID_PROPERTIES));
     public static final RegistryObject<FlowingFluid> BATTERY_ACID_FLOWING = FLUIDS.register("battery_acid_flowing",
@@ -350,8 +388,11 @@ public class RegistryHandler {
     public static final ForgeFlowingFluid.Properties BATTERY_ACID_PROPERTIES = new ForgeFlowingFluid.Properties(() -> BATTERY_ACID_FLUID.get(),
             () -> BATTERY_ACID_FLOWING.get(), FluidAttributes.builder(BATTERY_ACID_STILL_RL, BATTERY_ACID_FLOWING_RL)
             .sound(SoundEvents.ENTITY_VEX_CHARGE, SoundEvents.ENTITY_VEX_CHARGE).density(5).overlay(BATTERY_ACID_OVERLAY_RL)).block(() -> RegistryHandler.BATTERY_ACID_BLOCK.get());
+    //TODO do most visual and physical thigns
     public static final RegistryObject<ResinFluid.Flowing> RESIN_FLOWING = FLUIDS.register("resin_flowing", () -> new ResinFluid.Flowing());
     public static final RegistryObject<ResinFluid.Source> RESIN = FLUIDS.register("resin", () -> new ResinFluid.Source());
+    //TODO do most visual and physical thigns
+    //TODO work on recipe for it in mixer
     public static final RegistryObject<ResinFluid.Flowing> POLYURETHANE_FLOWING = FLUIDS.register("polyurethane_flowing", () -> new ResinFluid.Flowing());
     public static final RegistryObject<ResinFluid.Source> POLYURETHANE = FLUIDS.register("polyurethane", () -> new ResinFluid.Source());
     //fluid items
@@ -402,6 +443,10 @@ public class RegistryHandler {
             TILES.register("melting_pot", () -> TileEntityType.Builder.create(MeltingPotTile::new, MELTING_POT.get()).build(null));
     public static final RegistryObject<TileEntityType<SprocketeererTile>> SPROCKETEER_TILE =
             TILES.register("sprocketeerer", () -> TileEntityType.Builder.create(SprocketeererTile::new, SPROCKETEERER.get()).build(null));
+    public static final RegistryObject<TileEntityType<MillTile>> MILL_TILE =
+            TILES.register("mill", () -> TileEntityType.Builder.create(MillTile::new, MILL.get()).build(null));
+    public static final RegistryObject<TileEntityType<PressurizedGasContainerTile>> PRESSURIZED_GAS_CONTAINER_TILE =
+            TILES.register("pressurized_gas_container", () -> TileEntityType.Builder.create(PressurizedGasContainerTile::new, PRESSURIZED_GAS_CONTAINER.get()).build(null));
 
 
     //Containers
@@ -444,32 +489,39 @@ public class RegistryHandler {
 
     public static final RegistryObject<ContainerType<IntensiveHeatingOvenContainer>> INTENSIVE_HEATING_OVEN_CONTAINER = CONTAINERS.register("intensive_heating_oven", () -> IForgeContainerType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
-        System.out.println(pos);
         World world = inv.player.getEntityWorld();
         return new IntensiveHeatingOvenContainer(windowId, world, inv, pos);
     }));
 
     public static final RegistryObject<ContainerType<GeneratorContainer>> GENERATOR_CONTAINER = CONTAINERS.register("generator", () -> IForgeContainerType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
-        System.out.println(pos);
         World world = inv.player.getEntityWorld();
         return new GeneratorContainer(windowId, world, pos, inv);
     }));
     public static final RegistryObject<ContainerType<MeltingPotContainer>> MELTING_POT_CONTAINER = CONTAINERS.register("melting_pot", () -> IForgeContainerType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
-        System.out.println(pos);
         World world = inv.player.getEntityWorld();
         return new MeltingPotContainer(windowId, world, inv, pos);
     }));
     public static final RegistryObject<ContainerType<SprocketeererContainer>> SPROCKETEERER_CONTAINER = CONTAINERS.register("sprocketeer", () -> IForgeContainerType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
-        System.out.println(pos);
         World world = inv.player.getEntityWorld();
         return new SprocketeererContainer(windowId, world, inv, pos);
     }));
+    public static final RegistryObject<ContainerType<MillContainer>> MILL_CONTAINER = CONTAINERS.register("mill", () -> IForgeContainerType.create((windowId, inv, data) -> {
+        BlockPos pos = data.readBlockPos();
+        World world = inv.player.getEntityWorld();
+        return new MillContainer(windowId, world, inv, pos);
+    }));
 
+    public static final RegistryObject<ContainerType<PressurizedGasContainerContainer>> PRESSURIZED_GAS_CONTAINER_CONTAINER = CONTAINERS.register("pressurized_gas_container", () -> IForgeContainerType.create((windowId, inv, data) -> {
+        BlockPos pos = data.readBlockPos();
+        World world = inv.player.getEntityWorld();
+        return new PressurizedGasContainerContainer(windowId, world, inv, pos);
+    }));
 
-    //translucent layers
+    //particles
+    public static final RegistryObject<BasicParticleType> SPROCKETEER_CREATION_PARTICLE = PARTICLES.register("sprocketeer_creation_particle", () -> new BasicParticleType(false));
 
     //recipes
     //public static final IRecipeType<CrushingRecipe> CRUSHER_RECIPE = new CrusherRecipeType();
@@ -477,14 +529,21 @@ public class RegistryHandler {
     public static final RegistryObject<IRecipeSerializer<CrushingRecipe>> CRUSHING_RECIPE = RECIPES_SERIALIZER.register("crushing", () -> new CrushingRecipeSerializer(200));
     public static final RegistryObject<IRecipeSerializer<MeltingPotRecipe>> MELTING_POT_RECIPE = RECIPES_SERIALIZER.register("melting_pot", () -> new MeltingPotRecipeSerializer(1000));
     public static final RegistryObject<IRecipeSerializer<MixingRecipe>> MIXING_RECIPE = RECIPES_SERIALIZER.register("mixing", () -> new MixingRecipeSerializer(200));
+    //TODO needed?
     public static final RegistryObject<IRecipeSerializer<SprocketeerRecipe>> SPROCKETEER_RECIPE = RECIPES_SERIALIZER.register("sprocketeer", () -> new SprocketeerSerializer(200));
+    public static final RegistryObject<IRecipeSerializer<MillingRecipe>> MILLING_RECIPE = RECIPES_SERIALIZER.register("milling", () -> new MillingRecipeSerializer(200));
+    //TODO  no workey
+    public static final RegistryObject<IRecipeSerializer<UseToolRecipe>> USE_TOOL_RECIPE = RECIPES_SERIALIZER.register("use_tool", UseToolSerializer::new);
+    public static final RegistryObject<IRecipeSerializer<AtomizingRecipe>> ATOMIZING_RECIPE = RECIPES_SERIALIZER.register("atomizing", () -> new AtomizingRecipeSerializer(200));
+
+
 
     public static class Tags {
         //public static final Tag<Fluid> RESIN = new FluidTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "resin"));
-        public static final Tag<Block> SMOKY_SENSITIVE = new BlockTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "smoky_sensitive"));
-        public static final Tag<Item> CRUSHER_TEETH = new ItemTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "crusher_teeth"));
-
-        public static final Tag<Item> ITEM_HEAT_INFUSEABLE = new ItemTags.Wrapper(new ResourceLocation(MachineBuiltWorld.MOD_ID, "item_heat_infuseable"));
+        public static final Tag<Block> SMOKY_SENSITIVE = new BlockTags.Wrapper(new ResourceLocation(MOD_ID, "smoky_sensitive"));
+        public static final Tag<Item> CRUSHER_TEETH = new ItemTags.Wrapper(new ResourceLocation(MOD_ID, "crusher_teeth"));
+        public static final Tag<Item> BULLETS = new ItemTags.Wrapper(new ResourceLocation("machinebuiltworld", "bullets"));
+        public static final Tag<Item> ITEM_HEAT_INFUSEABLE = new ItemTags.Wrapper(new ResourceLocation(MOD_ID, "item_heat_infuseable"));
 
     }
     public static class ForgeTags {
@@ -493,13 +552,46 @@ public class RegistryHandler {
 
     }
 
-    //Dimensions
-    /*public static final RegistryObject<ModDimension> THE_MACHINE_BUILT_WORLD = DIMENSIONS.register("the_machine_built_world"
-            , TheMachineBuiltWorldModDimension::new);
+    //Dimension
+    //TODO energy core underneath ground
+    //TODO make redstone no workey (make it do that on purpose)
+    public static final RegistryObject<ModDimension> THE_MACHINE_BUILT_WORLD = DIMENSIONS.register("the_machine_built_world", () -> new TheMachineBuiltWorldModDimension());
+    public static DimensionType machinebuiltworld;
 
-     */
+    //Biomes
+    //TODO not generating
+    //TODO Potentially danderous alternative prefix as an error, idk why
+    public static final RegistryObject<Biome> BARREN_LANDS = BIOMES
+            .register("barren_lands",
+                    () -> new TheMachineBuiltWorldBarrenLands(
+                            new Biome.Builder().precipitation(Biome.RainType.SNOW).scale(1.5f).temperature(1.5f)
+                                    .waterColor(16724639).waterFogColor(16762304)
+                                    .surfaceBuilder(
+                                            new ConfiguredSurfaceBuilder<SurfaceBuilderConfig>(
+                                                    register("barren_lands_surface",
+                                                            new TheMachineBuiltWorldBarrenLandsSurfaceBuilder(
+                                                                    SurfaceBuilderConfig::deserialize)),
+                                                    new SurfaceBuilderConfig(Blocks.COARSE_DIRT.getDefaultState(),
+                                                            Blocks.DIRT.getDefaultState(),
+                                                            Blocks.GRASS_BLOCK.getDefaultState())))
+                                    .category(Biome.Category.PLAINS).downfall(0.5f).depth(0.12f).parent(null)));
+    @SuppressWarnings("deprecation")
+    private static <C extends ISurfaceBuilderConfig, F extends SurfaceBuilder<C>> F register(String key, F builderIn) {
+        return (F) (Registry.<SurfaceBuilder<?>>register(Registry.SURFACE_BUILDER, key, builderIn));
+    }
 
-    //Dimension Types
+
+    public static void registerBiomes() {
+        registerBiome(BARREN_LANDS.get(), BiomeDictionary.Type.PLAINS, BiomeDictionary.Type.SPARSE);
+    }
+
+    private static void registerBiome(Biome biome, BiomeDictionary.Type... types) {
+        // the line below will make it spawn in the overworld
+        //BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(biome, 100));
+        BiomeDictionary.addTypes(biome, types);
+        //BiomeManager.addSpawnBiome(biome);
+    }
+
 
 
     //Stats

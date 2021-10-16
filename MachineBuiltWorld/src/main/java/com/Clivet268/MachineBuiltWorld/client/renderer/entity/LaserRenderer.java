@@ -1,4 +1,4 @@
-package com.Clivet268.MachineBuiltWorld.client.renderer;
+package com.Clivet268.MachineBuiltWorld.client.renderer.entity;
 
 import com.Clivet268.MachineBuiltWorld.MachineBuiltWorld;
 import com.Clivet268.MachineBuiltWorld.entity.AbstractLaserEntity;
@@ -14,6 +14,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
+//TODO no worky, learn how to code
 public class LaserRenderer<T extends AbstractLaserEntity> extends EntityRenderer<T> {
     public static final ResourceLocation RES_LASER = new ResourceLocation(MachineBuiltWorld.MOD_ID,"textures/entity/projectiles/laser.png");
 
