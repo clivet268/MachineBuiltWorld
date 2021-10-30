@@ -36,6 +36,8 @@ import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.stream.Stream;
 
+//TODO make textures
+//TODO make worky better, GUI?
 public class CrystallizationChamberPart extends Block{
     public static final DirectionProperty PROPERTY_FACING = BlockStateProperties.FACING;
     public static final IntegerProperty STATE = MoreStateProperties.CRYSTILIZATIONSTATES;
