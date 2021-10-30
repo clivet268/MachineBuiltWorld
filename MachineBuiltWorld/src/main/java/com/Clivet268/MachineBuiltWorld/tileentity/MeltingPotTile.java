@@ -1,6 +1,5 @@
 package com.Clivet268.MachineBuiltWorld.tileentity;
 
-import com.Clivet268.MachineBuiltWorld.inventory.Containers.IntensiveHeatingOvenContainer;
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.MeltingPotContainer;
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.IMoreRecipeType;
 import net.minecraft.entity.player.PlayerInventory;
@@ -10,7 +9,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
 
-import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.*;
+import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.MELTING_POT_TILE;
 
 public class MeltingPotTile extends AbstractMeltingPotTile {
 

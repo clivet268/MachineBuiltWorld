@@ -1,5 +1,9 @@
 {
   "variants": {
-    "": { "model": "machinebuiltworld:block/melting_pot" }
+    "lit=false,fullnotfull=false": { "model": "machinebuiltworld:block/melting_pot" },
+    "lit=false,fullnotfull=true": { "model": "machinebuiltworld:block/melting_pot" },
+    "lit=true,fullnotfull=false": { "model": "machinebuiltworld:block/melting_pot_burning" },
+    "lit=true,fullnotfull=true": { "model": "machinebuiltworld:block/melting_pot_full_burning" }
+
   }
 }
