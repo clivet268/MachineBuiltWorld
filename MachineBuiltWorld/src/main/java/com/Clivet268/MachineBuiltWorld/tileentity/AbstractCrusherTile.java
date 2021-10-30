@@ -1,34 +1,34 @@
 package com.Clivet268.MachineBuiltWorld.tileentity;
 
-import com.Clivet268.MachineBuiltWorld.inventory.crafting.AbstractCokeingRecipe;
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.AbstractCrushingRecipe;
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.CrushingRecipe;
-import com.Clivet268.MachineBuiltWorld.items.IHeatInfuseable;
+import com.Clivet268.MachineBuiltWorld.items.CrusherTeethBase;
 import com.Clivet268.MachineBuiltWorld.util.CustomEnergyStorage;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.minecraft.block.AbstractFurnaceBlock;
-import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.block.ChestBlock;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.IRecipeHolder;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.ChestType;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -42,24 +42,35 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
-
-public abstract class AbstractCrusherTile extends LockableTileEntity implements IHeatInfuseable, ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
-    private ItemStackHandler itemHandler = createHandler();
-    private CustomEnergyStorage energyStorage = createEnergy();
+import java.util.Random;
+//TODO no workey, recipies arent going trough or something
+public abstract class AbstractCrusherTile extends LockableTileEntity implements ICrusherTeeth, ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
+    public ItemStackHandler itemHandler = createHandler();
+    public CustomEnergyStorage energyStorage = createEnergy();
     // Never create lazy optionals in getCapability. Always place them as fields in the tile entity:
     private LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 
     private LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
     private static final int[] SLOTS_UP = new int[]{0};
-    private static final int[] SLOTS_DOWN = new int[]{2, 1};
-    private static final int[] SLOTS_HORIZONTAL = new int[]{1};
+    private static final int[] SLOTS_DOWN = new int[]{1,2};
 
-    protected NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
-
+    protected NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
+    private boolean flag = false;
+    private boolean crushing = false;
     private int recipesUsed;
     private int cookTime;
     private int cookTimeTotal;
-    private boolean stuffy;
+    private int crusherMultiplier;
+    /** The current angle of the lid (between 0 and 1) */
+    protected float lidAngle;
+    /** The angle of the lid last tick */
+    protected float prevLidAngle;
+    /** The number of players currently using this chest */
+    protected int numPlayersUsing;
+    private int ticksSinceSync;
+    public CustomEnergyStorage getEnergyStorage(){
+        return energyStorage;
+    }
 
     protected final IIntArray crusherData = new IIntArray() {
         public int get(int index) {
@@ -95,14 +106,17 @@ public abstract class AbstractCrusherTile extends LockableTileEntity implements 
     };
 
     private CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(10000, 0) {
+        return new CustomEnergyStorage(10000, 100, 0) {
             @Override
             protected void onEnergyChanged() {
                 markDirty();
             }
         };
     }
-
+    @OnlyIn(Dist.CLIENT)
+    public float getLidAngle(float partialTicks) {
+        return MathHelper.lerp(partialTicks, this.prevLidAngle, this.lidAngle);
+    }
 
     public ItemStack getIItems(int i)
     {
@@ -151,13 +165,18 @@ public abstract class AbstractCrusherTile extends LockableTileEntity implements 
         return new InvWrapper(this);
     }
 
-    private boolean isBurning() {
-       return true;
+    private boolean isCrushing() {
+       return crushing;
+    }
+
+    private void setCrushing(boolean a) {
+        crushing = a;
     }
 
     @Override
     public void read(CompoundNBT compound) {
         super.read(compound);
+        energyStorage.deserializeNBT(compound.getCompound("energy"));
         this.items = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.items);
         this.cookTime = compound.getInt("CookTime");
@@ -175,6 +194,7 @@ public abstract class AbstractCrusherTile extends LockableTileEntity implements 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
+        compound.put("energy", energyStorage.serializeNBT());
         compound.putInt("CookTime", this.cookTime);
         compound.putInt("CookTimeTotal", this.cookTimeTotal);
         ItemStackHelper.saveAllItems(compound, this.items);
@@ -189,61 +209,91 @@ public abstract class AbstractCrusherTile extends LockableTileEntity implements 
         System.out.println("wrote");
         return compound;
     }
+    protected ItemStack dispenseStack(World world, BlockPos pos, ItemStack stack) {
+        Direction direction = Direction.DOWN;
+        doDispense(world, stack, 0, direction, pos);
+        return stack;
+    }
+
+    public static void doDispense(World worldIn, ItemStack stack, int speed, Direction facing, BlockPos position) {
+        double d0 = position.getX()+0.5;
+        double d1 = position.getY()-0.175D;
+        double d2 = position.getZ()+0.5;
+        if(stack.getItem() == Items.AIR) {
+            ItemEntity itementity = new ItemEntity(worldIn, d0, d1, d2, stack);
+            double d3 = worldIn.rand.nextDouble() * 0.1D + 0.2D;
+            itementity.setMotion(worldIn.rand.nextGaussian() * (double) 0.0075F * (double) speed - 0.3D + (double) facing.getXOffset() * d3, worldIn.rand.nextGaussian() * (double) 0.0075F * (double) speed + (double) 0.2F, worldIn.rand.nextGaussian() * (double) 0.0075F * (double) speed + (double) facing.getZOffset() * d3);
+            worldIn.addEntity(itementity);
+        }
+    }
+    private void playSound(SoundEvent soundIn) {
+        ChestType chesttype = this.getBlockState().get(ChestBlock.TYPE);
+        if (chesttype != ChestType.LEFT) {
+            double d0 = (double)this.pos.getX() + 0.5D;
+            double d1 = (double)this.pos.getY() + 0.5D;
+            double d2 = (double)this.pos.getZ() + 0.5D;
+            if (chesttype == ChestType.RIGHT) {
+                Direction direction = ChestBlock.getDirectionToAttached(this.getBlockState());
+                d0 += (double)direction.getXOffset() * 0.5D;
+                d2 += (double)direction.getZOffset() * 0.5D;
+            }
+
+            this.world.playSound((PlayerEntity)null, d0, d1, d2, soundIn, SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+        }
+    }
+
     @Override
     public void tick() {
-        boolean flag = this.isBurning();
-        boolean flag1 = false;
-        if (this.isBurning()) {
-            this.getEnergyS().consumeEnergy(10);
-        }
-        if (!this.world.isRemote) {
+        if(this.getEnergyStorage().getEnergyStored() > 5) {
+            World worldIn = this.world;
+            if (!this.items.get(1).isEmpty()) {
+                ItemStack stack = getStackInSlot(1).getStack().split(1);
+                dispenseStack(worldIn, pos, stack);
+            }
+            if (!this.items.get(2).isEmpty()) {
+                ItemStack stack1 = getStackInSlot(2).getStack().split(1);
+                dispenseStack(worldIn, pos, stack1);
+            }
 
-            if (this.isBurning() && !this.items.get(0).isEmpty()) {
-                IRecipe<?> irecipe = (this.world.getRecipeManager().getRecipe((IRecipeType<CrushingRecipe>)this.recipeType, this, this.world).orElse(null));
-                if (!this.isBurning() && this.canCrush(irecipe)) {
-                    //this.recipesUsed = this.burnTime;
-                    if (this.isBurning())
-                        flag1 = true;
-                    }
+            ItemStack itemstack333 = this.items.get(3);
+            if (itemstack333.getItem() != Items.AIR) {
+                this.flag = true;
+                this.crusherMultiplier = ((CrusherTeethBase) itemstack333.getItem()).getMultiplier();
+            } else {
+                this.flag = false;
+            }
 
-
-
-                if (/*this.isBurning() &&*/ this.canCrush(irecipe)) {
-                    ++this.cookTime;
-                    if (this.cookTime == this.cookTimeTotal) {
+            if (!this.world.isRemote) {
+                if (!this.items.get(0).isEmpty()) {
+                    IRecipe<?> irecipe = (this.world.getRecipeManager().getRecipe((IRecipeType<CrushingRecipe>) this.recipeType, this, this.world).orElse(null));
+                    //this.canCrush(irecipe);
+                    if (this.getEnergyStorage().getEnergyStored() > 5 && this.canCrush(irecipe)) {
+                        this.getEnergyStorage().consumeEnergy(5);
+                        ++this.cookTime;
+                        if (this.cookTime == this.cookTimeTotal) {
+                            this.cookTime = 0;
+                            this.cookTimeTotal = this.getCookTime();
+                            this.crush(irecipe);
+                        }
+                    } else {
                         this.cookTime = 0;
-                        this.cookTimeTotal = this.getCookTime();
-                        this.crush(irecipe);
-                        flag1 = true;
                     }
-                } else {
-                    this.cookTime = 0;
+                } else if (/*!this.isBurning() &&*/ this.cookTime > 0) {
+                    this.cookTime = MathHelper.clamp(this.cookTime - 2 + (crusherMultiplier - 1), 0, this.cookTimeTotal);
                 }
-            } else if (/*!this.isBurning() &&*/ this.cookTime > 0) {
-                this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, this.cookTimeTotal);
-            }
 
-            if (flag != this.isBurning()) {
-                flag1 = true;
-                //this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(AbstractFurnaceBlock.LIT, this.isBurning()), 3);
             }
-        }
-
-        if(flag1) {
             this.markDirty();
         }
-        this.markDirty();
 
     }
-    public CustomEnergyStorage getEnergyS()
-    {
-        return this.energyStorage;
+
+    public ItemStack whatsadateethtype(){
+        return this.items.get(3);
     }
 
     protected boolean canCrush(@Nullable IRecipe<?> recipe) {
-        System.out.println(recipe);
         CrushingRecipe recipeIn = (CrushingRecipe)recipe;
-        System.out.println(recipeIn);
         if (!this.items.get(0).isEmpty() && recipeIn != null) {
             ItemStack itemstack = recipeIn.getRecipeOutput();
             itemstack.setCount(recipeIn.getCount1());
@@ -252,27 +302,39 @@ public abstract class AbstractCrusherTile extends LockableTileEntity implements 
             ItemStack itemstack2 = this.items.get(2);
             ItemStack itemstack3 = this.items.get(0);
             ItemStack itemstack33 = this.items.get(1);
+            ItemStack itemstack333 = this.items.get(3);
+
+            if (itemstack333.isEmpty()) {
+                setCrushing(false);
+                return false;
+            }
 
             if (itemstack.isEmpty()) {
+                setCrushing(false);
                 return false;
             } else {
                 if (itemstack33.isEmpty()) {
+                    setCrushing(true);
                     return true;
                 } else if (!itemstack33.isItemEqual(itemstack)) {
                     return false;
                 } else if (itemstack33.getCount() + itemstack.getCount() <= this.getInventoryStackLimit() && itemstack33.getCount() + itemstack.getCount() <= itemstack33.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
+                    setCrushing(true);
                     return true;
                 } else {
+                    setCrushing(itemstack33.getCount() + itemstack.getCount() <= itemstack.getMaxStackSize());
                     return itemstack33.getCount() + itemstack.getCount() <= itemstack.getMaxStackSize(); // Forge fix: make furnace respect stack sizes in furnace recipes
                 }
             }
         } else {
+            setCrushing(false);
             return false;
         }
     }
 
     private void crush(@Nullable IRecipe<?> recipep) {
         CrushingRecipe recipe = (CrushingRecipe)recipep;
+
         if (recipe != null && this.canCrush(recipe)) {
 
             boolean flag =false;
@@ -283,6 +345,7 @@ public abstract class AbstractCrusherTile extends LockableTileEntity implements 
             itemstack11.setCount(recipe.getCount11());
             ItemStack itemstack2 = this.items.get(1);
             ItemStack itemstack3 = this.items.get(2);
+            ItemStack itemstack33 = this.items.get(3);
 
             if (itemstack2.isEmpty() || itemstack2.getItem() == Items.AIR) {
                 this.items.set(1, itemstack1.copy());
@@ -302,6 +365,7 @@ public abstract class AbstractCrusherTile extends LockableTileEntity implements 
             if (!this.world.isRemote) {
                 this.setRecipeUsed(recipe);
             }
+            itemstack33.attemptDamageItem(1, new Random(), null);
             itemstack.shrink(1);
         }
     }
@@ -315,11 +379,7 @@ public abstract class AbstractCrusherTile extends LockableTileEntity implements 
 
     @Override
     public int[] getSlotsForFace(Direction side) {
-        if (side == Direction.DOWN) {
-            return SLOTS_DOWN;
-        } else {
-            return side == Direction.UP ? SLOTS_UP : SLOTS_HORIZONTAL;
-        }
+        return SLOTS_DOWN;
     }
 
     /**
@@ -333,14 +393,8 @@ public abstract class AbstractCrusherTile extends LockableTileEntity implements 
     /**
      * Returns true if automation can extract the given item in the given slot from the given side.
      */
-    @Override
-    public boolean canExtractItem(int index, @Nonnull ItemStack stack, Direction direction) {
-        if (direction == Direction.DOWN && index == 1) {
-            Item item = stack.getItem();
-            return item == Items.WATER_BUCKET || item == Items.BUCKET;
-        }
-
-        return true;
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+      return true;
     }
 
     /**
@@ -410,9 +464,7 @@ public abstract class AbstractCrusherTile extends LockableTileEntity implements 
      * Don't rename this method to canInteractWith due to conflicts with Container
      */
     @Override
-    //@OnlyIn(Dist.CLIENT)
     public boolean isUsableByPlayer(PlayerEntity player) {
-        //assert this.world != null;
         if(this.world == null)
         {
             this.world = player.world;
@@ -439,10 +491,12 @@ public abstract class AbstractCrusherTile extends LockableTileEntity implements 
          return false;
         }
     }
+
     @Override
     public void clear() {
         this.items.clear();
     }
+
     @Override
     public void setRecipeUsed(@Nullable IRecipe<?> recipe) {
         if (recipe != null) {
@@ -464,35 +518,13 @@ public abstract class AbstractCrusherTile extends LockableTileEntity implements 
         List<IRecipe<?>> list = Lists.newArrayList();
 
         for(Map.Entry<ResourceLocation, Integer> entry : this.cokeOvenSlotThings.entrySet()) {
-            player.world.getRecipeManager().getRecipe(entry.getKey()).ifPresent((p_213993_3_) -> {
-                list.add(p_213993_3_);
-                spawnExpOrbs(player, entry.getValue(), ((AbstractCokeingRecipe)p_213993_3_).getExperience());
-            });
+            player.world.getRecipeManager().getRecipe(entry.getKey()).ifPresent(list::add);
         }
 
         player.unlockRecipes(list);
         this.cokeOvenSlotThings.clear();
     }
 
-    private static void spawnExpOrbs(PlayerEntity player, int p_214003_1_, float experience) {
-        if (experience == 0.0F) {
-            p_214003_1_ = 0;
-        } else if (experience < 1.0F) {
-            int i = MathHelper.floor((float)p_214003_1_ * experience);
-            if (i < MathHelper.ceil((float)p_214003_1_ * experience) && Math.random() < (double)((float)p_214003_1_ * experience - (float)i)) {
-                ++i;
-            }
-
-            p_214003_1_ = i;
-        }
-
-        while(p_214003_1_ > 0) {
-            int j = ExperienceOrbEntity.getXPSplit(p_214003_1_);
-            p_214003_1_ -= j;
-            player.world.addEntity(new ExperienceOrbEntity(player.world, player.getPosX(), player.getPosY() + 0.5D, player.getPosZ() + 0.5D, j));
-        }
-
-    }
     @Override
     public void fillStackedContents(RecipeItemHelper helper) {
         for(ItemStack itemstack : this.items) {
@@ -512,5 +544,10 @@ public abstract class AbstractCrusherTile extends LockableTileEntity implements 
         super.remove();
         for (int x = 0; x < handlers.length; x++)
             handlers[x].invalidate();
+    }
+
+    public enum Mode{
+        OPEN,
+        CLOSE
     }
 }

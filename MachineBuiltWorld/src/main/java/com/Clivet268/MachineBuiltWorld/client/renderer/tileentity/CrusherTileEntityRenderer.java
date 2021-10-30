@@ -1,135 +1,98 @@
 package com.Clivet268.MachineBuiltWorld.client.renderer.tileentity;
 
-import com.Clivet268.MachineBuiltWorld.blocks.Crusher;
-import com.Clivet268.MachineBuiltWorld.tileentity.ICrusherTeeth;
+import com.Clivet268.MachineBuiltWorld.MachineBuiltWorld;
+import com.Clivet268.MachineBuiltWorld.tileentity.CrusherTile;
+import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.Material;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.client.renderer.tileentity.DualBrightnessCallback;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.state.properties.ChestType;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.IChestLid;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityMerger;
-import net.minecraft.util.Direction;
-import net.minecraft.world.World;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
-import java.util.Calendar;
+@OnlyIn(Dist.CLIENT)
+//TODO fix this idk lol
+    public class CrusherTileEntityRenderer extends TileEntityRenderer<CrusherTile> {
+        public static final Material BELL_BODY_TEXTURE = new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(MachineBuiltWorld.MOD_ID, "entity/tileentity/crusher"));
+        private final  ModelRenderer bone = new ModelRenderer(64,64,0,0);
+        private final ModelRenderer cube_r1= new ModelRenderer(64,64,0,0);;
+        private final ModelRenderer cube_r2= new ModelRenderer(64,64,0,0);;
+        private final ModelRenderer cube_r3= new ModelRenderer(64,64,0,0);;
+        public CrusherTileEntityRenderer(TileEntityRendererDispatcher p_i226005_1_) {
+            super(p_i226005_1_);
+            bone.setRotationPoint(-4.5F, 13.5F, 10.0F);
+            bone.setTextureOffset(0, 0).addBox(-1.5F, -1.5F, -17.0F, 3.0F, 3.0F, 14.0F, 0.0F, false);
+            bone.setTextureOffset(12, 17).addBox(1.5F, -0.75F, -16.0F, 1.0F, 2.0F, 2.0F, 0.0F, false);
+            bone.setTextureOffset(6, 17).addBox(1.5F, -1.0F, -11.0F, 1.0F, 2.0F, 2.0F, 0.0F, false);
+            bone.setTextureOffset(0, 17).addBox(1.5F, -1.25F, -6.0F, 1.0F, 2.0F, 2.0F, 0.0F, false);
 
-public class CrusherTileEntityRenderer {
-    @OnlyIn(Dist.CLIENT)
-    public class ChestTileEntityRenderer<T extends TileEntity & ICrusherTeeth> extends TileEntityRenderer<T> {
-        private final ModelRenderer singleLid;
-        private final ModelRenderer singleBottom;
-        private final ModelRenderer singleLatch;
-        private final ModelRenderer rightLid;
-        private final ModelRenderer rightBottom;
-        private final ModelRenderer rightLatch;
-        private final ModelRenderer leftLid;
-        private final ModelRenderer leftBottom;
-        private final ModelRenderer leftLatch;
-        private boolean isChristmas;
+            cube_r1.setRotationPoint(0.0F, 0.0F, 0.0F);
+            bone.addChild(cube_r1);
+            setRotationAngle(cube_r1, 0.0F, 0.0F, 1.5708F);
+            cube_r1.setTextureOffset(0, 0).addBox(1.5F, -1.25F, -6.0F, 1.0F, 2.0F, 2.0F, 0.0F, false);
+            cube_r1.setTextureOffset(0, 4).addBox(1.5F, -1.0F, -11.0F, 1.0F, 2.0F, 2.0F, 0.0F, false);
+            cube_r1.setTextureOffset(4, 2).addBox(1.5F, -0.75F, -16.0F, 1.0F, 2.0F, 2.0F, 0.0F, false);
 
-        public ChestTileEntityRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
-            super(rendererDispatcherIn);
-            /*Calendar calendar = Calendar.getInstance();
-            if (calendar.get(2) + 1 == 12 && calendar.get(5) >= 24 && calendar.get(5) <= 26) {
-                this.isChristmas = true;
+            cube_r2.setRotationPoint(0.0F, 0.0F, 0.0F);
+            bone.addChild(cube_r2);
+            setRotationAngle(cube_r2, 0.0F, 0.0F, -3.1416F);
+            cube_r2.setTextureOffset(4, 6).addBox(1.5F, -1.25F, -6.0F, 1.0F, 2.0F, 2.0F, 0.0F, false);
+            cube_r2.setTextureOffset(0, 8).addBox(1.5F, -1.0F, -11.0F, 1.0F, 2.0F, 2.0F, 0.0F, false);
+            cube_r2.setTextureOffset(8, 8).addBox(1.5F, -0.75F, -16.0F, 1.0F, 2.0F, 2.0F, 0.0F, false);
+
+            cube_r3.setRotationPoint(0.0F, 0.0F, 0.0F);
+            bone.addChild(cube_r3);
+            setRotationAngle(cube_r3, 0.0F, 0.0F, -1.5708F);
+            cube_r3.setTextureOffset(8, 0).addBox(1.5F, -1.25F, -6.0F, 1.0F, 2.0F, 2.0F, 0.0F, false);
+            cube_r3.setTextureOffset(8, 4).addBox(1.5F, -1.0F, -11.0F, 1.0F, 2.0F, 2.0F, 0.0F, false);
+            cube_r3.setTextureOffset(4, 10).addBox(1.5F, -0.75F, -16.0F, 1.0F, 2.0F, 2.0F, 0.0F, false);
+
+        }
+
+        public void render(CrusherTile tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+            //float f = (float)tileEntityIn.ringingTicks + partialTicks;
+            float f1 = 0.0F;
+            float f2 = 0.0F;
+            /*if (tileEntityIn.isRinging) {
+                float f3 = MathHelper.sin(f / (float)Math.PI) / (4.0F + f / 3.0F);
+                if (tileEntityIn.ringDirection == Direction.NORTH) {
+                    f1 = -f3;
+                } else if (tileEntityIn.ringDirection == Direction.SOUTH) {
+                    f1 = f3;
+                } else if (tileEntityIn.ringDirection == Direction.EAST) {
+                    f2 = -f3;
+                } else if (tileEntityIn.ringDirection == Direction.WEST) {
+                    f2 = f3;
+                }
             }
+
              */
-            this.singleBottom = new ModelRenderer(64, 64, 0, 19);
-            this.singleBottom.addBox(1.0F, 0.0F, 1.0F, 14.0F, 10.0F, 14.0F, 0.0F);
-            this.singleLid = new ModelRenderer(64, 64, 0, 0);
-            this.singleLid.addBox(1.0F, 0.0F, 0.0F, 14.0F, 5.0F, 14.0F, 0.0F);
-            this.singleLid.rotationPointY = 9.0F;
-            this.singleLid.rotationPointZ = 1.0F;
-            this.singleLatch = new ModelRenderer(64, 64, 0, 0);
-            this.singleLatch.addBox(7.0F, -1.0F, 15.0F, 2.0F, 4.0F, 1.0F, 0.0F);
-            this.singleLatch.rotationPointY = 8.0F;
-            this.rightBottom = new ModelRenderer(64, 64, 0, 19);
-            this.rightBottom.addBox(1.0F, 0.0F, 1.0F, 15.0F, 10.0F, 14.0F, 0.0F);
-            this.rightLid = new ModelRenderer(64, 64, 0, 0);
-            this.rightLid.addBox(1.0F, 0.0F, 0.0F, 15.0F, 5.0F, 14.0F, 0.0F);
-            this.rightLid.rotationPointY = 9.0F;
-            this.rightLid.rotationPointZ = 1.0F;
-            this.rightLatch = new ModelRenderer(64, 64, 0, 0);
-            this.rightLatch.addBox(15.0F, -1.0F, 15.0F, 1.0F, 4.0F, 1.0F, 0.0F);
-            this.rightLatch.rotationPointY = 8.0F;
-            this.leftBottom = new ModelRenderer(64, 64, 0, 19);
-            this.leftBottom.addBox(0.0F, 0.0F, 1.0F, 15.0F, 10.0F, 14.0F, 0.0F);
-            this.leftLid = new ModelRenderer(64, 64, 0, 0);
-            this.leftLid.addBox(0.0F, 0.0F, 0.0F, 15.0F, 5.0F, 14.0F, 0.0F);
-            this.leftLid.rotationPointY = 9.0F;
-            this.leftLid.rotationPointZ = 1.0F;
-            this.leftLatch = new ModelRenderer(64, 64, 0, 0);
-            this.leftLatch.addBox(0.0F, -1.0F, 15.0F, 1.0F, 4.0F, 1.0F, 0.0F);
-            this.leftLatch.rotationPointY = 8.0F;
+
+            /*this.onecrush.rotateAngleX = f1;
+            this.onecrush.rotateAngleZ = f2;
+
+             */
+            IVertexBuilder ivertexbuilder = BELL_BODY_TEXTURE.getBuffer(bufferIn, RenderType::getEntitySolid);
+            this.bone.render(matrixStackIn, ivertexbuilder, combinedLightIn, combinedOverlayIn);
+            this.bone.render(matrixStackIn, ivertexbuilder, combinedLightIn, combinedOverlayIn);
         }
-
-        public void render(T tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-            World world = tileEntityIn.getWorld();
-            boolean flag = world != null;
-            BlockState blockstate = flag ? tileEntityIn.getBlockState() : Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.SOUTH);
-            ChestType chesttype = blockstate.has(ChestBlock.TYPE) ? blockstate.get(ChestBlock.TYPE) : ChestType.SINGLE;
-            Block block = blockstate.getBlock();
-            if (block instanceof Crusher) {
-                Crusher abstractchestblock = (Crusher)block;
-                boolean flag1 = chesttype != ChestType.SINGLE;
-                matrixStackIn.push();
-                float f = blockstate.get(ChestBlock.FACING).getHorizontalAngle();
-                matrixStackIn.translate(0.5D, 0.5D, 0.5D);
-                matrixStackIn.rotate(Vector3f.YP.rotationDegrees(-f));
-                matrixStackIn.translate(-0.5D, -0.5D, -0.5D);
-                TileEntityMerger.ICallbackWrapper<? extends ChestTileEntity> icallbackwrapper;
-                if (flag) {
-                    icallbackwrapper = abstractchestblock.func_225536_a_(blockstate, world, tileEntityIn.getPos(), true);
-                } else {
-                    icallbackwrapper = TileEntityMerger.ICallback::func_225537_b_;
-                }
-
-                float f1 = icallbackwrapper.apply(ChestBlock.func_226917_a_((IChestLid)tileEntityIn)).get(partialTicks);
-                f1 = 1.0F - f1;
-                f1 = 1.0F - f1 * f1 * f1;
-                int i = icallbackwrapper.apply(new DualBrightnessCallback<>()).applyAsInt(combinedLightIn);
-                Material material = this.getMaterial(tileEntityIn, chesttype);
-                IVertexBuilder ivertexbuilder = material.getBuffer(bufferIn, RenderType::getEntityCutout);
-                if (flag1) {
-                    if (chesttype == ChestType.LEFT) {
-                        this.renderModels(matrixStackIn, ivertexbuilder, this.leftLid, this.leftLatch, this.leftBottom, f1, i, combinedOverlayIn);
-                    } else {
-                        this.renderModels(matrixStackIn, ivertexbuilder, this.rightLid, this.rightLatch, this.rightBottom, f1, i, combinedOverlayIn);
-                    }
-                } else {
-                    this.renderModels(matrixStackIn, ivertexbuilder, this.singleLid, this.singleLatch, this.singleBottom, f1, i, combinedOverlayIn);
-                }
-
-                matrixStackIn.pop();
-            }
-        }
-
-        private void renderModels(MatrixStack matrixStackIn, IVertexBuilder bufferIn, ModelRenderer chestLid, ModelRenderer chestLatch, ModelRenderer chestBottom, float lidAngle, int combinedLightIn, int combinedOverlayIn) {
-            chestLid.rotateAngleX = -(lidAngle * ((float)Math.PI / 2F));
-            chestLatch.rotateAngleX = chestLid.rotateAngleX;
-            chestLid.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
-            chestLatch.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
-            chestBottom.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
-        }
-
-        protected Material getMaterial(T tileEntity, ChestType chestType) {
-            return Atlases.getChestMaterial(tileEntity, chestType, this.isChristmas);
-        }
+    public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+        modelRenderer.rotateAngleX = x;
+        modelRenderer.rotateAngleY = y;
+        modelRenderer.rotateAngleZ = z;
     }
-
+    public static void register() {
+        ClientRegistry.bindTileEntityRenderer(RegistryHandler.CRUSHER_TILE.get(), CrusherTileEntityRenderer::new);
+    }
 }
+
+
+
+

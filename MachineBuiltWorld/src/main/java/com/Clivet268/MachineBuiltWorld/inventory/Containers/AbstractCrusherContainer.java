@@ -1,7 +1,10 @@
 package com.Clivet268.MachineBuiltWorld.inventory.Containers;
 
-import com.Clivet268.MachineBuiltWorld.inventory.crafting.*;
-import com.Clivet268.MachineBuiltWorld.tileentity.AbstractCrusherTile;
+import com.Clivet268.MachineBuiltWorld.inventory.crafting.AbstractCrushingRecipe;
+import com.Clivet268.MachineBuiltWorld.inventory.crafting.CrushingRecipe;
+import com.Clivet268.MachineBuiltWorld.inventory.crafting.ServerPlacerCokeOven;
+import com.Clivet268.MachineBuiltWorld.inventory.slots.CrusherTeethSlot;
+import com.Clivet268.MachineBuiltWorld.inventory.slots.ResultSlot;
 import com.Clivet268.MachineBuiltWorld.tileentity.CrusherTile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -35,9 +38,10 @@ public abstract class AbstractCrusherContainer extends RecipeBookContainer<IInve
     private IItemHandler playerInventory;
     public CrusherTile tileEntity;
 
+
     private final IRecipeType<? extends AbstractCrushingRecipe> recipeType;
     public AbstractCrusherContainer(ContainerType<?> containerTypeIn, World wworld, IRecipeType<? extends AbstractCrushingRecipe> recipeTypeIn, int id, PlayerInventory playerInventoryIn, BlockPos pos) {
-        this(containerTypeIn, wworld, recipeTypeIn, id, playerInventoryIn, new Inventory(3), new IntArray(5),pos);
+        this(containerTypeIn, wworld, recipeTypeIn, id, playerInventoryIn, new Inventory(4), new IntArray(5),pos);
     }
 
     protected AbstractCrusherContainer(ContainerType<?> containerTypeIn, World wworld, IRecipeType<? extends AbstractCrushingRecipe> recipeTypeIn, int id, PlayerInventory playerInventoryIn, IInventory furnaceInventoryIn, IIntArray furnaceDataIn, BlockPos pos) {
@@ -46,15 +50,16 @@ public abstract class AbstractCrusherContainer extends RecipeBookContainer<IInve
         this.tileEntity = (CrusherTile) wworld.getTileEntity(pos);
         this.playerInventory = new InvWrapper(playerInventoryIn);
         this.recipeType = recipeTypeIn;
-        assertInventorySize(furnaceInventoryIn, 3);
+        assertInventorySize(furnaceInventoryIn, 4);
         System.out.println(furnaceDataIn.size());
         assertIntArraySize(furnaceDataIn, 3);
         this.furnaceInventory = furnaceInventoryIn;
         this.furnaceData = furnaceDataIn;
         if (tileEntity != null) {
             addSlot(new Slot(this.tileEntity, 0, 56, 17));
-            addSlot(new CrusherResultSlot(playerInventoryIn.player, this.tileEntity,  1, 116, 19));
-            addSlot(new CrusherResultSlot(playerInventoryIn.player, this.tileEntity,  2, 116, 51));
+            addSlot(new ResultSlot(this.tileEntity, playerInventoryIn.player,  1, 116, 19));
+            addSlot(new ResultSlot(this.tileEntity, playerInventoryIn.player,  2, 116, 51));
+            addSlot(new CrusherTeethSlot(this.tileEntity, 3, 36, 36));
 
         }
         layoutPlayerInventorySlots(8,84);
@@ -80,7 +85,7 @@ public abstract class AbstractCrusherContainer extends RecipeBookContainer<IInve
     }
     @Override
     public int getOutputSlot() {
-        return 3;
+        return 1;
     }
     @Override
     public int getWidth() {
@@ -93,7 +98,7 @@ public abstract class AbstractCrusherContainer extends RecipeBookContainer<IInve
 
     @OnlyIn(Dist.CLIENT)
     public int getSize() {
-        return 3;
+        return 4;
     }
 
     /**
@@ -120,6 +125,12 @@ public abstract class AbstractCrusherContainer extends RecipeBookContainer<IInve
                 slot.onSlotChange(itemstack1, itemstack);
             }
             else if (index == 2) {
+                if (!this.mergeItemStack(itemstack1, 4, 39, true)) {
+                    return ItemStack.EMPTY;
+                }
+                slot.onSlotChange(itemstack1, itemstack);
+            }
+            else if (index == 3) {
                 if (!this.mergeItemStack(itemstack1, 4, 39, true)) {
                     return ItemStack.EMPTY;
                 }
