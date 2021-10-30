@@ -13,6 +13,7 @@ import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
 
+//TODO no voxel shape? but i still want it to protect from blasts? idk how it works
 public class SteelPanel extends DirectionalBlock {
     public SteelPanel() {
 
