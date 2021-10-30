@@ -1,13 +1,8 @@
 package com.Clivet268.MachineBuiltWorld.util.packets;
 
-import com.Clivet268.MachineBuiltWorld.MachineBuiltWorld;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;

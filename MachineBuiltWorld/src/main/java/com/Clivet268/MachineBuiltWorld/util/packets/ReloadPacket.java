@@ -1,9 +1,6 @@
 package com.Clivet268.MachineBuiltWorld.util.packets;
 
-import com.Clivet268.MachineBuiltWorld.MachineBuiltWorld;
 import com.Clivet268.MachineBuiltWorld.items.IReloadable;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;

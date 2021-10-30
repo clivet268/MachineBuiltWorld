@@ -1,25 +1,30 @@
 package com.Clivet268.MachineBuiltWorld;
 
 
-import com.Clivet268.MachineBuiltWorld.client.ClientProxy;
-import com.Clivet268.MachineBuiltWorld.client.renderer.GearFactory;
-import com.Clivet268.MachineBuiltWorld.client.renderer.LaserRenderFactory;
-import com.Clivet268.MachineBuiltWorld.client.renderer.SprocketeerRenderFactory;
 import com.Clivet268.MachineBuiltWorld.client.gui.*;
+import com.Clivet268.MachineBuiltWorld.client.particle.SprocketeerCreationParticle;
+import com.Clivet268.MachineBuiltWorld.client.renderer.entity.GearFactory;
+import com.Clivet268.MachineBuiltWorld.client.renderer.entity.LaserRenderFactory;
+import com.Clivet268.MachineBuiltWorld.client.renderer.entity.SprocketeerRenderFactory;
+import com.Clivet268.MachineBuiltWorld.client.renderer.tileentity.CrusherTileEntityRenderer;
 import com.Clivet268.MachineBuiltWorld.util.KeyHandler;
 import com.Clivet268.MachineBuiltWorld.util.LootHandler;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import com.Clivet268.MachineBuiltWorld.util.packets.PacketHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -30,11 +35,9 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.function.Supplier;
-
 //import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.CRUSHER_RECIPE;
 
-
+//TODO all tile entities are a bit inefficient so yea
 @Mod("machinebuiltworld")
 @Mod.EventBusSubscriber(modid = MachineBuiltWorld.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MachineBuiltWorld
@@ -51,11 +54,6 @@ public class MachineBuiltWorld
             NETWORK_PROTOCOL_VERSION::equals
     );
 
-    @OnlyIn(Dist.CLIENT)
-    public static Supplier<ClientProxy> getClientProxy() {
-        //NOTE: This extra method is needed to avoid classloading issues on servers
-        return ClientProxy::new;
-    }
 
     private void registerRecipeSerializers (RegistryEvent.Register<IRecipeSerializer<?>> event) {
 
@@ -80,22 +78,23 @@ public class MachineBuiltWorld
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
-            ScreenManager.registerFactory(RegistryHandler.TTTBATTERY_CONTAINER.get(), TTTBatteryScreen::new);
-            ScreenManager.registerFactory(RegistryHandler.TTBATTERY_CONTAINER.get(), TTBatteryScreen::new);
-            ScreenManager.registerFactory(RegistryHandler.TBATTERY_CONTAINER.get(), TBatteryScreen::new);
-            ScreenManager.registerFactory(RegistryHandler.BATTERY_POT_CONTAINER.get(), BatteryPotScreen::new);
-            ScreenManager.registerFactory(RegistryHandler.MIXER_CONTAINER.get(), MixerScreen::new);
-            ScreenManager.registerFactory(RegistryHandler.ATOMIZER_CONTAINER.get(), AtomizerScreen::new);
-            ScreenManager.registerFactory(RegistryHandler.GENERATOR_CONTAINER.get(),  GeneratorScreen::new);
-            ScreenManager.registerFactory(RegistryHandler.CRUSHER_CONTAINER.get(), CrusherScreen::new);
-            ScreenManager.registerFactory(RegistryHandler.INTENSIVE_HEATING_OVEN_CONTAINER.get(), IntensiveHeatingOvenScreen::new);
-            ScreenManager.registerFactory(RegistryHandler.MELTING_POT_CONTAINER.get(), MeltingPotScreen::new);
-            ScreenManager.registerFactory(RegistryHandler.SPROCKETEERER_CONTAINER.get(), SprocketeererScreen::new);
-            ScreenManager.registerFactory(RegistryHandler.MILL_CONTAINER.get(), MillScreen::new);
-            RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.LASER_ENTITY.get(), LaserRenderFactory.instance);
-            RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.SPROCKETEER.get(), SprocketeerRenderFactory.instance);
-            RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.GEAR_ENTITY.get(), GearFactory.instance);
-        }
+        ScreenManager.registerFactory(RegistryHandler.TTTBATTERY_CONTAINER.get(), TTTBatteryScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.TTBATTERY_CONTAINER.get(), TTBatteryScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.TBATTERY_CONTAINER.get(), TBatteryScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.BATTERY_POT_CONTAINER.get(), BatteryPotScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.MIXER_CONTAINER.get(), MixerScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.ATOMIZER_CONTAINER.get(), AtomizerScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.GENERATOR_CONTAINER.get(),  GeneratorScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.CRUSHER_CONTAINER.get(), CrusherScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.INTENSIVE_HEATING_OVEN_CONTAINER.get(), IntensiveHeatingOvenScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.MELTING_POT_CONTAINER.get(), MeltingPotScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.SPROCKETEERER_CONTAINER.get(), SprocketeererScreen::new);
+        ScreenManager.registerFactory(RegistryHandler.MILL_CONTAINER.get(), MillScreen::new);
+        RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.LASER_ENTITY.get(), LaserRenderFactory.instance);
+        RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.SPROCKETEER.get(), SprocketeerRenderFactory.instance);
+        RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.GEAR_ENTITY.get(), GearFactory.instance);
+        CrusherTileEntityRenderer.register();
+    }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
@@ -104,22 +103,31 @@ public class MachineBuiltWorld
         RenderTypeLookup.setRenderLayer(RegistryHandler.ATOMIZER.get(), RenderType.getTranslucent());
         MinecraftForge.EVENT_BUS.register(new KeyHandler());
         MinecraftForge.EVENT_BUS.register(new LootHandler());
-        //DeferredWorkQueue.runLater(MachineBuiltWorld::onDimensionRegistry(e));
+         //DeferredWorkQueue.runLater(MachineBuiltWorld::onDimensionRegistry(e));
     }
 
     public static ResourceLocation locate(String path) {
         return new ResourceLocation(MachineBuiltWorld.MOD_ID, path);
     }
 
-
-
-
-/*
     @SubscribeEvent
-    public static void onDimensionRegistry(RegisterDimensionsEvent event) {
-        ModDimensions.DIMENSION_TYPE = DimensionManager.registerOrGetDimension(ModDimensions.DIMENSION_ID, RegistryHandler.THE_MACHINE_BUILT_WORLD.get(), null, true);
+    public static void onTextureStitch(TextureStitchEvent.Pre event) {
+        if (!event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
+            return;
+        }
+
     }
 
- */
+    @SubscribeEvent
+    public static void onRegisterBiomes(final RegistryEvent.Register<Biome> event) {
+        RegistryHandler.registerBiomes();
+    }
 
+
+    @SubscribeEvent
+    public static void registerFactories(ParticleFactoryRegisterEvent evt) {
+        Minecraft.getInstance().particles.registerFactory(
+                RegistryHandler.SPROCKETEER_CREATION_PARTICLE.get(), SprocketeerCreationParticle.Factory::new);
+    }
 }
+
