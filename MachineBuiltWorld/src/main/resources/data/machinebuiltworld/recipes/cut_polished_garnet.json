@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "machinebuiltworld:cut_garnet"
+    },
+    {
+      "item": "machinebuiltworld:sandpaper"
+    }
+  ],
+  "result": {
+    "item": "machinebuiltworld:cut_polished_garnet"
+  }
+}

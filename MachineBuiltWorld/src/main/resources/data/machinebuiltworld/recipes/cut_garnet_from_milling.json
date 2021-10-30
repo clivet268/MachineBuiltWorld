@@ -1,0 +1,9 @@
+{
+  "type": "machinebuiltworld:milling",
+  "ingredient": {
+    "item": "machinebuiltworld:large_uncut_garnet"
+  },
+  "result": "machinebuiltworld:cut_garnet",
+  "experience": 1.25,
+  "cookingtime": 750
+}
