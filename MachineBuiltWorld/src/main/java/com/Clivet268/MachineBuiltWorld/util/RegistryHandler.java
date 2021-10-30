@@ -6,7 +6,6 @@ import com.Clivet268.MachineBuiltWorld.fluids.ResinFluid;
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.*;
 import com.Clivet268.MachineBuiltWorld.inventory.crafting.*;
 import com.Clivet268.MachineBuiltWorld.items.*;
-import com.Clivet268.MachineBuiltWorld.items.armor.ModArmorMaterial;
 import com.Clivet268.MachineBuiltWorld.items.tools.CraftingToolsItem;
 import com.Clivet268.MachineBuiltWorld.items.tools.ModItemTier;
 import com.Clivet268.MachineBuiltWorld.items.tools.MultimeterItem;
@@ -23,9 +22,11 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.*;
+import net.minecraft.item.BucketItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.item.WallOrFloorItem;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.ParticleType;
@@ -44,9 +45,11 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.surfacebuilders.*;
+import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
+import net.minecraft.world.gen.surfacebuilders.ISurfaceBuilderConfig;
+import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
+import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
@@ -447,6 +450,8 @@ public class RegistryHandler {
             TILES.register("mill", () -> TileEntityType.Builder.create(MillTile::new, MILL.get()).build(null));
     public static final RegistryObject<TileEntityType<PressurizedGasContainerTile>> PRESSURIZED_GAS_CONTAINER_TILE =
             TILES.register("pressurized_gas_container", () -> TileEntityType.Builder.create(PressurizedGasContainerTile::new, PRESSURIZED_GAS_CONTAINER.get()).build(null));
+    public static final RegistryObject<TileEntityType<DisassociatedAtomContainerTile>> DISASSOCIATED_ATOM_CONTAINER_TILE =
+            TILES.register("disassaciated_atom_container", () -> TileEntityType.Builder.create(DisassociatedAtomContainerTile::new, PRESSURIZED_GAS_CONTAINER.get()).build(null));
 
 
     //Containers
