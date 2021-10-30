@@ -1,0 +1,15 @@
+{
+  "type": "machinebuiltworld:mixing",
+  "ingredients": {
+    "item": "machinebuiltworld:resin_bucket"
+  },
+  "ingredients1": {
+    "item": "machinebuiltworld:polyurethane_bucket"
+  },
+  "result": "machinebuiltworld:resin_bucket",
+  "cookingtime": 600,
+  "count": 1,
+  "count1": 1,
+  "count2": 1,
+  "improve": true
+}

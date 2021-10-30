@@ -1,0 +1,15 @@
+{
+  "type": "machinebuiltworld:mixing",
+  "ingredients": {
+    "item": "minecraft:water_bucket"
+  },
+  "ingredients1": {
+    "item": "minecraft:sand"
+  },
+  "result": "minecraft:dirt",
+  "cookingtime": 600,
+  "count": 1,
+  "count1": 1,
+  "count2": 1,
+  "improve": false
+}
