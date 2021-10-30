@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=north": { "model": "machinebuiltworld:block/pressurized_gas_container_north" },
+    "facing=west": { "model": "machinebuiltworld:block/pressurized_gas_container_west" },
+    "facing=south": { "model": "machinebuiltworld:block/pressurized_gas_container_south" },
+    "facing=east": { "model": "machinebuiltworld:block/pressurized_gas_container_east" },
+    "facing=up": { "model": "machinebuiltworld:block/pressurized_gas_container_up" },
+    "facing=down": { "model": "machinebuiltworld:block/pressurized_gas_container_down" }
+  }
+}
