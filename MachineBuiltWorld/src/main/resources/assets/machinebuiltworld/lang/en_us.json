@@ -79,5 +79,13 @@
   "death.attack.gear": "Got Geared",
   "death.attack.laser": "Got Lasered",
   "death.attack.bullet": "Got Smoked",
-  "death.attack.cannon_ball": "Was On The Wrong End Of A Hunk Of Iron"
+  "death.attack.cannon_ball": "Was On The Wrong End Of A Hunk Of Iron",
+  "item.machinebuiltworld.steel_grip": "Steel Grip",
+  "item.machinebuiltworld.glass_dagger_blade": "Glass Dagger Blade",
+  "item.machinebuiltworld.strengthened_glass_dagger_blade": "Strengthened Glass Dagger Blade",
+  "item.machinebuiltworld.glass_dagger": "Glass Dagger",
+  "item.machinebuiltworld.strengthened_glass_dagger": "Strengthened Glass Dagger",
+  "item.machinebuiltworld.pistol_body": "Pistol Body"
+
+
 }
