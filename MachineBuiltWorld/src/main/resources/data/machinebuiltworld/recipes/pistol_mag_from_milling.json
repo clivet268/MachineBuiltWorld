@@ -1,0 +1,9 @@
+{
+  "type": "machinebuiltworld:milling",
+  "ingredient": {
+    "tag": "forge:ingots/steel"
+  },
+  "result": "machinebuiltworld:pistol_mag",
+  "experience": 0.65,
+  "cookingtime": 300
+}
