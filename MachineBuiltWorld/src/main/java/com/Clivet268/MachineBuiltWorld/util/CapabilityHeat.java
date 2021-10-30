@@ -30,7 +30,7 @@ public class CapabilityHeat {
                             ((HeatStorage)instance).heat = ((IntNBT)nbt).getInt();
                         }
                     },
-                    () -> new HeatStorage(1000));
+                    () -> new HeatStorage(1000, 100,100,100,100));
         }
     }
 

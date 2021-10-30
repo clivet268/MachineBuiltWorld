@@ -44,8 +44,6 @@ public interface IHeatStorage {
         int getMaxHeatStored();
 
 
-        int getRedHeatStored();
-
         /**
          * Returns if this storage can have heat extracted.
          * If this is false, then any calls to extractHeat will return 0.

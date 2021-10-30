@@ -2,33 +2,21 @@ package com.Clivet268.MachineBuiltWorld.util;
 
 
 public class HeatStorage implements IHeatStorage {
-        protected int heat;
-        protected int redCapacity;
-        protected int capacity;
-        protected int maxReceive;
-        protected int maxExtract;
+    public int heat;
+    public int capacity;
+    public int maxReceive;
+    public int maxTransfer;
+    public int macsGen;
+    public int macpasdis;
 
-        public HeatStorage(int capacity)
-        {
-            this(capacity, capacity, capacity, 0);
-        }
-
-        public HeatStorage(int capacity, int maxTransfer)
-        {
-            this(capacity, maxTransfer, maxTransfer, 0);
-        }
-
-        public HeatStorage(int capacity, int maxReceive, int maxExtract)
-        {
-            this(capacity, maxReceive, maxExtract, 0);
-        }
-
-        public HeatStorage(int capacity, int maxReceive, int maxExtract, int heat)
+        public HeatStorage(int capacity, int maxTransferr,int maxReceivee , int maxGen, int maxPasDis)
         {
             this.capacity = capacity;
-            this.maxReceive = maxReceive;
-            this.maxExtract = maxExtract;
-            this.heat = Math.max(0 , Math.min(capacity, heat));
+            this.maxReceive = maxReceivee;
+            this.maxTransfer = maxTransferr;
+            this.macpasdis = maxPasDis;
+            this.macsGen = maxGen;
+            this.heat = 0;
         }
 
         @Override
@@ -49,7 +37,7 @@ public class HeatStorage implements IHeatStorage {
             if (!canExtract())
                 return 0;
 
-            int heatExtracted = Math.min(heat, Math.min(this.maxExtract, maxExtract));
+            int heatExtracted = Math.min(heat, Math.min(this.maxTransfer, maxExtract));
             if (!simulate)
                 heat -= heatExtracted;
             return heatExtracted;
@@ -67,15 +55,12 @@ public class HeatStorage implements IHeatStorage {
             return capacity;
         }
 
-    @Override
-    public int getRedHeatStored() {
-        return redCapacity;
-    }
+
 
     @Override
         public boolean canExtract()
         {
-            return this.maxExtract > 0;
+            return this.maxTransfer > 0;
         }
 
         @Override
