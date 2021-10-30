@@ -2,16 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "pattern":
   [
-    " x ",
-    " y ",
-    " x "
+    "y",
+    "y",
+    "y"
   ],
   "key":
   {
-    "x":
-    {
-      "item": "machinebuiltworld:iron_rod"
-    },
     "y":
     {
       "item": "minecraft:iron_ingot"
