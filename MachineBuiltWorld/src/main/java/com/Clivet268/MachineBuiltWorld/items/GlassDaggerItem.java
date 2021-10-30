@@ -26,15 +26,15 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.data.IDynamicBakedModel;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
-
+//TODO balance
 public class GlassDaggerItem extends ShootableItem implements IReloadable{
     private final float attackDamage;
     private final float attackSpeed;
+
     public GlassDaggerItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
         super(builder);
         this.attackSpeed = attackSpeedIn;

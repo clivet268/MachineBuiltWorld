@@ -1,0 +1,14 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "machinebuiltworld:items/strengthened_glass_dagger_e"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "machinebuiltworld:ammo": 0.1
+      },
+      "model": "machinebuiltworld:item/strengthened_glass_dagger_1"
+    }
+  ]
+}
