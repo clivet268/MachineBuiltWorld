@@ -1,0 +1,12 @@
+{
+  "type": "machinebuiltworld:crushing",
+  "ingredient": {
+    "item": "minecraft:boron_ore"
+  },
+  "result": "machinebuiltworld:boron_dust",
+  "result1": "minecraft:air",
+  "experience": 0.65,
+  "cookingtime": 300,
+  "count": 3,
+  "chance": 0.5
+}
