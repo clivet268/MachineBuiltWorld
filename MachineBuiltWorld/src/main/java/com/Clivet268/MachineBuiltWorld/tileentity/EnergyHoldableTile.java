@@ -1,7 +1,6 @@
 package com.Clivet268.MachineBuiltWorld.tileentity;
 
 import com.Clivet268.MachineBuiltWorld.util.CustomEnergyStorage;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -19,16 +18,16 @@ public abstract class EnergyHoldableTile extends TileEntity {
     // Never create lazy optionals in getCapability. Always place them as fields in the tile entity:
 
     private LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
-    public EnergyHoldableTile(TileEntityType<?> tileTypeIn, int i, int ie, int tra)
+    public EnergyHoldableTile(TileEntityType<?> tileTypeIn, int i, int reciv, int tra)
     {
         super(tileTypeIn);
-        energyStorage = createEnergy(i, ie, tra);
+        this.energyStorage = createEnergy(i, reciv, tra);
 
     }
 
     public void tick()
     {
-        /*rip fish the cat on -----'s server*/
+        /*rip fish the cat on adina's server*/
         sendEnergy();
         this.markDirty();
 

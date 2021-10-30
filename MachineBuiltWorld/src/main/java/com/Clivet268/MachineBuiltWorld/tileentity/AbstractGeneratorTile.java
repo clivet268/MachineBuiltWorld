@@ -1,46 +1,48 @@
 package com.Clivet268.MachineBuiltWorld.tileentity;
 
-import net.minecraft.block.AbstractFurnaceBlock;
+import com.Clivet268.MachineBuiltWorld.util.CustomEnergyStorage;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collections;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.Clivet268.MachineBuiltWorld.Config.TBATTERY_MAXPOWER;
-import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.GENERATOR_TILE;
+import static com.Clivet268.MachineBuiltWorld.blocks.Generator.FACING;
 
 /**
  * Add Configs sometime
+ *
  */
-public abstract class AbstractGeneratorTile extends EnergyHoldableTile implements IInventory {
+public abstract class AbstractGeneratorTile extends TileEntity implements ISidedInventory, ITickableTileEntity {
     private int burnTime;
+    private CustomEnergyStorage energyStorage = createEnergy();
     private ItemStackHandler itemHandler = createHandler();
     // Never create lazy optionals in getCapability. Always place them as fields in the tile entity:
+
+    private LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
     private LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
-    protected NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
+    protected NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
     public AbstractGeneratorTile(TileEntityType<?> tileTypeIn)
     {
-        super(tileTypeIn, TBATTERY_MAXPOWER.get(), 100 ,10);
+        super(tileTypeIn);
     }
     @Override
     public void tick()
@@ -49,18 +51,20 @@ public abstract class AbstractGeneratorTile extends EnergyHoldableTile implement
         boolean flag1 = false;
         if (this.isBurning()) {
             --this.burnTime;
+            /*rip fish the cat on -----'s server*/
             this.generate();
         }
         if (!this.world.isRemote) {
             ItemStack itemstack = this.items.get(0);
-            if (this.isBurning() || !itemstack.isEmpty()) {
-                    this.burnTime = this.getBurnTime(itemstack);
-                    if (this.isBurning()) {
+            if (!itemstack.isEmpty()) {
+                    if (!this.isBurning()) {
                         flag1 = true;
-                        if (itemstack.hasContainerItem())
+                        if (itemstack.hasContainerItem()) {
                             this.items.set(0, itemstack.getContainerItem());
+                            this.burnTime = this.getBurnTime(itemstack);
+                        }
                         else if (!itemstack.isEmpty()) {
-                            Item items = itemstack.getItem();
+                            this.burnTime = this.getBurnTime(itemstack);
                             itemstack.shrink(1);
                             if (itemstack.isEmpty()) {
                                 this.items.set(0, itemstack.getContainerItem());
@@ -72,32 +76,47 @@ public abstract class AbstractGeneratorTile extends EnergyHoldableTile implement
         if (flag != this.isBurning()) {
             flag1 = true;
         }
-        if(flag1) {
+            sendEnergy();
             this.markDirty();
-        }
+
+    }
+
+
+    public int getEnergy() {
+        return energyStorage.getEnergyStored();
     }
     private boolean isBurning() {
         return this.burnTime > 0;
     }
 
     public void generate(){
-        this.getEnergyS().addEnergy(10);
+        this.energyStorage.addEnergy(10);
     }
 
     protected int getBurnTime(ItemStack fuel) {
         if (fuel.isEmpty()) {
             return 0;
         } else {
-            return ForgeHooks.getBurnTime(fuel)/3;
+            return ForgeHooks.getBurnTime(fuel);
         }
     }
+
+    private CustomEnergyStorage createEnergy() {
+        return new CustomEnergyStorage(10000, 0, 100) {
+            @Override
+            protected void onEnergyChanged() {
+                markDirty();
+            }
+        };
+    }
+
     @Override
     public void read(CompoundNBT tag) {
         super.read(tag);
         this.items = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(tag, this.items);
         this.burnTime = tag.getInt("BurnTime");
-        this.getEnergyS().deserializeNBT(tag.getCompound("energy"));
+        this.energyStorage.deserializeNBT(tag.getCompound("Energy"));
     }
 
     @Override
@@ -105,7 +124,7 @@ public abstract class AbstractGeneratorTile extends EnergyHoldableTile implement
         super.write(tag);
         ItemStackHelper.saveAllItems(tag, this.items);
         tag.putInt("BurnTime", this.burnTime);
-        tag.put("energy", this.getEnergyS().serializeNBT());
+        tag.put("Energy", this.energyStorage.serializeNBT());
 
         System.out.println("wrote");
         return tag;
@@ -189,12 +208,70 @@ public abstract class AbstractGeneratorTile extends EnergyHoldableTile implement
         this.items.clear();
     }
 
-    @Nonnull
+    LazyOptional<? extends IItemHandler>[] handlers =
+            SidedInvWrapper.create(this, Direction.UP, Direction.DOWN);
+
+
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return handler.cast();
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        if (!this.removed && facing != null && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            if (facing == Direction.UP) {
+                return handlers[0].cast();
+            }
+            else if (facing == Direction.DOWN)
+                return handlers[1].cast();
         }
-        return super.getCapability(cap, side);
+        if(!this.removed && facing != null && capability == CapabilityEnergy.ENERGY)
+        {
+            return LazyOptional.of(() -> energyStorage).cast();
+        }
+        return super.getCapability(capability, facing);
     }
+
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        return new int[0];
+    }
+
+    @Override
+    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+        return direction== Direction.UP;
+    }
+
+    @Override
+    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+        return direction == Direction.DOWN;
+    }
+
+
+    private void sendEnergy()
+    {
+        this.energy.ifPresent(energy ->
+        {
+            AtomicInteger capacity = new AtomicInteger(energy.getEnergyStored());
+
+            for(int i = 0; (i < Direction.values().length) && (capacity.get() > 0); i++)
+            {
+                Direction facing = Direction.values()[i];
+                if(facing == this.world.getBlockState(this.pos).get(FACING))
+                {
+                    TileEntity tileEntity = world.getTileEntity(pos.offset(facing));
+                    if(tileEntity != null)
+                    {
+                        tileEntity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).ifPresent(handler ->
+                        {
+                            if(handler.canReceive())
+                            {
+                                int received = handler.receiveEnergy(Math.min(capacity.get(), this.energyStorage.maxTransfer), false);
+                                capacity.addAndGet(-received);
+                                (this.energyStorage).consumeEnergy(received);
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+
 }
