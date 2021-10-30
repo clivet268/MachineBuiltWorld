@@ -2,9 +2,7 @@ package com.Clivet268.MachineBuiltWorld.client.gui;
 
 
 import com.Clivet268.MachineBuiltWorld.MachineBuiltWorld;
-import com.Clivet268.MachineBuiltWorld.inventory.Containers.AbstractIntensiveHeatingOvenContainer;
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.AbstractMeltingPotContainer;
-import com.Clivet268.MachineBuiltWorld.inventory.Containers.IntensiveHeatingOvenContainer;
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.MeltingPotContainer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;

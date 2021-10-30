@@ -11,6 +11,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+
 public abstract class AbstractCrushingRecipe implements IRecipe<IInventory> {
         protected final IRecipeType<?> type;
         protected final ResourceLocation id;
@@ -57,6 +59,7 @@ public abstract class AbstractCrushingRecipe implements IRecipe<IInventory> {
         public boolean canFit(int width, int height) {
             return true;
         }
+         @Nonnull
          @Override
         public NonNullList<Ingredient> getIngredients() {
             NonNullList<Ingredient> nonnulllist = NonNullList.create();

@@ -1,6 +1,6 @@
-package com.Clivet268.MachineBuiltWorld.inventory.crafting;
+package com.Clivet268.MachineBuiltWorld.inventory.slots;
 
-import com.Clivet268.MachineBuiltWorld.items.IHeatInfuseable;
+
 import com.Clivet268.MachineBuiltWorld.tileentity.IntensiveHeatingOvenTile;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -8,7 +8,7 @@ import net.minecraft.item.Items;
 
 import javax.annotation.Nonnull;
 
-public class CokeOvenInfuseSlot extends Slot implements IHeatInfuseable {
+public class CokeOvenInfuseSlot extends Slot {
 
     public CokeOvenInfuseSlot(IntensiveHeatingOvenTile intensiveHeatingOvenTile1, int index, int x, int y) {
         super(intensiveHeatingOvenTile1, index, x, y);
@@ -19,7 +19,7 @@ public class CokeOvenInfuseSlot extends Slot implements IHeatInfuseable {
      */
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return canDoSomeInfusin(stack.getItem());
+        return true;
     }
 
     public int getItemStackLimit(@Nonnull ItemStack stack) {

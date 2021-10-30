@@ -7,21 +7,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.IBooleanFunction;
@@ -36,7 +31,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
 
@@ -85,36 +79,7 @@ public class Mixer extends Block {
 
     @Override
     public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
-        if (state.get(PROPERTY_MIXER_WORK) > 0) {
-            if(state.get(PROPERTY_MIXER_WORK) == 1) {
-                world.setBlockState(pos, state.with(PROPERTY_MIXER_WORK, Integer.valueOf(2)), 3);
-            }
-            else if(state.get(PROPERTY_MIXER_WORK) == 2) {
-                world.setBlockState(pos, state.with(PROPERTY_MIXER_WORK, Integer.valueOf(1)), 3);
-            }
-            if(TTC > 0) {
-                TTC--;
-                world.playSound(pos.getX(),pos.getY(),pos.getZ(), SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.BLOCKS,10000, 1 ,true);
-            }
-            else if(TTC == 0){
-                world.playSound(pos.getX(),pos.getY(),pos.getZ(), SoundEvents.ENTITY_ENDERMAN_DEATH, SoundCategory.BLOCKS,10000, 1 ,true);
-                world.setBlockState(pos, state.with(PROPERTY_MIXER_WORK, Integer.valueOf(0)), 3);
-                TTC = -1;
-            }
-        }
 
-
-    }
-
-    /*@Override
-    public int getLightValue(BlockState state) {
-        return state.get(BlockStateProperties.POWERED) ? super.getLightValue(state) : 0;
-    }
-
-     */
-    @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader reader, List<ITextComponent> list, ITooltipFlag flags) {
-        list.add(new TranslationTextComponent("message.battery", Integer.toString(9)));
     }
 
     @Override
@@ -143,30 +108,12 @@ public class Mixer extends Block {
 
                     @Override
                     public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-                        return new MixerContainer(i, world, pos, playerInventory, playerEntity);
+                        return new MixerContainer(i, world, playerInventory, pos);
                     }
                 };
                 NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, tileEntity.getPos());
             } else {
                 throw new IllegalStateException("Our named container provider is missing!");
-            }
-        }
-        TileEntity tileEntity = world.getTileEntity(pos);
-        if (tileEntity instanceof MixerTile) {
-            if (state.get(PROPERTY_MIXER_WORK) == 0 && player.getHeldItemMainhand().getItem() == Items.AIR && player.isCrouching() == true) {
-                world.setBlockState(pos, state.with(PROPERTY_MIXER_WORK, Integer.valueOf(1)), 3);
-                TTC=200;
-                System.out.println("Mix On");
-            } else {
-                System.out.println(":(");
-            }
-        } else if (state.get(PROPERTY_MIXER_WORK) == 1 || state.get(PROPERTY_MIXER_WORK) == 2) {
-            if (player.getHeldItemMainhand().getItem() == Items.AIR && player.isCrouching() == true) {
-                world.setBlockState(pos, state.with(PROPERTY_MIXER_WORK, Integer.valueOf(0)), 3);
-                TTC = -1;
-                System.out.println("Mix Off");
-            } else {
-                System.out.println(":(");
             }
         }
         return ActionResultType.SUCCESS;

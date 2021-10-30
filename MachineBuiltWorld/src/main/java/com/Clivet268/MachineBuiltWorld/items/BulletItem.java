@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class BulletItem extends Item {
+public class BulletItem extends AbstractBulletItem {
     public BulletItem(Item.Properties builder) {
         super(builder);
     }

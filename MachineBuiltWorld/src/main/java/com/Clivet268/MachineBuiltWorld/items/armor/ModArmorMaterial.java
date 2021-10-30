@@ -4,7 +4,6 @@ import com.Clivet268.MachineBuiltWorld.MachineBuiltWorld;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;

@@ -17,10 +17,11 @@ public abstract class AbstractCokeingRecipe implements IRecipe<IInventory> {
         protected final String group;
         protected final Ingredient ingredient;
         protected final ItemStack result;
+        protected final ItemStack infusie;
         protected final float experience;
         protected final int cookTime;
 
-        public AbstractCokeingRecipe(IRecipeType<?> typeIn, ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, float experienceIn, int cookTimeIn) {
+        public AbstractCokeingRecipe(IRecipeType<?> typeIn, ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, ItemStack infusieIn, float experienceIn, int cookTimeIn) {
             this.type = typeIn;
             this.id = idIn;
             this.group = groupIn;
@@ -28,6 +29,7 @@ public abstract class AbstractCokeingRecipe implements IRecipe<IInventory> {
             this.result = resultIn;
             this.experience = experienceIn;
             this.cookTime = cookTimeIn;
+            this.infusie = infusieIn;
         }
 
         /**
@@ -75,6 +77,11 @@ public abstract class AbstractCokeingRecipe implements IRecipe<IInventory> {
         public ItemStack getRecipeOutput() {
             return this.result;
         }
+
+
+        public ItemStack getInfusie() {
+        return this.infusie;
+    }
 
         /**
          * Recipes with equal group are combined into one button in the recipe book

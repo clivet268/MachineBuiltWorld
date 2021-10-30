@@ -1,19 +1,19 @@
-package com.Clivet268.MachineBuiltWorld.inventory.crafting;
+package com.Clivet268.MachineBuiltWorld.inventory.slots;
 
-import com.Clivet268.MachineBuiltWorld.tileentity.AbstractIntensiveHeatingOvenTile;
-import com.Clivet268.MachineBuiltWorld.tileentity.IntensiveHeatingOvenTile;
+import com.Clivet268.MachineBuiltWorld.tileentity.AbstractMeltingPotTile;
+import com.Clivet268.MachineBuiltWorld.tileentity.AbstractMixerTile;
+import com.Clivet268.MachineBuiltWorld.tileentity.MixerTile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-public class CokeOvenResultSlot extends Slot {
+public class MixerResultSlot extends Slot {
     private final PlayerEntity player;
     private int removeCount;
 
-    public CokeOvenResultSlot(PlayerEntity player, IntensiveHeatingOvenTile intensiveHeatingOvenTile, int slotIndex, int xPosition, int yPosition) {
+    public MixerResultSlot(PlayerEntity player, MixerTile intensiveHeatingOvenTile, int slotIndex, int xPosition, int yPosition) {
         super(intensiveHeatingOvenTile, slotIndex, xPosition, yPosition);
         this.player = player;
-        //System.out.println(this.getHasStack());
     }
 
     /**
@@ -54,8 +54,8 @@ public class CokeOvenResultSlot extends Slot {
      */
     protected void onCrafting(ItemStack stack) {
         stack.onCrafting(this.player.world, this.player, this.removeCount);
-        if (!this.player.world.isRemote && this.inventory instanceof AbstractIntensiveHeatingOvenTile) {
-            ((AbstractIntensiveHeatingOvenTile)this.inventory).recipeOutput(this.player);
+        if (!this.player.world.isRemote && this.inventory instanceof AbstractMeltingPotTile) {
+            ((AbstractMixerTile)this.inventory).recipeOutput(this.player);
         }
 
         this.removeCount = 0;

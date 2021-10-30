@@ -1,21 +1,18 @@
-package com.Clivet268.MachineBuiltWorld.inventory.crafting;
+package com.Clivet268.MachineBuiltWorld.inventory.slots;
 
-import com.Clivet268.MachineBuiltWorld.tileentity.AbstractCrusherTile;
-import com.Clivet268.MachineBuiltWorld.tileentity.AbstractIntensiveHeatingOvenTile;
-import com.Clivet268.MachineBuiltWorld.tileentity.CrusherTile;
-import com.Clivet268.MachineBuiltWorld.tileentity.IntensiveHeatingOvenTile;
+import com.Clivet268.MachineBuiltWorld.tileentity.AbstractMeltingPotTile;
+import com.Clivet268.MachineBuiltWorld.tileentity.MeltingPotTile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-public class CrusherResultSlot extends Slot {
+public class MeltingPotResultSlot extends Slot {
     private final PlayerEntity player;
     private int removeCount;
 
-    public CrusherResultSlot(PlayerEntity player, CrusherTile crushertile, int slotIndex, int xPosition, int yPosition) {
-        super(crushertile, slotIndex, xPosition, yPosition);
+    public MeltingPotResultSlot(PlayerEntity player, MeltingPotTile intensiveHeatingOvenTile, int slotIndex, int xPosition, int yPosition) {
+        super(intensiveHeatingOvenTile, slotIndex, xPosition, yPosition);
         this.player = player;
-        //System.out.println(this.getHasStack());
     }
 
     /**
@@ -56,8 +53,8 @@ public class CrusherResultSlot extends Slot {
      */
     protected void onCrafting(ItemStack stack) {
         stack.onCrafting(this.player.world, this.player, this.removeCount);
-        if (!this.player.world.isRemote && this.inventory instanceof AbstractCrusherTile) {
-            ((AbstractCrusherTile)this.inventory).recipeOutput(this.player);
+        if (!this.player.world.isRemote && this.inventory instanceof AbstractMeltingPotTile) {
+            ((AbstractMeltingPotTile)this.inventory).recipeOutput(this.player);
         }
 
         this.removeCount = 0;

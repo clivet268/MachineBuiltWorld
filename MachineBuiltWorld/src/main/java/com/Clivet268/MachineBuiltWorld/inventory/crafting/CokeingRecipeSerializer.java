@@ -22,6 +22,7 @@ private final int cookingTime;
 
     public CokeingRecipe read(ResourceLocation recipeId, JsonObject json) {
         String s = JSONUtils.getString(json, "group", "");
+        //Tag.TagEntry<ItemTags>
         JsonElement jsonelement = (JsonElement)(JSONUtils.isJsonArray(json, "ingredient") ? JSONUtils.getJsonArray(json, "ingredient") : JSONUtils.getJsonObject(json, "ingredient"));
         Ingredient ingredient = Ingredient.deserialize(jsonelement);
         //Forge: Check if primitive string to keep vanilla or a object which can contain a count field.
@@ -36,18 +37,30 @@ private final int cookingTime;
                 return new IllegalStateException("Item: " + s1 + " does not exist");
             }));
         }
+        if (!json.has("infusie")) throw new com.google.gson.JsonSyntaxException("Missing result, expected to find a string or object");
+        ItemStack infusie;
+        if (json.get("result").isJsonObject()) infusie = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "infusie"));
+        else {
+            String s1 = JSONUtils.getString(json, "infusie");
+            System.out.println();
+            ResourceLocation resourcelocation = new ResourceLocation(s1);
+            infusie = new ItemStack(Registry.ITEM.getValue(resourcelocation).orElseThrow(() -> {
+                return new IllegalStateException("Item: " + s1 + " does not exist");
+            }));
+        }
         float f = JSONUtils.getFloat(json, "experience", 0.0F);
         int i = JSONUtils.getInt(json, "cookingtime", this.cookingTime);
-        return new CokeingRecipe(recipeId, s, ingredient, itemstack, f, i);
+        return new CokeingRecipe(recipeId, s, ingredient, itemstack,infusie, f, i);
     }
 
     public CokeingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
         String s = buffer.readString(32767);
         Ingredient ingredient = Ingredient.read(buffer);
         ItemStack itemstack = buffer.readItemStack();
+        ItemStack infusie = buffer.readItemStack();
         float f = buffer.readFloat();
         int i = buffer.readVarInt();
-        return new CokeingRecipe(recipeId, s, ingredient, itemstack, f, i);
+        return new CokeingRecipe(recipeId, s, ingredient, itemstack,infusie, f, i);
     }
 
     @Override
@@ -55,6 +68,7 @@ private final int cookingTime;
         buffer.writeString(recipe.group);
         recipe.ingredient.write(buffer);
         buffer.writeItemStack(recipe.result);
+        buffer.writeItemStack(recipe.infusie);
         buffer.writeFloat(recipe.experience);
         buffer.writeVarInt(recipe.cookTime);
     }

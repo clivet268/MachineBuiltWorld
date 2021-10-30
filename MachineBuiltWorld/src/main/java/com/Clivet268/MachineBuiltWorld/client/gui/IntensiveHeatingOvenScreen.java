@@ -9,22 +9,22 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-
+//TODO gui progression
+//TODO recipe book?
 public class IntensiveHeatingOvenScreen extends ContainerScreen<IntensiveHeatingOvenContainer> {
 
-        private ResourceLocation GUI = new ResourceLocation(MachineBuiltWorld.MOD_ID, "textures/gui/intensive_heating_oven.png");
+    private ResourceLocation GUI = new ResourceLocation(MachineBuiltWorld.MOD_ID, "textures/gui/intensive_heating_oven.png");
 
-        public IntensiveHeatingOvenScreen(IntensiveHeatingOvenContainer container, PlayerInventory inv, ITextComponent name) {
-            super(container, inv, name);
-        }
+    public IntensiveHeatingOvenScreen(IntensiveHeatingOvenContainer container, PlayerInventory inv, ITextComponent name) {
+        super(container, inv, name);
+    }
 
-
-        @Override
-        public void render(int mouseX, int mouseY, float partialTicks) {
-            this.renderBackground();
-            super.render(mouseX, mouseY, partialTicks);
-            this.renderHoveredToolTip(mouseX, mouseY);
-        }
+    @Override
+    public void render(int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground();
+        super.render(mouseX, mouseY, partialTicks);
+        this.renderHoveredToolTip(mouseX, mouseY);
+    }
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String s = this.title.getFormattedText();
@@ -42,9 +42,12 @@ public class IntensiveHeatingOvenScreen extends ContainerScreen<IntensiveHeating
         this.minecraft.getTextureManager().bindTexture(this.GUI);
         int i = this.guiLeft;
         int j = this.guiTop;
+        MachineBuiltWorld.LOGGER.info("two " + ((AbstractIntensiveHeatingOvenContainer)this.container).isBurning());
+
         this.blit(i, j, 0, 0, this.xSize, this.ySize);
         if (((AbstractIntensiveHeatingOvenContainer)this.container).isBurning()) {
             int k = ((AbstractIntensiveHeatingOvenContainer)this.container).getBurnLeftScaled();
+
             this.blit(i + 56, j + 36 + 12 - k, 176, 12 - k, 14, k + 1);
         }
 

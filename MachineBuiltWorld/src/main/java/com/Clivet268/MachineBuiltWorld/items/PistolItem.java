@@ -5,10 +5,7 @@ import com.Clivet268.MachineBuiltWorld.entity.BulletEntity;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.ShootableItem;
-import net.minecraft.item.UseAction;
+import net.minecraft.item.*;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -17,17 +14,35 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
-
+//TODO make work/exist
 public class PistolItem extends ShootableItem {
     public PistolItem(Properties builder) {
         super(builder);
     }
 
+    public Item[] bulletTypes= new Item[8];
     public static final Predicate<ItemStack> BULLETS = (p_220002_0_) -> {
         //
         //return p_220002_0_.getItem().isIn(RegistryHandler.Tags.BULLETS);
         return p_220002_0_.getItem() == RegistryHandler.BULLET.get();
     };
+
+    public void rollitup(){
+        Item[] ea= new Item[8];
+        boolean ii = false;
+        int iii = 0;
+        for(Item i : bulletTypes)
+        {
+            if (ii){
+                ea[iii] = bulletTypes[iii];
+                iii++;
+            }
+            else{
+                ii = true;
+            }
+        }
+        bulletTypes = ea;
+    }
     @Override
     public Predicate<ItemStack> getInventoryAmmoPredicate() {
         return BULLETS;

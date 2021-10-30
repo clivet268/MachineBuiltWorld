@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
-
+//TODO balance
 public class LaserPistolItem extends ShootableItem implements IReloadable{
     public LaserPistolItem(Properties builder) {
         super(builder);
@@ -121,7 +121,7 @@ public class LaserPistolItem extends ShootableItem implements IReloadable{
      * How long it takes to use or consume an item
      */
     public int getUseDuration(ItemStack stack) {
-        return 7200;
+        return 72;
     }
 
     public void reload(PlayerEntity playerIn) {

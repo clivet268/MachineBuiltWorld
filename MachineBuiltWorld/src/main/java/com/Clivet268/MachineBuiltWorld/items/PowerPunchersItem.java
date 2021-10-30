@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 
 import static com.Clivet268.MachineBuiltWorld.items.armor.ModArmorMaterial.PUNCH;
 
+//TODO later in 0.6-0.7 but make them cooler then big punch in later stages
 public class PowerPunchersItem  extends ArmorItem {
 
        // private static final GasMaskMaterial GAS_MASK_MATERIAL = new GasMaskMaterial();

@@ -2,15 +2,11 @@ package com.Clivet268.MachineBuiltWorld.blocks;
 
 //import com.Clivet268.MachineBuiltWorld.init.ModTileEntityTypes;
 
-import com.Clivet268.MachineBuiltWorld.inventory.Containers.IntensiveHeatingOvenContainer;
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.MeltingPotContainer;
 import com.Clivet268.MachineBuiltWorld.state.MoreStateProperties;
-import com.Clivet268.MachineBuiltWorld.tileentity.IntensiveHeatingOvenTile;
 import com.Clivet268.MachineBuiltWorld.tileentity.MeltingPotTile;
-import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityType;
@@ -21,13 +17,15 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.IBooleanFunction;
@@ -46,8 +44,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.stream.Stream;
-
-import static com.Clivet268.MachineBuiltWorld.util.RegistryHandler.MoreStats.INTERACT_WITH_COKE_OVEN;
 
 public class MeltingPot extends Block{
     public static final BooleanProperty FULL = MoreStateProperties.FULLNOTFULL;

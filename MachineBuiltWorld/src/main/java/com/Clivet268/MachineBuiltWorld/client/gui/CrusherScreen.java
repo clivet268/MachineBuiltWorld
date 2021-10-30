@@ -2,20 +2,16 @@ package com.Clivet268.MachineBuiltWorld.client.gui;
 
 
 import com.Clivet268.MachineBuiltWorld.MachineBuiltWorld;
-import com.Clivet268.MachineBuiltWorld.blocks.Crusher;
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.AbstractCrusherContainer;
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.CrusherContainer;
 import com.Clivet268.MachineBuiltWorld.tileentity.AbstractCrusherTile;
 import com.Clivet268.MachineBuiltWorld.tileentity.CrusherTile;
-import com.Clivet268.MachineBuiltWorld.tileentity.GeneratorTile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.tileentity.CommandBlockLogic;
-import net.minecraft.tileentity.CommandBlockTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
@@ -33,13 +29,15 @@ public class CrusherScreen extends ContainerScreen<CrusherContainer> {
         @Override
         public void tick()
         {
-            this.modeBtn.active = true;
+            /*this.modeBtn.active = true;
             if(this.commandBlockMode == AbstractCrusherTile.Mode.OPEN) {
                 this.crusherTile.getWorld().setBlockState(this.crusherTile.getPos(), this.crusherTile.getBlockState().with(Crusher.OC, true), 3);
             }
             else if(this.commandBlockMode == AbstractCrusherTile.Mode.CLOSE) {
                 this.crusherTile.getWorld().setBlockState(this.crusherTile.getPos(), this.crusherTile.getBlockState().with(Crusher.OC, false), 3);
             }
+
+             */
         }
         @Override
         public void init()

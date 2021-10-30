@@ -9,6 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
+//TODO darker texture, more rusty
 public class IronOxide extends FallingBlock {
    private final int dustColor;
 

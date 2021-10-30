@@ -104,12 +104,6 @@ public class FiberglassMould extends Block{
         return new FiberglassMouldTile().getTileEntity();
     }
 
-   // @Nullable
-    //@Override
-   // public BlockState getStateForPlacement(BlockItemUseContext context) {
-    //    return getDefaultState().with(BlockStateProperties.FACING, context.getNearestLookingDirection().getOpposite());
-   // }
-
     @SuppressWarnings("deprecation")
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {

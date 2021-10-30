@@ -1,11 +1,9 @@
-package com.Clivet268.MachineBuiltWorld.inventory.crafting;
+package com.Clivet268.MachineBuiltWorld.inventory.slots;
 
 import com.Clivet268.MachineBuiltWorld.tileentity.CrusherTile;
-import com.Clivet268.MachineBuiltWorld.tileentity.IntensiveHeatingOvenTile;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 
 import javax.annotation.Nonnull;
 

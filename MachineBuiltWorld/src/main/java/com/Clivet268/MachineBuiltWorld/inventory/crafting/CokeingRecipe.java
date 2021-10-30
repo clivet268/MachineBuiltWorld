@@ -7,8 +7,8 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
 public class CokeingRecipe extends AbstractCokeingRecipe {
-    public CokeingRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, float experienceIn, int cookTimeIn) {
-        super(IMoreRecipeType.COKEING, idIn, groupIn, ingredientIn, resultIn, experienceIn, cookTimeIn);
+    public CokeingRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, ItemStack infusie, float experienceIn, int cookTimeIn) {
+        super(IMoreRecipeType.MoreCokes.COKEING, idIn, groupIn, ingredientIn, resultIn, infusie, experienceIn, cookTimeIn);
     }
     @Override
     public ItemStack getIcon() {

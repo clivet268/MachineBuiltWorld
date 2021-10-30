@@ -4,7 +4,6 @@ package com.Clivet268.MachineBuiltWorld.client.gui;
 import com.Clivet268.MachineBuiltWorld.MachineBuiltWorld;
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.MixerContainer;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
@@ -29,7 +28,7 @@ public class MixerScreen extends ContainerScreen<MixerContainer> {
 
         @Override
         protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-            drawString(Minecraft.getInstance().fontRenderer, "Energy: " + container.getEnergy(), 10, 10, 0xffffff);
+            //drawString(Minecraft.getInstance().fontRenderer, "Energy: " + container.getEnergy(), 10, 10, 0xffffff);
         }
 
         @Override

@@ -9,7 +9,7 @@ public class CopperBlock extends Block {
     public CopperBlock() {
 
         super(Block.Properties.create(Material.IRON)
-        .hardnessAndResistance(3.0f, 6.0f)
+        .hardnessAndResistance(5.0f, 6.0f)
         .sound(SoundType.METAL)
         .harvestLevel(1)
         .harvestTool(ToolType.PICKAXE)

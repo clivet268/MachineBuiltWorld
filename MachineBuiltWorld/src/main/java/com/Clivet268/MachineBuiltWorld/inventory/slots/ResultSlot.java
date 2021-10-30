@@ -1,19 +1,17 @@
-package com.Clivet268.MachineBuiltWorld.inventory.crafting;
+package com.Clivet268.MachineBuiltWorld.inventory.slots;
 
-import com.Clivet268.MachineBuiltWorld.tileentity.AbstractIntensiveHeatingOvenTile;
 import com.Clivet268.MachineBuiltWorld.tileentity.AbstractMeltingPotTile;
-import com.Clivet268.MachineBuiltWorld.tileentity.IntensiveHeatingOvenTile;
-import com.Clivet268.MachineBuiltWorld.tileentity.MeltingPotTile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.LockableTileEntity;
 
-public class MeltingPotResultSlot extends Slot {
+public class ResultSlot extends Slot {
     private final PlayerEntity player;
     private int removeCount;
 
-    public MeltingPotResultSlot(PlayerEntity player, MeltingPotTile intensiveHeatingOvenTile, int slotIndex, int xPosition, int yPosition) {
-        super(intensiveHeatingOvenTile, slotIndex, xPosition, yPosition);
+    public ResultSlot(LockableTileEntity t, PlayerEntity player, int slotIndex, int xPosition, int yPosition) {
+        super(t, slotIndex, xPosition, yPosition);
         this.player = player;
     }
 

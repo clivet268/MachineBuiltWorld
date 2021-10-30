@@ -1,14 +1,11 @@
-package com.Clivet268.MachineBuiltWorld.client.model;
+package com.Clivet268.MachineBuiltWorld.client.model.entity;
 
-import com.Clivet268.MachineBuiltWorld.MachineBuiltWorld;
 import com.Clivet268.MachineBuiltWorld.entity.GearEntity;
-import com.Clivet268.MachineBuiltWorld.entity.LaserEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.ResourceLocation;
 
 public class GearModel<T extends GearEntity> extends Model{
     private final ModelRenderer bb_main;

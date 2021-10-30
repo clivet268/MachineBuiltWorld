@@ -1,22 +1,37 @@
 package com.Clivet268.MachineBuiltWorld.blocks;
 
+import com.Clivet268.MachineBuiltWorld.inventory.Containers.MillContainer;
 import com.Clivet268.MachineBuiltWorld.state.MoreStateProperties;
+import com.Clivet268.MachineBuiltWorld.tileentity.MillTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fml.network.NetworkHooks;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.stream.Stream;
 
@@ -120,7 +135,6 @@ public class Mill extends Block implements IWorkable{
     //canWork(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient);
 
     @Override
-
     public boolean hasTileEntity(BlockState state) {
         return true;
     }
@@ -201,5 +215,35 @@ public class Mill extends Block implements IWorkable{
     @Override
     public void work(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
 
+    }
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        return new MillTile().getTileEntity();
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult trace) {
+        if (!world.isRemote) {
+            TileEntity tileEntity = world.getTileEntity(pos);
+            if (tileEntity instanceof MillTile) {
+                INamedContainerProvider containerProvider = new INamedContainerProvider() {
+                    @Override
+                    public ITextComponent getDisplayName() {
+                        return new TranslationTextComponent("screen.machinebuiltworld.mill");
+                    }
+
+                    @Override
+                    public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+                        return new MillContainer(i, world, playerInventory, pos);
+                    }
+                };
+                NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, tileEntity.getPos());
+            } else {
+                throw new IllegalStateException("Our named container provider is missing!");
+            }
+        }
+        return ActionResultType.SUCCESS;
     }
 }

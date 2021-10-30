@@ -1,11 +1,8 @@
-package com.Clivet268.MachineBuiltWorld.inventory.crafting;
+package com.Clivet268.MachineBuiltWorld.inventory.slots;
 
-import com.Clivet268.MachineBuiltWorld.tileentity.AbstractMeltingPotTile;
-import com.Clivet268.MachineBuiltWorld.tileentity.IntensiveHeatingOvenTile;
 import com.Clivet268.MachineBuiltWorld.tileentity.MeltingPotTile;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;

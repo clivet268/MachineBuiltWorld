@@ -12,7 +12,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.particles.ParticleTypes;
@@ -45,7 +44,6 @@ public class IntensiveHeatingOven extends Block{
                     .hardnessAndResistance(4.5f, 15.0f)
                     .sound(SoundType.STONE)
                     .harvestLevel(1)
-                    .lightValue(6)
             );
         }
     @Override
@@ -91,7 +89,7 @@ public class IntensiveHeatingOven extends Block{
                     }
 
                     @Override
-                    public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+                    public IntensiveHeatingOvenContainer createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
                         return new IntensiveHeatingOvenContainer(i, world, playerInventory, pos);
                     }
                 };

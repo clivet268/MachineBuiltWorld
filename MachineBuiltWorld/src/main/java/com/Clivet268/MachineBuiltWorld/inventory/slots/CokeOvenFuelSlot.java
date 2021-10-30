@@ -1,4 +1,4 @@
-package com.Clivet268.MachineBuiltWorld.inventory.crafting;
+package com.Clivet268.MachineBuiltWorld.inventory.slots;
 
 import com.Clivet268.MachineBuiltWorld.tileentity.IntensiveHeatingOvenTile;
 import net.minecraft.inventory.container.Slot;
