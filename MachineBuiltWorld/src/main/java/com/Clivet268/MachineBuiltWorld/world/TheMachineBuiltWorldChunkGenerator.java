@@ -2,7 +2,7 @@ package com.Clivet268.MachineBuiltWorld.world;
 
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.gen.*;
+import net.minecraft.world.gen.NoiseChunkGenerator;
 
 import javax.annotation.Nonnull;
 
