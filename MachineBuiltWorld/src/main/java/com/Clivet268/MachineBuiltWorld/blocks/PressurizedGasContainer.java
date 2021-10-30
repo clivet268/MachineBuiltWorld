@@ -1,12 +1,10 @@
 package com.Clivet268.MachineBuiltWorld.blocks;
 
 import com.Clivet268.MachineBuiltWorld.inventory.Containers.GeneratorContainer;
-import com.Clivet268.MachineBuiltWorld.state.MoreStateProperties;
 import com.Clivet268.MachineBuiltWorld.tileentity.GeneratorTile;
 import com.Clivet268.MachineBuiltWorld.tileentity.PressurizedGasContainerTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
@@ -40,7 +38,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static net.minecraft.util.Direction.*;
-import static net.minecraft.util.Direction.EAST;
 
 public class PressurizedGasContainer extends Block{
     public static final DirectionProperty FFACING = BlockStateProperties.FACING;
