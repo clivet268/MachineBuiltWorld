@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.stream.Stream;
 
+//TODO redo model
 public class SteelFrame extends Block{
     //public static final IntegerProperty AGE = BlockStateProperties.AGE_0_1;
     public static final IntegerProperty FULL = MoreStateProperties.FILLED;
