@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "lit=false": { "model": "machinebuiltworld:block/sprocketeerer" },
+    "lit=true": { "model": "machinebuiltworld:block/sprocketeerer_lit" }
+  }
+}

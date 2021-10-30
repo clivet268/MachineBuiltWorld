@@ -9,6 +9,36 @@
       }
     ]
   },
+  "entity.sprocketeer_step": {
+    "category": "entity",
+    "subtitle": "entity.sprocketeer_step.sub",
+    "sounds": [
+      {
+        "name": "machinebuiltworld:entity/sprocketeer_step",
+        "stream": true
+      }
+    ]
+  },
+  "entity.pitterbot_shoot": {
+    "category": "entity",
+    "subtitle": "entity.pitterbot_shoot.sub",
+    "sounds": [
+      {
+        "name": "machinebuiltworld:entity/pitterbot_shoot",
+        "stream": true
+      }
+    ]
+  },
+  "entity.shredderbot_shoot": {
+    "category": "entity",
+    "subtitle": "entity.shredderbot_shoot.sub",
+    "sounds": [
+      {
+        "name": "machinebuiltworld:entity/shredderbot_shoot",
+        "stream": true
+      }
+    ]
+  },
   "item.pistol_shoot": {
     "category": "item",
     "subtitle": "item.pistol_shoot.sub",
@@ -35,6 +65,16 @@
     "sounds": [
       {
         "name": "machinebuiltworld:block/smoke_alarm",
+        "stream": true
+      }
+    ]
+  },
+  "block.crusher_crushing": {
+    "category": "block",
+    "subtitle": "block.crusher_crushing.sub",
+    "sounds": [
+      {
+        "name": "machinebuiltworld:block/crusher_crushing",
         "stream": true
       }
     ]
