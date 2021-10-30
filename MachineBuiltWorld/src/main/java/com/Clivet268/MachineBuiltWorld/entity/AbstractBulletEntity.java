@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+//TODO make exist/better
 public abstract class AbstractBulletEntity extends Entity implements IProjectile {
     private static final DataParameter<Byte> CRITICAL = EntityDataManager.createKey(AbstractBulletEntity.class, DataSerializers.BYTE);
     protected static final DataParameter<Optional<UUID>> field_212362_a = EntityDataManager.createKey(AbstractBulletEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);

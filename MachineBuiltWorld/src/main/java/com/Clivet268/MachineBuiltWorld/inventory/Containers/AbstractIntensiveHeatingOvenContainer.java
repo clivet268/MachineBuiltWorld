@@ -1,6 +1,11 @@
 package com.Clivet268.MachineBuiltWorld.inventory.Containers;
 
-import com.Clivet268.MachineBuiltWorld.inventory.crafting.*;
+import com.Clivet268.MachineBuiltWorld.inventory.crafting.AbstractCokeingRecipe;
+import com.Clivet268.MachineBuiltWorld.inventory.crafting.CokeingRecipe;
+import com.Clivet268.MachineBuiltWorld.inventory.crafting.ServerPlacerCokeOven;
+import com.Clivet268.MachineBuiltWorld.inventory.slots.CokeOvenFuelSlot;
+import com.Clivet268.MachineBuiltWorld.inventory.slots.CokeOvenInfuseSlot;
+import com.Clivet268.MachineBuiltWorld.inventory.slots.ResultSlot;
 import com.Clivet268.MachineBuiltWorld.tileentity.AbstractIntensiveHeatingOvenTile;
 import com.Clivet268.MachineBuiltWorld.tileentity.IntensiveHeatingOvenTile;
 import net.minecraft.entity.player.PlayerEntity;
@@ -54,7 +59,7 @@ public abstract class AbstractIntensiveHeatingOvenContainer extends RecipeBookCo
             addSlot(new Slot(this.tileEntity, 0, 56, 17));
             addSlot(new CokeOvenFuelSlot(this.tileEntity,  1, 38, 53));
             addSlot(new CokeOvenInfuseSlot(this.tileEntity,  2, 74, 53));
-            addSlot(new CokeOvenResultSlot(playerInventoryIn.player, this.tileEntity,  3, 116, 35));
+            addSlot(new ResultSlot(this.tileEntity, playerInventoryIn.player,  3, 116, 35));
 
         }
         layoutPlayerInventorySlots(8,84);

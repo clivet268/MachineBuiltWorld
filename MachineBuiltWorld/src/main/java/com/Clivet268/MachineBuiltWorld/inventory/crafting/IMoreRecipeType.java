@@ -18,8 +18,12 @@ public interface IMoreRecipeType extends IRecipeType {
     interface MoreSprocketeers extends  IRecipeType<SprocketeerRecipe>{
         IRecipeType<SprocketeerRecipe> SPROCKETEER = IRecipeType.register("sprocketeer");
     }
-
-
+    interface MoreMillings extends  IRecipeType<MillingRecipe>{
+        IRecipeType<MillingRecipe> MILLING = IRecipeType.register("milling");
+    }
+    interface MoreAtomizing extends  IRecipeType<AtomizingRecipe>{
+        IRecipeType<AtomizingRecipe> ATOMIZING = IRecipeType.register("atomizing");
+    }
 
 
 }

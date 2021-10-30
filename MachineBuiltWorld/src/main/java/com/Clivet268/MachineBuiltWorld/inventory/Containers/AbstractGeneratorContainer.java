@@ -1,6 +1,6 @@
 package com.Clivet268.MachineBuiltWorld.inventory.Containers;
 
-import com.Clivet268.MachineBuiltWorld.tileentity.AbstractGeneratorTile;
+import com.Clivet268.MachineBuiltWorld.tileentity.GeneratorTile;
 import com.Clivet268.MachineBuiltWorld.util.CustomEnergyStorage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -9,7 +9,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -17,7 +16,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -28,20 +26,22 @@ public abstract class AbstractGeneratorContainer extends Container {
 
     private final IInventory genoratorInv;
     private IItemHandler playerInventory;
-    public TileEntity tileEntity;
+    public GeneratorTile tileEntity;
 
 
     public AbstractGeneratorContainer(World wworld,int id, PlayerInventory playerInventoryIn, BlockPos pos) {
-        this(id, wworld, pos, playerInventoryIn, new Inventory(4));
+        this(id, wworld, pos, playerInventoryIn, new Inventory(1));
     }
 
     public AbstractGeneratorContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, IInventory genaratorInvIn) {
         super(GENERATOR_CONTAINER.get(), windowId);
-        this.tileEntity = (AbstractGeneratorTile) world.getTileEntity(pos);
+        this.tileEntity = (GeneratorTile) world.getTileEntity(pos);
         this.genoratorInv = genaratorInvIn;
         this.playerInventory = new InvWrapper(playerInventory);
-        addSlot(new Slot(genoratorInv, 0, 56, 17));
-        layoutPlayerInventorySlots(8, 70);
+        if (tileEntity != null) {
+            addSlot(new Slot(this.tileEntity, 0, 56, 17));
+        }
+        layoutPlayerInventorySlots(8,84);
         trackPower();
     }
     @OnlyIn(Dist.CLIENT)
@@ -134,7 +134,7 @@ public abstract class AbstractGeneratorContainer extends Container {
     }
 
     public int getEnergy() {
-        return tileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
+        return this.tileEntity.getEnergy();
     }
     // Setup syncing of power from server to client so that the GUI can show the amount of power in the block
     private void trackPower() {

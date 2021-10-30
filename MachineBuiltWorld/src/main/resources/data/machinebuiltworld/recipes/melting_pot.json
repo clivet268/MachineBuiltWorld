@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "x x",
+    "xxx",
+    "y y"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "tag": "forge:blocks/steel"
+    },
+    "y":
+    {
+      "tag": "forge:ingots/steel"
+    }
+  },
+  "result":
+  {
+    "item": "machinebuiltworld:melting_pot",
+    "count": 1
+  }
+}

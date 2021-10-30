@@ -372,9 +372,9 @@ public abstract class AbstractGearEntity extends DamagingProjectileEntity implem
         Entity entity1 = this.getShooter();
         DamageSource damagesource;
         if (entity1 == null) {
-            damagesource = MoreDamageSource.causeGearDamage(this, this);
+            damagesource = MoreDamageSource.causeCannonBallDamage(this, this);
         } else {
-            damagesource = MoreDamageSource.causeGearDamage(this, entity1);
+            damagesource = MoreDamageSource.causeCannonBallDamage(this, entity1);
             if (entity1 instanceof LivingEntity) {
                 ((LivingEntity)entity1).setLastAttackedEntity(entity);
             }
