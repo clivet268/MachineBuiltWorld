@@ -1,5 +1,56 @@
 Machine Built World
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+5/22/2021
+Machine Built World V1.0.5 Alpha
+
+Blocks added: Pressurized Gas Container(WIP), Complex Fabricator(WIP), Mini-Moulder(WIP), Moulder(WIP),
+Disassociated Atom Container(WIP), Atomic Manager(WIP)
+
+Items added: glass dagger(WIP), pistol body(WIP), steel grip, glass dagger blade(WIP),
+strengthened glass dagger blade(WIP), sicker(WIP), sick shot(wip),synthetic soul(WIP), unfun lump(WIP)
+
+Entities added: Sick Shot(WIP)
+
+Removed:
+All Copper Armor and tools(repetitive across mods, didnt jive with my goal)
+All Steel Armor and tools (same reason)
+
+Other:
+Added Barren Lands Biome
+Added Mekanism Dependencies
+The Machine Built World is now acesable
+A Lotta Bug Fixin
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+3/20/2021
+Machine Built World V1.0.4 Alpha
+
+Blocks added: Conveyor(WIP), Neodymium Ore(WIP), Steel Block(WIP),Steel Panel(WIP), Inductor(WIP), Tin Ore(WIP),
+Sprocketeerer(WIP), Iron Oxide(WIP)
+
+Items added: copper dust(WIP), iron dust(WIP), garnet dust(WIP), erbium dust(WIP),neodymium(WIP),steel chestplate(WIP),
+steel boots(WIP), steel leggings(WIP), steel helmet(WIP), iron crushing teeth(WIP), copper crushing teeth(WIP),
+gold crushing teeth(WIP), steel crushing teeth(WIP), diamond crushing teeth(WIP), copper axle(WIP), gold axle(WIP),
+steel axle(WIP), diamond axle(WIP), induction plate(WIP), xenotime chunk(WIP), tin ingot(WIP), bronze ingot(WIP),
+aluminum nugget(WIP), bronze nugget(WIP), iron gear(WIP), pistol_mag(WIP), sandpaper(WIP)
+
+Entities added: Sprocketeer(WIP), Pitterbot(WIP), Shrederbot(WIP), The Crusher(WIP), The Roller(WIP), The Blaster(WIP),
+Gear(WIP)
+
+Other:
+The Machine Built World added (WIP)
+Mixer: + Container(WIP) + Mixing(WIP)
+Mill:+ Container(WIP) + Tile Entity(WIP) + Milling(WIP)
+Crusher: + Tile Entity(WIP) + Container(WIP) + GUI(WIP) + Crushing(WIP)
+Conveyor: + conveyoring(WIP)
+Melting Pot: + Tile Entity(WIP) + Container(WIP) + Melting Pot(ing?)
+Sprocketeerer: + Tile Entity(WIP) + Container(WIP) + Sprocketeer production(WIP)
+Fixed Forge Tags
+Updated Forge Tags
+Updated Recipes
+
+Removed:
+Track, Heavy Duty Pot, iron rod, gear, Plug, Oxygen Furnace
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 3/9/2021
 Machine Built World V1.0.3 Alpha
 
@@ -25,7 +76,7 @@ Items Added: glass shards, bullet(WIP), incendiary bullet(WIP), ion canister(WIP
 micro resonator(WIP), resonator(WIP), large resonator(WIP), steel ingot(WIP), coke, cut garnet(WIP),
 polished cut garnet(WIP), large uncut garnet(WIP), uncut garnet(WIP), erbium(WIP), aluminum ingot(WIP)
 
-Tools Added: laser pistol(WIP), laser pistol mag(WIP), pistol(WIP)
+Tools Added: laser pistol(WIP), laser pistol mag, pistol(WIP)
 
 Entities Added: Bullet(WIP), Laser(WIP)
 
@@ -52,7 +103,7 @@ Blocks Added:
 Mill(WIP), Mixer(WIP), Smoke Detector(WIP), Fiberglass Mould
 
 Items Added:
-wood gear(WIP), high performance circut board(WIP), super performance circut board(WIP), epoxy(WIP), high performance
+wood gear(WIP), high performance circuit board(WIP), super performance circuit board(WIP), epoxy(WIP), high performance
 epoxy(WIP), super high performance epoxy(WIP), fiber glass, resin bucket(WIP)
 
 Fluids Added:
@@ -69,15 +120,14 @@ Machine Built World V1.0.0 Alpha
 
 Blocks Added:
 Atomizer(WIP), BatteryPot(WIP), TTTBattery(WIP), TTBattery(WIP), TBattery(WIP), Boronated Glass(WIP), Boron Ore(WIP),
-Copper Block, Copper Ore(WIP), Crude ElectromagnetA (WIP), Magnets(WIP), Melting Pot(WIP), Moulding Sand(WIP),
-Track(WIP), Wire(WIP), Heavy Duty Pot(WIP),
+Copper Block, Copper Ore(WIP), Crude ElectromagnetA (WIP), Magnets(WIP), Melting Pot(WIP), Moulding Sand(WIP),Wire(WIP)
 
 Fluids Added:
 Battery Acid(WIP)
 
 Items Added:
 gear(WIP), copper ingot, silver ingot(WIP), crude electromagnet, wire(WIP), magnet, graphene(WIP), iron rod(WIP),
-iron axle(WIP), boron dust, boron chunk(WIP), dirty boron dust(WIP), circut board(WIP), silicone glob(WIP)
+iron axle(WIP), boron dust, boron chunk(WIP), dirty boron dust(WIP), circuit board(WIP), silicone glob(WIP)
 
 Tools Added:
 wire cutters(WIP), pliers(WIP), copper sword, copper helmet, copper chestplate, copper leggings,
@@ -85,8 +135,8 @@ copper boots, power punchers(WIP), multimeter(WIP)
 
 Other:
 + Config(WIP)
-TTTBattery: + GUI(WIP) + Tile Entity + Config(WIP)
-TTBattery: + GUI(WIP) + Tile Entity + Config(WIP)
-TBattery: + GUI(WIP) + Tile Entity + Config(WIP)
-Battery Pot: + GUI(WIP) + Tile Entity + Config(WIP)
+TTTBattery: + GUI(WIP) + Tile Entity(WIP) + Config(WIP)
+TTBattery: + GUI(WIP) + Tile Entity(WIP) + Config(WIP)
+TBattery: + GUI(WIP) + Tile Entity(WIP) + Config(WIP)
+Battery Pot: + GUI(WIP) + Tile Entity(WIP) + Config(WIP)
 
