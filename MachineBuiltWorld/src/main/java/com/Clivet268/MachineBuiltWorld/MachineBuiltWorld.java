@@ -7,6 +7,7 @@ import com.Clivet268.MachineBuiltWorld.client.renderer.entity.GearFactory;
 import com.Clivet268.MachineBuiltWorld.client.renderer.entity.LaserRenderFactory;
 import com.Clivet268.MachineBuiltWorld.client.renderer.entity.SprocketeerRenderFactory;
 import com.Clivet268.MachineBuiltWorld.client.renderer.tileentity.CrusherTileEntityRenderer;
+import com.Clivet268.MachineBuiltWorld.client.renderer.tileentity.ResonatingFrameTileRenderer;
 import com.Clivet268.MachineBuiltWorld.util.KeyHandler;
 import com.Clivet268.MachineBuiltWorld.util.LootHandler;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
@@ -25,6 +26,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -93,7 +95,8 @@ public class MachineBuiltWorld
         RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.LASER_ENTITY.get(), LaserRenderFactory.instance);
         RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.SPROCKETEER.get(), SprocketeerRenderFactory.instance);
         RenderingRegistry.registerEntityRenderingHandler(RegistryHandler.GEAR_ENTITY.get(), GearFactory.instance);
-        CrusherTileEntityRenderer.register();
+        ClientRegistry.bindTileEntityRenderer(RegistryHandler.CRUSHER_TILE.get(), CrusherTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(RegistryHandler.RESONATING_FRAME_TILE.get(), ResonatingFrameTileRenderer::new);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -110,13 +113,6 @@ public class MachineBuiltWorld
         return new ResourceLocation(MachineBuiltWorld.MOD_ID, path);
     }
 
-    @SubscribeEvent
-    public static void onTextureStitch(TextureStitchEvent.Pre event) {
-        if (!event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
-            return;
-        }
-
-    }
 
     @SubscribeEvent
     public static void onRegisterBiomes(final RegistryEvent.Register<Biome> event) {

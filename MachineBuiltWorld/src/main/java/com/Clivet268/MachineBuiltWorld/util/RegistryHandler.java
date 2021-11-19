@@ -204,10 +204,12 @@ public class RegistryHandler {
     //TODO buff and make harder to get somehow
     public static final RegistryObject<Item> STRENGTHENED_GLASS_DAGGER_BLADE = ITEMS.register("strengthened_glass_dagger_blade", ItemBase::new);
     public static final RegistryObject<Item> SICK_SHOT = ITEMS.register("sick_shot", ItemBase::new);
-    //TODO do
+    //TODO do?
     public static final RegistryObject<Item> SYNTHETIC_SOUL = ITEMS.register("synthetic_soul", ItemBase::new);
     //TODO do texture
     public static final RegistryObject<Item> UNFUN_LUMP = ITEMS.register("unfun_lump", ItemBase::new);
+    //TODO do, crafting
+    public static final RegistryObject<Item> CELESTIAL_GEAR = ITEMS.register("celestial_gear", ItemBase::new);
 
 
     //special items
@@ -271,6 +273,10 @@ public class RegistryHandler {
     public static final RegistryObject<Block> DISASSOCIATED_ATOM_CONTAINER = BLOCKS.register("disassociated_atom_container", DisasossiatedAtomContainer::new);
     //TODO do
     public static final RegistryObject<Block> ATOMIC_MANAGER = BLOCKS.register("atomic_manager", PressurizedGasContainer::new);
+    //TODO do
+    public static final RegistryObject<Block> FLOURECENT_LIGHT = BLOCKS.register("flourecent_light", FlourecentLights::new);
+    //TODO do
+    public static final RegistryObject<Block> RESONATING_FRAME = BLOCKS.register("resonating_frame", ResonatingFrame::new);
 
 
     //special blocks
@@ -369,6 +375,7 @@ public class RegistryHandler {
     public static final RegistryObject<Item> SPROCKETEERER_ITEM = ITEMS.register("sprocketeerer", () -> new BlockItemBase(SPROCKETEERER.get()));
     public static final RegistryObject<Item> IRON_OXIDE_ITEM = ITEMS.register("iron_oxide", () -> new BlockItemBase(IRON_OXIDE.get()));
     public static final RegistryObject<Item> PRESSURIZED_GAS_CONTAINER_ITEM = ITEMS.register("pressurized_gas_container", () -> new BlockItemBase(PRESSURIZED_GAS_CONTAINER.get()));
+    public static final RegistryObject<Item> RESONATING_FRAME_ITEM = ITEMS.register("resonating_frame", () -> new BlockItemBase(RESONATING_FRAME.get()));
 
     //special block items
     public static final RegistryObject<Item> CONVEYOR_ITEM = ITEMS.register("conveyor",
@@ -452,6 +459,8 @@ public class RegistryHandler {
             TILES.register("pressurized_gas_container", () -> TileEntityType.Builder.create(PressurizedGasContainerTile::new, PRESSURIZED_GAS_CONTAINER.get()).build(null));
     public static final RegistryObject<TileEntityType<DisassociatedAtomContainerTile>> DISASSOCIATED_ATOM_CONTAINER_TILE =
             TILES.register("disassaciated_atom_container", () -> TileEntityType.Builder.create(DisassociatedAtomContainerTile::new, PRESSURIZED_GAS_CONTAINER.get()).build(null));
+    public static final RegistryObject<TileEntityType<ResonatingFrameTileEntity>> RESONATING_FRAME_TILE =
+            TILES.register("resonating_frame", () -> TileEntityType.Builder.create(ResonatingFrameTileEntity::new, RESONATING_FRAME.get()).build(null));
 
 
     //Containers
