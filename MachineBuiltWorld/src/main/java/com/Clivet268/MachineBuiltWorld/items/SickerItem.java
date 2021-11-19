@@ -4,6 +4,8 @@ import com.Clivet268.MachineBuiltWorld.entity.AbstractSickShotEntity;
 import com.Clivet268.MachineBuiltWorld.entity.SickShotEntity;
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -12,9 +14,7 @@ import net.minecraft.item.ShootableItem;
 import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
@@ -28,7 +28,10 @@ import static com.Clivet268.MachineBuiltWorld.MachineBuiltWorld.LOGGER;
 //TODO balance
 //TODO do
 //TODO make sickly
+//TODO sounds
 public class SickerItem extends ShootableItem implements IReloadable{
+
+
     private static boolean donodo = true;
     public SickerItem(Properties builder) {
         super(builder);
@@ -49,15 +52,19 @@ public class SickerItem extends ShootableItem implements IReloadable{
         return UseAction.CROSSBOW;
     }
 
-    @Override
+
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
         int i = this.getUseDuration(stack) - timeLeft;
         LOGGER.info("it worked");
-        if(!getRTF(stack) && getLoaded(stack)){
-            setRTF(stack, true);
-            //setPower(stack, 10);
+        if(getPower(stack) == 0 && getLoaded(stack)) {
+            setPower(stack, 10);
         }
 
+    }
+
+    @Override
+    public boolean isCrossbow(ItemStack stack) {
+        return stack.getItem() == RegistryHandler.SICKER.get() || stack.getItem() == Items.CROSSBOW;
     }
 
 
@@ -96,7 +103,6 @@ public class SickerItem extends ShootableItem implements IReloadable{
             ItemStack ammoStack = findAmmo(playerIn);
             if (ammoStack.getItem() == RegistryHandler.SICK_SHOT.get()) {
                 setLoaded(playerIn.getHeldItemMainhand(), true);
-                System.out.println(":)");
                 playerIn.world.playSound(playerIn, playerIn.getPosition(), RegistryHandler.SPROCKETEER_STEP.get(), SoundCategory.PLAYERS, 100, 1);
                 ammoStack.shrink(1);
 
@@ -106,58 +112,41 @@ public class SickerItem extends ShootableItem implements IReloadable{
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        if (playerIn instanceof PlayerEntity) {
-            LOGGER.info("Power level:" + getPower(playerIn.getHeldItemMainhand()));
-            if (getPower(playerIn.getHeldItemMainhand()) > 0) {
-                System.out.println("sickershot:)");
-                PlayerEntity playerentity = playerIn;
-                boolean flag = playerentity.abilities.isCreativeMode;
-                ItemStack stack = playerIn.getHeldItemMainhand();
-                PlayerEntity player = playerentity;
-                float f = getBulletVelocity();
+        ItemStack itemstack = playerIn.getHeldItem(handIn);
+        LOGGER.info("Power level:" + getPower(itemstack));
+        if (getPower(itemstack) > 0 && getLoaded(itemstack)) {
+            System.out.println("sickershot:)");
+            //TODO simple creative thingy inf ammo
+            boolean flag = playerIn.abilities.isCreativeMode;
+            ItemStack stack = itemstack;
+            float f = getBulletVelocity();
 
-                if (!worldIn.isRemote) {
-                    AbstractSickShotEntity laserEntity = new SickShotEntity(worldIn, player);
-                    laserEntity.setDamage(calcDamage(stack));
-                    laserEntity.shoot(playerentity, playerentity.rotationPitch, playerentity.rotationYaw, 0.0F, f, 1.0F);
-                    stack.damageItem(1, playerentity, (p_220009_1_) -> {
-                        //p_220009_1_.sendBreakAnimation(playerentity.getActiveHand());
-                    });
-                    //System.out.println(worldIn.addEntity(laserEntity));
-                    worldIn.addEntity(laserEntity);
-                }
-                // use ammo
-                if (!flag) {
-                    setLoaded(stack, false);
-                    setPower(stack, 0);
-                }
-                worldIn.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), RegistryHandler.LASER_PISTOL_SHOOT.get(), SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-
-
-                player.addStat(Stats.ITEM_USED.get(this));
-
+            if (!worldIn.isRemote) {
+                AbstractSickShotEntity laserEntity = new SickShotEntity(worldIn, playerIn);
+                laserEntity.setDamage(calcDamage(stack));
+                laserEntity.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, f, 1.0F);
+                stack.damageItem(1, playerIn, (p_220009_1_) -> {
+                    p_220009_1_.sendBreakAnimation(playerIn.getActiveHand());
+                });
+                //System.out.println(worldIn.addEntity(laserEntity));
+                worldIn.addEntity(laserEntity);
             }
-            playerIn.setActiveHand(handIn);
-            return ActionResult.resultConsume(playerIn.getHeldItem(handIn));
-        }
-        else if (getLoaded(playerIn.getHeldItemMainhand())){
-            System.out.println("failure");
-            playerIn.setActiveHand(handIn);
-            return ActionResult.resultConsume(playerIn.getHeldItem(handIn));
-        }
-        else{
-            System.out.println("failurex2");
-            return ActionResult.resultFail(playerIn.getHeldItem(handIn));
-        }
-    }
 
-    @Override
-    public void onUse(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
-        if (!worldIn.isRemote) {
-            setPower(stack ,stack.getUseDuration() - count);
-            System.out.println("good + stack.getUseDuration() - count)");
-        }
+            worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), RegistryHandler.LASER_PISTOL_SHOOT.get(), SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
+            setLoaded(itemstack, false);
+            setPower(itemstack, 0);
+            playerIn.addStat(Stats.ITEM_USED.get(this));
+            System.out.println("balteg");
+            return ActionResult.resultConsume(itemstack);
+        }
+        if(getPower(itemstack) == 0) {
+            System.out.println("baltege");
+            playerIn.setActiveHand(handIn);
+            return ActionResult.resultConsume(itemstack);
+        }
+        System.out.println(getPower(itemstack));
+        return ActionResult.resultFail(itemstack);
     }
 
 
@@ -170,11 +159,6 @@ public class SickerItem extends ShootableItem implements IReloadable{
         CompoundNBT tagCompound = pewpew.getOrCreateTag();
         return tagCompound.getBoolean("loaded");
     }
-    public static boolean getRTF(ItemStack pewpew) {
-        CompoundNBT tagCompound = pewpew.getOrCreateTag();
-        return tagCompound.getBoolean("rtf");
-    }
-
     public static void setPower(ItemStack pewpew, int pow) {
         CompoundNBT tagCompound = pewpew.getOrCreateTag();
         tagCompound.putInt("power", pow);
@@ -182,10 +166,6 @@ public class SickerItem extends ShootableItem implements IReloadable{
     public static void setLoaded(ItemStack pewpew, boolean loded) {
         CompoundNBT tagCompound = pewpew.getOrCreateTag();
         tagCompound.putBoolean("loaded",loded);
-    }
-    public static void setRTF(ItemStack pewpew, boolean rtf) {
-        CompoundNBT tagCompound = pewpew.getOrCreateTag();
-        tagCompound.putBoolean("rtf",rtf);
     }
 
 

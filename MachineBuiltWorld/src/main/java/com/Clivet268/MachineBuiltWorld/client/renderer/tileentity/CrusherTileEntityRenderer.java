@@ -88,9 +88,6 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
-    public static void register() {
-        ClientRegistry.bindTileEntityRenderer(RegistryHandler.CRUSHER_TILE.get(), CrusherTileEntityRenderer::new);
-    }
 }
 
 
