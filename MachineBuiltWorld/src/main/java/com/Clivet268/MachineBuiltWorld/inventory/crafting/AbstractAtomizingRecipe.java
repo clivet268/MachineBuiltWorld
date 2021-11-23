@@ -1,10 +1,12 @@
 package com.Clivet268.MachineBuiltWorld.inventory.crafting;
 
 import com.Clivet268.MachineBuiltWorld.util.RegistryHandler;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 public abstract class AbstractAtomizingRecipe extends AbstractMBWRecipe {
         protected final ResourceLocation id;
@@ -37,6 +39,19 @@ public abstract class AbstractAtomizingRecipe extends AbstractMBWRecipe {
             this.count2 = countIn2;
             this.minHeat = minHehe;
             this.aod = asordys;
+        }
+
+        /**
+         * Used to check if a recipe matches current crafting inventory
+         */
+        @Override
+        public boolean matches(IInventory inv, World worldIn){
+            for(int i = 2; i <= 4; i++){
+                if(!this.ingredient.get(i).test(inv.getStackInSlot(i))){
+                    return false;
+                }
+            }
+            return true;
         }
 
         public boolean asymordysa(){

@@ -62,6 +62,21 @@ public class Atomizer extends Block {
 
     }
 
+    public Direction getFacing(BlockState bs){
+        switch(bs.get(FACING).getHorizontalIndex()){
+            case 0:
+                return Direction.SOUTH;
+            case 1:
+                return Direction.WEST;
+            case 2:
+                return Direction.NORTH;
+            case 3:
+                return Direction.EAST;
+            default:
+                return null;
+        }
+    }
+
     private static final VoxelShape NORTH = Stream.of(
                     Block.makeCuboidShape(1, 0, 2, 15, 9, 14),
                     Block.makeCuboidShape(1, 7, 14, 15, 9, 15),
@@ -99,38 +114,6 @@ public class Atomizer extends Block {
     @Override
     public boolean hasTileEntity(BlockState state) {
         return true;
-    }
-
-    @Nullable
-    public Direction getLeft(BlockState bs){
-        switch(bs.get(FACING).getHorizontalIndex()){
-            case 0:
-                return Direction.EAST;
-            case 1:
-                return Direction.SOUTH;
-            case 2:
-                return Direction.WEST;
-            case 3:
-                return Direction.NORTH;
-            default:
-                return null;
-        }
-    }
-
-    @Nullable
-    public Direction getRight(BlockState bs){
-        switch(bs.get(FACING).getHorizontalIndex()){
-            case 0:
-                return Direction.WEST;
-            case 1:
-                return Direction.NORTH;
-            case 2:
-                return Direction.EAST;
-            case 3:
-                return Direction.SOUTH;
-            default:
-                return null;
-        }
     }
 
 
